@@ -3,14 +3,22 @@
   "description": "getting started with nodejs on sinacloud platform",
   "version": "0.0.1",
   "private": true,
-  "author": {
-    "name": "sae",
-    "email": "saemail@sina.cn"
-  },
+  "author": "sae <saemail@sina.cn>",
   "dependencies": {
     "express": "^4.13.3"
   },
   "scripts": {
     "start": "node index.js"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinacloud/nodejs-getting-started.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sinacloud/nodejs-getting-started/issues"
+  },
+  "homepage": "https://github.com/sinacloud/nodejs-getting-started#readme"
 }
