@@ -27,6 +27,6 @@ app.use('/', index);
 
 
 
-http.listen(process.env.PORT || 3000,function(){
+http.listen(process.env.PORT || 5050,function(){
     console.log("监听开始");
 });
