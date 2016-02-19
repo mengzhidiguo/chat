@@ -9,7 +9,7 @@ function init(io){
 
     io.on('connection', function(socket) {
         socket.on('msg',function(msg){
-           console.log(msg);
+            socket.emit(msg);
         });
         socket.emit('msg','hello');
     });
