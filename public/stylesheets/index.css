@@ -1,0 +1,254 @@
+footer, header, div, body, html,button,img {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 625%;
+    height: 100%;
+    width: 100%;
+    -ms-touch-action: none;
+}
+
+body {
+    width: 100%;
+    padding-top: 0.3rem;
+    padding-bottom: 0.4rem;
+}
+
+/*头部标题开始*/
+header {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 0.3rem;
+    font-size: 0.16rem;
+    text-align: center;
+    background-color: white;
+}
+
+header h4 {
+    display: inline;
+    font-size: 0.25rem;
+    height: 100%;
+    line-height: 0.3rem;
+}
+/*头部标题结束*/
+/*底部输入框开始*/
+footer {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    min-height: 0.4rem;
+    background-color: white;
+}
+
+footer .footerCon  .m {
+   box-sizing: border-box;
+    padding:0px;
+    border: 0px;
+    width: 100%;
+    margin-left: 0.04rem;
+    margin-right: 0.04rem;
+    padding-left: 0.1rem;
+    border-bottom:0.01rem solid lightgray;
+    font-size: 0.2rem;
+    outline: none;
+}
+footer button{
+    outline: none;
+    width:0.4rem;
+    height: 100%;
+}
+footer .footerCon{
+    height: 0.4rem;
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+footer .footerCon .l {
+    background: url(../image/ui_03_07.png) no-repeat center;
+}
+footer .footerCon .r {
+    background: url(../image/ui_03_07.png) no-repeat center;
+}
+footer .footerXun{
+    display: none;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    height: 0.4rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+footer .footerXun span{
+    display: block;
+    height: 0.4rem;
+    width:0.4rem;
+    line-height: 0.4rem;
+    text-align: center;
+    font-size: 0.12rem;
+    position: relative;
+  
+}
+footer .footerXun span input{
+    position: absolute;
+    top:0px;
+    left:0px;
+    height: 0.4rem;
+    width: 0.4rem;
+    opacity: 0;
+}
+
+
+/*底部输入框结束*/
+
+.container {
+  position: absolute;
+    top:0.3rem;
+    bottom: 0.4rem;
+    overflow: hidden;
+    width:100%;
+    background-color: #fbcb67;
+    font-size: 0.16rem;
+}
+#scroller{
+    width: 100%;
+    position: absolute;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -o-text-size-adjust: none;
+    text-size-adjust: none;
+
+
+}
+
+ul {
+
+    padding:0px;
+    width: 100%;
+    color: #444444;
+}
+ul li{
+    display: block;
+    width: 100%;
+    position: relative;
+    border-radius: 0.06rem;
+}
+.chat_time{
+    text-align: center;
+    font-size: 0.12rem;
+    color: lightgray;
+}
+.chat_l{
+    min-height: 0.55rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    /*justify-content: flex-end;*/
+}
+.chat_l .touxiang{
+    display: inline-block;
+    margin-left: 0.05rem;
+    bottom: 0px;
+    border-radius: 0.27rem;
+    align-self:center;
+    height: 0.54rem;
+    width: 0.54rem;
+    vertical-align: middle;
+}
+.chat_l p{
+    display: block;
+    padding: 0.05rem 0.05rem 0.05rem 0.05rem;
+    border: 1px solid lightgray;
+    border-radius: 0.03rem;
+    box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
+    margin-left: 0.2rem;
+    margin-right: 0.1rem;
+    background-color: white;
+    position: relative;
+    z-index:100;
+}
+.chat_l::after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    height: 0.1rem;
+    background-color: white;
+    top:0.25rem;
+    left:0.75rem;
+    width:0.1rem;
+    z-index: 10;
+    border: 1px solid lightgray;
+    transform: rotate(40deg);
+    box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
+}
+
+.chat_r{
+    width:100%;
+    min-height: 0.55rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+.chat_r .touxiang{
+    display: inline-block;
+    margin-left: 0.05rem;
+    bottom: 0px;
+    order:3;
+    border-radius: 0.27rem;
+    align-self:center;
+    height: 0.54rem;
+    width: 0.54rem;
+    vertical-align: middle;
+}
+.chat_r p{
+    display: block;
+    padding: 0.05rem 0.05rem 0.05rem 0.05rem;
+    border: 1px solid lightgray;
+    border-radius: 0.03rem;
+    box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
+    margin-right: 0.2rem;
+    margin-left: 0.1rem;
+    background-color: white;
+    position: relative;
+    z-index:100;
+}
+.chat_r::after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    height: 0.1rem;
+    background-color: white;
+    top:0.25rem;
+    order: 2;
+    right:0.75rem;
+    width:0.1rem;
+    z-index: 10;
+    border: 1px solid lightgray;
+    transform: rotate(40deg);
+    box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
+}
