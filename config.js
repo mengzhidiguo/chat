@@ -7,4 +7,6 @@ module.exports  = {
         database : 'test',
         port:3306
     },
+    //端口设置
+    port:process.env.PORT || 5050,
 };

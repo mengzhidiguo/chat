@@ -4,6 +4,7 @@ var socket  =  (function(){
         console.log('接受到:'+msg);
         chat.receive(2,msg);
     });
+
     return socket;
 })();
 var chat = {

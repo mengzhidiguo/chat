@@ -9,9 +9,8 @@ function init(io){
 
     io.on('connection', function(socket) {
         socket.on('msg',function(msg){
-            socket.emit('msg',msg);
+            io.sockets.emit("msg",msg);
         });
-        socket.emit('msg','hello');
     });
     //io.on('connection', function(socket) {
     //    //blog主人登陆

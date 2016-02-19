@@ -161,12 +161,19 @@ ul li{
     color: lightgray;
 }
 .chat_l{
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+
     min-height: 0.55rem;
     position: relative;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+
+
     /*justify-content: flex-end;*/
+
 }
 .chat_l .touxiang{
     display: inline-block;
@@ -206,13 +213,20 @@ ul li{
 }
 
 .chat_r{
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+
     width:100%;
     min-height: 0.55rem;
     position: relative;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
+
+
 }
 .chat_r .touxiang{
     display: inline-block;
