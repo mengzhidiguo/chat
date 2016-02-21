@@ -44,19 +44,22 @@ var chat = {
 //footer底部  发送等触发事件处理函数
 var footer = {
     //input
-    input:document.querySelector('.footerCon .m'),
+    input:document.querySelector('.footerCon .m input'),
 
     //发送按钮
     send:function(){
-        chat.send(2, this.input.value.replace(/^\s*|\s*$/g,''));
+        var temp = this.input.value.replace(/^\s*|\s*$/g,'');
+        console.log(temp);
+        chat.send(2, temp);
         this.input.value = '';
     },
     //回车键
     enter:function (e) {
-        var t = this.input.value.replace(/^\s*|\s*$/g,'');
-        if (e.keyCode !== 13 || t === '' || t === undefined)
+        var temp = this.input.value.replace(/^\s*|\s*$/g,'');
+        if (e.keyCode !== 13 || temp === '' || temp === undefined)
             return;
-        chat.send(2, t);
+        console.log(temp);
+        chat.send(2, temp);
         this.input.value = '';
     },
 
@@ -105,5 +108,29 @@ window.onload = function () {
                 break;
         }
     };
+
+    (function() {
+        var video = document.querySelector('.videoContain video');
+        var config = [{ video: true}, function(){
+            console.log('成功');
+            console.log(arguments)
+            video.src = window.webkitURL.createObjectURL(arguments[0]);
+            video.play();
+        }, function(){
+            console.log('失败')
+            console.log(arguments)
+        }];
+        var stream;
+        if(navigator.getUserMedia)
+             stream = navigator.getUserMedia( config[0],config[1],config[2]);
+        else if(navigator.webkitGetUserMedia)
+            stream = navigator.webkitGetUserMedia(config[0],config[1],config[2]);
+        else if(navigator.mozGetUserMedia)
+            stream =navigator.mozGetUserMedia(config[0],config[1],config[2]);
+        else if(navigator.msGetUserMedia)
+            stream = navigator.msGetUserMedia(config[0],config[1],config[2])
+
+        console.log(navigator.getwebkitGetUserMedia)
+    })();
 
 }

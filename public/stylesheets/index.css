@@ -23,6 +23,20 @@ body {
   padding-top: 0.3rem;
   padding-bottom: 0.4rem;
 }
+.videoContain {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  min-height: 1rem;
+  font-size: 0px;
+  z-index: 1000;
+}
+.videoContain video {
+  margin: 0.03rem;
+  display: inline-block;
+  height: 0.5rem;
+  width: 0.5rem;
+}
 /*头部标题开始*/
 header {
   position: absolute;
@@ -54,37 +68,38 @@ footer .footerCon {
   height: 0.4rem;
   width: 100%;
 }
-footer .footerCon button {
-  outline: none;
-  width: 0.4rem;
-  height: 100%;
-}
 footer .footerCon .l {
-  display: block;
   float: left;
   width: 0.4rem;
   height: 100%;
+  display: block;
+  outline: none;
   background: url(../image/ui_03_07.png) no-repeat center;
   background-size: 80% 80%;
 }
 footer .footerCon .r {
-  display: block;
   float: right;
   width: 0.4rem;
   height: 100%;
+  display: block;
+  outline: none;
   background: url(../image/ui_03_07.png) no-repeat center;
   background-size: 80% 80%;
 }
 footer .footerCon .m {
-  display: block;
   box-sizing: border-box;
-  padding: 0px;
-  border: 0px;
   height: 100%;
   overflow: hidden;
   border-bottom: 0.01rem solid lightgray;
+}
+footer .footerCon .m input {
+  display: block;
+  padding: 0px;
+  border: 0px;
   font-size: 0.2rem;
   outline: none;
+  width: 100%;
+  height: 100%;
 }
 footer .footerXun {
   display: none;
@@ -170,11 +185,6 @@ footer .footerXun span input {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-wrap: nowrap;
-  -webkit-flex-wrap: nowrap;
-  flex-wrap: nowrap;
   min-height: 0.55rem;
   position: relative;
   /*justify-content: flex-end;*/
@@ -201,7 +211,7 @@ footer .footerXun span input {
   position: relative;
   z-index: 100;
 }
-.container .chat_l::after {
+.container .chat_l:after {
   position: absolute;
   display: inline-block;
   content: '';
@@ -212,39 +222,28 @@ footer .footerXun span input {
   width: 0.1rem;
   z-index: 10;
   border: 1px solid lightgray;
+  -webkit-transform: rotate(40deg);
   transform: rotate(40deg);
   box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
 }
 .container .chat_r {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-direction: row;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-wrap: nowrap;
-  -webkit-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  -webkit-box-justify-content: flex-end;
-  -webkit-justify-content: flex-end;
-  justify-content: flex-end;
   width: 100%;
   min-height: 0.55rem;
   position: relative;
 }
 .container .chat_r .touxiang {
   display: inline-block;
-  margin-left: 0.05rem;
+  margin-right: 0.05rem;
   bottom: 0px;
-  order: 3;
+  float: right;
   border-radius: 0.27rem;
-  align-self: center;
   height: 0.54rem;
   width: 0.54rem;
   vertical-align: middle;
 }
 .container .chat_r p {
   display: block;
+  float: right;
   padding: 0.05rem 0.05rem 0.05rem 0.05rem;
   border: 1px solid lightgray;
   border-radius: 0.03rem;
@@ -252,21 +251,20 @@ footer .footerXun span input {
   margin-right: 0.2rem;
   margin-left: 0.1rem;
   background-color: white;
-  position: relative;
-  z-index: 100;
+  z-index: 300;
 }
-.container .chat_r::after {
+.container .chat_r:after {
   position: absolute;
   display: inline-block;
   content: '';
   height: 0.1rem;
   background-color: white;
   top: 0.25rem;
-  order: 2;
   right: 0.75rem;
   width: 0.1rem;
   z-index: 10;
   border: 1px solid lightgray;
+  -webkit-transform: rotate(40deg);
   transform: rotate(40deg);
   box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
 }

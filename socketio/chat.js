@@ -11,6 +11,19 @@ function init(io){
         socket.on('msg',function(msg){
             io.sockets.emit("msg",msg);
         });
+        socket.on('photo', function(msg) {
+        var base64Data = msg.replace(new RegExp('^data:image/jpeg;base64,'), "");
+
+        var buffer = new Buffer(base64Data, "base64");
+        //fs.open(new Date().getTime()+"1"+new Date().getMilliseconds() + ".jpeg", "ax+", function(err, fd) {
+        //    if (err == null) {
+        //        fs.write(fd, buffer, 0, buffer.length, function(err, written, string) {
+        //        });
+        //        fs.close(fd,function(){});
+        //    }
+        //});
+            io.sockets.emit("msg",{msg:msg,id:socket.id});
+    });
     });
     //io.on('connection', function(socket) {
     //    //blog主人登陆

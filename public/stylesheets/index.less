@@ -1,7 +1,5 @@
 
-
-
-footer, header, div, body, html,button,img {
+footer, header, div, body, html, button, img {
   padding: 0px;
   margin: 0px;
   border: 0px;
@@ -23,6 +21,25 @@ body {
   padding-top: 0.3rem;
   padding-bottom: 0.4rem;
 }
+//浮动内容
+.videoContain{
+  position: absolute;
+  top:0px;
+  left:0px;
+  min-height: 1rem;
+  font-size: 0px;
+  z-index: 1000;
+
+  video{
+    margin: 0.03rem;
+    display: inline-block;
+    height: 0.5rem;
+    width: 0.5rem;
+  }
+}
+
+
+
 
 /*头部标题开始*/
 header {
@@ -51,44 +68,47 @@ footer {
   width: 100%;
   min-height: 0.4rem;
   background-color: white;
-  .footerCon{
+  .footerCon {
     height: 0.4rem;
-    width:100%;
-    button{
-      outline: none;
-      width:0.4rem;
-      height: 100%;
-    }
+    width: 100%;
     .l {
-      display: block;
       float: left;
       width: 0.4rem;
       height: 100%;
+      display: block;
+      outline: none;
       background: url(../image/ui_03_07.png) no-repeat center;
       background-size: 80% 80%;
+
     }
     .r {
-      display: block;
       float: right;
-      width:0.4rem;
+      width: 0.4rem;
       height: 100%;
+      display: block;
+      outline: none;
       background: url(../image/ui_03_07.png) no-repeat center;
       background-size: 80% 80%;
+
     }
     .m {
-      display: block;
       box-sizing: border-box;
-      padding:0px;
-      border: 0px;
       height: 100%;
       overflow: hidden;
-      border-bottom:0.01rem solid lightgray;
-      font-size: 0.2rem;
-      outline: none;
+      border-bottom: 0.01rem solid lightgray;
+      input {
+        display: block;
+        padding: 0px;
+        border: 0px;
+        font-size: 0.2rem;
+        outline: none;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 
-  .footerXun{
+  .footerXun {
     display: none;
     margin-top: 0.1rem;
     margin-bottom: 0.1rem;
@@ -102,18 +122,18 @@ footer {
     -webkit-box-justify-content: space-around;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    span{
+    span {
       display: block;
       height: 0.4rem;
-      width:0.4rem;
+      width: 0.4rem;
       line-height: 0.4rem;
       text-align: center;
       font-size: 0.12rem;
       position: relative;
-      input{
+      input {
         position: absolute;
-        top:0px;
-        left:0px;
+        top: 0px;
+        left: 0px;
         height: 0.4rem;
         width: 0.4rem;
         opacity: 0;
@@ -121,20 +141,21 @@ footer {
     }
   }
 }
+
 /*底部输入框结束*/
 
 .container {
   position: absolute;
-  top:0.3rem;
+  top: 0.3rem;
   bottom: 0.4rem;
   overflow: hidden;
-  width:100%;
+  width: 100%;
   background-color: #fbcb67;
   font-size: 0.16rem;
-  #scroller{
+  #scroller {
     width: 100%;
     position: absolute;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
     -ms-transform: translateZ(0);
@@ -152,10 +173,10 @@ footer {
     text-size-adjust: none;
   }
   ul {
-    padding:0px;
+    padding: 0px;
     width: 100%;
     color: #444444;
-    li{
+    li {
       display: block;
       width: 100%;
       position: relative;
@@ -163,39 +184,38 @@ footer {
     }
   }
 
-  .chat_time{
+  .chat_time {
     text-align: center;
     font-size: 0.12rem;
     color: lightgray;
   }
-  .chat_l{
+  .chat_l {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-wrap: nowrap;
-    -webkit-flex-wrap: nowrap;
-    flex-wrap: nowrap;
+    //-webkit-flex-direction: row;
+    //flex-direction: row;
+    //-webkit-box-wrap: nowrap;
+    //-webkit-flex-wrap: nowrap;
+    //flex-wrap: nowrap;
 
     min-height: 0.55rem;
     position: relative;
 
-
     /*justify-content: flex-end;*/
-    .touxiang{
+    .touxiang {
       display: inline-block;
       margin-left: 0.05rem;
       bottom: 0px;
       border-radius: 0.27rem;
-      align-self:center;
+      align-self: center;
       height: 0.54rem;
       width: 0.54rem;
       vertical-align: middle;
     }
-    p{
+    p {
       display: block;
       padding: 0.05rem 0.05rem 0.05rem 0.05rem;
       border: 1px solid lightgray;
@@ -205,56 +225,45 @@ footer {
       margin-right: 0.1rem;
       background-color: white;
       position: relative;
-      z-index:100;
+      z-index: 100;
     }
   }
 
-
-  .chat_l::after {
+  .chat_l:after {
     position: absolute;
     display: inline-block;
     content: '';
     height: 0.1rem;
     background-color: white;
-    top:0.25rem;
-    left:0.75rem;
-    width:0.1rem;
+    top: 0.25rem;
+    left: 0.75rem;
+    width: 0.1rem;
     z-index: 10;
     border: 1px solid lightgray;
+    -webkit-transform:rotate(40deg);
     transform: rotate(40deg);
     box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
   }
 
-  .chat_r{
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-direction: row;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-wrap: nowrap;
-    -webkit-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    -webkit-box-justify-content: flex-end;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
-
-    width:100%;
+  .chat_r {
+    width: 100%;
     min-height: 0.55rem;
     position: relative;
-    .touxiang{
+    .touxiang {
       display: inline-block;
-      margin-left: 0.05rem;
+      margin-right: 0.05rem;
       bottom: 0px;
-      order:3;
+      float: right;
+
       border-radius: 0.27rem;
-      align-self:center;
+
       height: 0.54rem;
       width: 0.54rem;
       vertical-align: middle;
     }
-    p{
+    p {
       display: block;
+      float: right;
       padding: 0.05rem 0.05rem 0.05rem 0.05rem;
       border: 1px solid lightgray;
       border-radius: 0.03rem;
@@ -262,22 +271,23 @@ footer {
       margin-right: 0.2rem;
       margin-left: 0.1rem;
       background-color: white;
-      position: relative;
-      z-index:100;
+      z-index: 300;
+
     }
+
   }
-  .chat_r::after {
+  .chat_r:after {
     position: absolute;
     display: inline-block;
     content: '';
     height: 0.1rem;
     background-color: white;
-    top:0.25rem;
-    order: 2;
-    right:0.75rem;
-    width:0.1rem;
+    top: 0.25rem;
+    right: 0.75rem;
+    width: 0.1rem;
     z-index: 10;
     border: 1px solid lightgray;
+    -webkit-transform: rotate(40deg);
     transform: rotate(40deg);
     box-shadow: 0rem 0rem 0.01rem 0.01rem lightgray;
   }
