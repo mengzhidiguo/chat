@@ -1,45 +1,178 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en" ng-app="chat">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport"
-		  content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="stylesheets/index.css">
-
-	<title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body >
-<!--浮动框-->
-<div class="videoContain" >
-	<video src=""></video></div>
+<!--登录界面-->
+<div class="login" ng-hide="loginHide"  ng-controller="loginController">
+    <div class="showTip" ng-show="c">
+        <em >{{info}}</em>
+    </div>
+    <div class="loginin">
+            <div class="top"><p>Already have an account?</p>
+                <p>Log In Here</p></div>
+            <input type="text" placeholder="Username" ng-model="username"  ng-maxlength="10" required>
+            <input type="text" placeholder="Password" ng-model="password"  ng-maxlength="10" required>
+            <div class="bottom">
+                <label for="check"><input type="checkbox" ng-model="rember" id="check" ng-disabled="!rember">Keep me
+                </label>
+                <button ng-click="send()">Log In »</button>
+            </div>
+    </div>
+</div>
 
-<header><h4>和客服一聊天</h4></header>
+<!--菜单界面-->
+<div class="menu"  ng-hide="menuHide" ng-controller="menuController">
+    <div class="menu_main">
+        <div class="menu_main_top">
+            <!--头像-->
+            <img class="menu_main_top_photo" src="./image/menu_03.png" alt="">
+            <!--编辑-->
+            <img class="menu_main_top_edit" src="./image/menu_06.png" alt="">
+            <h4 class="menu_main_top_name">周建</h4>
+        </div>
+        <div class="menu_main_menu">
+            <ul>
+                <li>聊天</li>
+                <li ng-click="friendShow()">好友列表</li>
+                <li>朋友圈</li>
+                <li>附近的人</li>
+                <li>游戏</li>
+                <li>注销</li>
 
-<!--聊天内容框-->
-<div class="container" id="wrapper">
-	<div id="scroller">
-		<ul id="chat_rl">
-			<li class="chat_time">2016:01:12 12:20</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-		</ul>
-	</div>
+<!--好友界面-->
+<div class="friend" ng-hide="friendHide" ng-controller="friendController">
+    <!--头部-->
+    <div class="firend_top">
+        <div class="firend_menu"></div>
+        <h4 class="logo">Chat</h4>
+    </div>
+
+    <!--好友列表-->
+    <div class="firend_list">
+        <ul>
+            <li>
+                <div class="firend_contain" ng-click="chat"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭fffffff</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭1</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭2</p>
+                </div>
+            </li>
+            <li>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
+                    <span class="time">15:00 PM</span>
+                    <p>我想吃饭3</p>
+                </div>
+            </li>
+
+
+        </ul>
+    </div>
 </div>
 
 
-<footer>
-	<div class="footerCon">
-		<button id="f_l"  class="l"></button>
-		<button  class="r"></button>
-		<div class="m"><input  type="text" placeholder="在这里和我对话啊"></div>
-
-	</div>
-	<div class="footerXun"><span>表情</span><span data="picture">相册 <input type="file" accept="image/jpeg,image/png"> </span><span data="photo">照机</span></div>
-</footer>
-
-<script type="text/javascript" src="javascripts/iscroll.js"></script>
-<script src="javascripts/jquery-2.1.4.min.js"></script>
-<script src="javascripts/socket.io-1.2.0.js"></script>
-<script src="javascripts/index.js"> </script>
-
+<!--聊天界面-->
+<div class="chat" ng-hide="chatlistHide" ng-controller="chatlistController">
+    <div class="chat_top">
+        <div class="chat_top_back"></div>
+        <h4>周建</h4>
+        <div class="chat_top_person"></div>
+    </div>
+    <div class="chat_contain">
+        <ul>
+            <li class="chat_left">
+                <img src="./image/friend_name_06.png" alt="">
+                <p>假假按揭假是哪范德萨发生的发生按揭啊</p>
+            </li>
+            <li class="chat_right">
+                <img src="./image/friend_name_06.png" alt="">
+                <p>假假</p>
+            </li>
+            <li class="chat_time">12:00</li>
+            <li class="chat_left">
+                <img src="./image/friend_name_06.png" alt="">
+                <p>假假按揭假是哪范德萨发生的发生按揭啊</p>
+            </li>
+            <li class="chat_right">
+                <img src="./image/friend_name_06.png" alt="">
+                <p>假假</p>
+            </li>
+            <li class="chat_time">12:00</li>
+            <li class="chat_left">
+                <img src="./image/friend_name_06.png" alt="">
+                <p>假假按揭假是哪范德萨发生的发生按揭啊</p>
+            </li>
+            <li class="chat_right">
+                <img src="./image/friend_name_06.png" alt="">
+                <p>假假</p>
+            </li>
+            <li class="chat_time">12:00</li>
+        </ul>
+    </div>
+    <div class="chat_bottom">
+        <div class="voice"></div>
+        <div class="add"></div>
+        <input class="input" type="text">
+        <div class="send"></div>
+    </div>
+</div>
+<script data-main="js/app" src="js/lib/requireJs.js"></script>
 </body>
 </html>

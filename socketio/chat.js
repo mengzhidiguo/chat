@@ -2,14 +2,29 @@
  * Created by 周建 on 2015/12/4.
  */
 var main_socket = null;
+var query = require('../db/db');
+
 
 function init(io){
-
     console.log("socket启动");
-
+    var num=0;
     io.on('connection', function(socket) {
+        socket.on('login',function(msg){
+            var str = {code:1,msg:'失败'};
+            if(msg.username == '周建' && msg.password == 'zhoujian')
+                str = {code:0,msg:'成功'};
+            socket.emit('login',str);
+
+
+
+        });
+
+
+
+        socket.emit('msg','ddd');
         socket.on('msg',function(msg){
             io.sockets.emit("msg",msg);
+            console.log(msg)
         });
         socket.on('photo', function(msg) {
         var base64Data = msg.replace(new RegExp('^data:image/jpeg;base64,'), "");
