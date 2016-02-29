@@ -7,7 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
-<body >
+<body>
 <!--登录界面-->
 <div class="login" ng-hide="loginHide"  ng-controller="loginController">
     <div class="showTip" ng-show="c">
@@ -54,15 +54,15 @@
 <div class="friend" ng-hide="friendHide" ng-controller="friendController">
     <!--头部-->
     <div class="firend_top">
-        <div class="firend_menu"></div>
+        <div class="firend_menu" ng-click="menushow()"></div>
         <h4 class="logo">Chat</h4>
     </div>
 
     <!--好友列表-->
-    <div class="firend_list">
+    <div class="firend_list" ng-click="chat()">
         <ul>
             <li>
-                <div class="firend_contain" ng-click="chat"><h4 class="firend_name">周建</h4>
+                <div class="firend_contain" ><h4 class="firend_name">周建</h4>
                     <span class="time">15:00 PM</span>
                     <p>我想吃饭</p>
                 </div>
@@ -131,46 +131,27 @@
 <!--聊天界面-->
 <div class="chat" ng-hide="chatlistHide" ng-controller="chatlistController">
     <div class="chat_top">
-        <div class="chat_top_back"></div>
+        <div class="chat_top_back" ng-click="back()"></div>
         <h4>周建</h4>
         <div class="chat_top_person"></div>
     </div>
     <div class="chat_contain">
+        <div id="scroller">
         <ul>
-            <li class="chat_left">
-                <img src="./image/friend_name_06.png" alt="">
-                <p>假假按揭假是哪范德萨发生的发生按揭啊</p>
+            <!--<li class="chat_time">12:00</li>-->
+            <li ng-repeat="a in A" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}" repeat-done="repeatDone()">
+                <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
+                <p ng-if="a.type!==3">{{a.body}}</p>
+               {{a.time}}
             </li>
-            <li class="chat_right">
-                <img src="./image/friend_name_06.png" alt="">
-                <p>假假</p>
-            </li>
-            <li class="chat_time">12:00</li>
-            <li class="chat_left">
-                <img src="./image/friend_name_06.png" alt="">
-                <p>假假按揭假是哪范德萨发生的发生按揭啊</p>
-            </li>
-            <li class="chat_right">
-                <img src="./image/friend_name_06.png" alt="">
-                <p>假假</p>
-            </li>
-            <li class="chat_time">12:00</li>
-            <li class="chat_left">
-                <img src="./image/friend_name_06.png" alt="">
-                <p>假假按揭假是哪范德萨发生的发生按揭啊</p>
-            </li>
-            <li class="chat_right">
-                <img src="./image/friend_name_06.png" alt="">
-                <p>假假</p>
-            </li>
-            <li class="chat_time">12:00</li>
         </ul>
+        </div>
     </div>
     <div class="chat_bottom">
         <div class="voice"></div>
         <div class="add"></div>
-        <input class="input" type="text">
-        <div class="send"></div>
+        <input class="input" ng-model="talk" type="text">
+        <div class="send" ng-click="send()"></div>
     </div>
 </div>
 <script data-main="js/app" src="js/lib/requireJs.js"></script>

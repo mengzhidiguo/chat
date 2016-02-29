@@ -1,6 +1,14 @@
 require.config({
     baseUrl:'js/lib',
     paths: {
+        //插件
+        'iscroll':'iscroll',
+        'angular':'angular.min',
+
+        'io':'socket.io-1.2.0',
+
+
+        //自定义模块
         "init": "../model/init",
         "config":'../model/config',
         'login':'../model/login',
@@ -8,9 +16,6 @@ require.config({
         'friend':'../model/friend',
         'chatlist':'../model/chatlist',
         'angularApp':'../model/angularApp',
-        'iscroll':'iscroll',
-        'angular':'angular.min',
-        'io':'socket.io-1.2.0',
     },
     shim: {
         'iscroll':{
@@ -25,6 +30,7 @@ require.config({
             deps:[],
             exports: 'Socket'
         },
+
     },
 });
 

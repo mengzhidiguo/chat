@@ -29,10 +29,20 @@ define(function () {
     })
 
 
-    //初始化angular
-    require(['angularApp'], function (angularApp) {
-    })
+    ////初始化angular
+    //require(['angularApp'], function (angularApp) {
+    //
+    //})
 
+    require(['login'],function(){
+    });
+    require(['menu'],function(){
+    });
+    require(['friend'],function(){
+    });
+
+    require(['chatlist'],function(){
+    });
 
     return null;
 })

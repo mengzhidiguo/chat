@@ -14,17 +14,12 @@ function init(io){
             if(msg.username == '周建' && msg.password == 'zhoujian')
                 str = {code:0,msg:'成功'};
             socket.emit('login',str);
-
-
-
         });
 
+        socket.on('chat',function(msg){
 
-
-        socket.emit('msg','ddd');
-        socket.on('msg',function(msg){
-            io.sockets.emit("msg",msg);
-            console.log(msg)
+            var temp = {code:0,type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body}
+            socket.emit('chat',temp);
         });
         socket.on('photo', function(msg) {
         var base64Data = msg.replace(new RegExp('^data:image/jpeg;base64,'), "");

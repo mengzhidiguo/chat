@@ -461,6 +461,9 @@ body {
   font-size: 0.32rem;
   color: #444444;
 }
+.chat .chat_contain ul {
+  padding-bottom: 0.8rem;
+}
 .chat .chat_contain .chat_left {
   margin-top: 0.2rem;
   margin-bottom: 0.2rem;
