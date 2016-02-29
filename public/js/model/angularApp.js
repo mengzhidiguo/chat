@@ -16,13 +16,6 @@ define(['angular', 'io'], function (angular, io) {
     })
 
     ////自定义触摸事件
-    //app.directive('repeatDone', function() {
-    //    return {
-    //        link: function(scope, element, attrs) {
-    //
-    //        }
-    //    }
-    //})
     app.directive('ngClick', ['$parse', '$timeout', '$rootElement',
         function($parse, $timeout, $rootElement) {
             var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
