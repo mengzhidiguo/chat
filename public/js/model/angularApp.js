@@ -1,6 +1,6 @@
 define(['angular', 'io'], function (angular, io) {
 
-    var app = angular.module('chat', []).run(function ($rootScope) {
+    var app = angular.module('chat', ['ngRoute']).run(function ($rootScope) {
         //    可以通过run方法来访问$rootScope
     });
 
