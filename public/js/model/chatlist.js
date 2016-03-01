@@ -7,9 +7,6 @@ define(['angularApp'],function(app){
             {type: 2, imgSrc: './image/friend_name_06.png', body: '不是'},
             {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
         ];
-
-
-
         $scope.back = function () {
             $switchView.switch('.chat','.friend',1,function(){
             });
@@ -22,9 +19,7 @@ define(['angularApp'],function(app){
             $scope.A.push({type: 2, imgSrc: './image/friend_name_06.png', body: $scope.talk})
             $socket.emit('chat', {type: 1, body:$scope.talk });
             $scope.talk = '';
-
         }
-
 
         $scope.c = true;
         $socket.on('chat', function (msg) {

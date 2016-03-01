@@ -40,9 +40,17 @@ define(function () {
     });
     require(['friend'],function(){
     });
-
     require(['chatlist'],function(){
     });
-
-    return null;
+    require(['angularApp'],function(app){
+        app.controller('loaddingController', ['$rootScope', '$scope', '$timeout','$switchView', function ($rootScope, $scope, $timeout,$switchView) {
+            $switchView.switch('.loadding','.login',1,function(){
+                //$scope.show = false;
+            });
+            //$timeout(function(){
+            //
+            //},1000);
+        }]);
+    });
+return null;
 })

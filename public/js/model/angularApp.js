@@ -245,14 +245,9 @@ define(['angular', 'io'], function (angular, io) {
                 eleTo.css('transform',' translate(0px,0px)');
                 eleTo.removeClass('animalShow');
                 callback();
-
             },1500);
         };
 
-    })
-
-
-
-
+    });
     return app;
 });

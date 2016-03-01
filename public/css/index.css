@@ -102,6 +102,17 @@ body {
   animation-name: rl;
   -webkit-animation-name: rl;
 }
+.loadding {
+  position: absolute;
+  z-index: 1000;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  font-size: 50px;
+}
 .login {
   position: absolute;
   top: 0px;

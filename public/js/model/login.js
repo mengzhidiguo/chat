@@ -20,15 +20,7 @@ define(['angularApp'],function(app){
                 } else if (msg.code == 0) {
                     $scope.info = msg.msg;
                     //登录成功
-                    //$timeout(function () {
-
-                    $switchView.switch('.login','.menu',1,function(){
-
-                    });
-
-                        //$scope.loginHide = true;
-                        //$rootScope.$broadcast('menushow', '');
-                    //}, 500);
+                    $switchView.switch('.login','.menu',1,function(){});
                 }
             });
         }
