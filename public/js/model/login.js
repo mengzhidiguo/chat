@@ -18,6 +18,7 @@ define(['angularApp'],function(app){
                         $scope.c = false;
                     }, 500);
                 } else if (msg.code == 0) {
+                    console.log(msg.msg);
                     $scope.info = msg.msg;
                     //登录成功
                     $switchView.switch('.login','.menu',1,function(){});
