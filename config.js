@@ -8,11 +8,11 @@ module.exports  = {
         port:3306
     },
     mysql:{
-        host     : process.env.MYSQL_HOST,
-        port     : process.env.MYSQL_PORT,
-        user     : process.env.ACCESSKEY||'4ox3j0kyjw',
-        password : process.env.SECRETKEY||'mzz2xx3h155kjhkwzl114wjwhx1l0ljizw0xh1lj',
-        database : 'app_' + process.env.APPNAME
+        host     : process.env.SAE_MYSQL_HOST_M,
+        port     : process.env.SAE_MYSQL_PORT,
+        user     : process.env.SAE_MYSQL_USER||'4ox3j0kyjw',
+        password : process.env.SAE_MYSQL_PASS||'mzz2xx3h155kjhkwzl114wjwhx1l0ljizw0xh1lj',
+        database : 'app_zhouapp'
     },
     //端口设置
     port:process.env.PORT || 5050,
