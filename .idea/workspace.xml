@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7451d56e-491c-403c-a93b-15670f7650a5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/lib/angular-route.min.js" afterPath="$PROJECT_DIR$/public/js/lib/angular-route.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/lib/angular.min.js" afterPath="$PROJECT_DIR$/public/js/lib/angular.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/model/angularApp.js" afterPath="$PROJECT_DIR$/public/js/model/angularApp.js" />
     </list>
     <ignored path="nodejs-getting-started.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,6 +63,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="1.0353982">
+              <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="index.less" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/css/index.less">
           <provider selected="true" editor-type-id="text-editor">
@@ -103,10 +110,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="angularApp.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="angularApp.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/model/angularApp.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.07964602">
+            <state vertical-scroll-proportion="0.0">
               <caret line="2" column="46" selection-start-line="2" selection-start-column="46" selection-end-line="2" selection-end-column="46" />
               <folding>
                 <element signature="e#128#172#0" expanded="false" />
@@ -181,10 +188,10 @@
         <option value="$PROJECT_DIR$/public/js/model/init.js" />
         <option value="$PROJECT_DIR$/views/index.ejs" />
         <option value="$PROJECT_DIR$/public/css/index.less" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/public/js/lib/angular-route.min.js" />
         <option value="$PROJECT_DIR$/public/js/lib/angular.min.js" />
         <option value="$PROJECT_DIR$/public/js/model/angularApp.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -916,14 +923,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7284992">
-          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/lib/angular-route.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3035413">
@@ -1001,7 +1000,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/js/model/angularApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07964602">
+        <state vertical-scroll-proportion="0.0">
           <caret line="2" column="46" selection-start-line="2" selection-start-column="46" selection-end-line="2" selection-end-column="46" />
           <folding>
             <element signature="e#128#172#0" expanded="false" />
@@ -1014,6 +1013,14 @@
             <element signature="e#5432#5828#0" expanded="false" />
             <element signature="e#7465#7565#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0353982">
+          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
