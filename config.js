@@ -1,13 +1,13 @@
 module.exports  = {
     //数据库配置
-    mysql:{
+    mysql1:{
         host     : 'localhost',
         user     : 'root',
         password : '',
         database : 'test',
         port:3306
     },
-    mysql1:{
+    mysql:{
         host     : process.env.MYSQL_HOST,
         port     : process.env.MYSQL_PORT,
         user     : process.env.ACCESSKEY,
