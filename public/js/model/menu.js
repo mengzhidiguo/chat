@@ -15,7 +15,7 @@ define(['angularApp'], function (app) {
         $scope.friendShow = function (event) {
             event = event || window.event;
             event = angular.element(event.target);
-
+            console.log(event)
             if(event.text() === '好友列表'){
                 $scope.menuHide = true;
                 $rootScope.$broadcast('friendshow', '');
