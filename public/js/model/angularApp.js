@@ -2,12 +2,33 @@ define(['angular', 'io'], function (angular, io) {
 
     var app = angular.module('chat', ['ngRoute']).run(function ($rootScope) {
         //    可以通过run方法来访问$rootScope
+
+        $rootScope.friendList = {
+            '周建': {id: 1, name: '周建', time: '12:00', moto: '吃饭要吃饱,好吗'},
+            '测试人员1': {id: 2, name: '测试人员1', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
+            '测试人员2': {id: 3, name: '测试人员2', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
+            '测试人员3': {id: 4, name: '测试人员3', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
+            '测试人员4': {id: 5, name: '测试人员4', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
+            '测试人员5': {id: 6, name: '测试人员5', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
+            '测试人员6': {id: 7, name: '测试人员6', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
+        };
+
+        $rootScope.$on('friend', function (evt, next, current) {
+            if($rootScope.friendList[arguments[1].name] !== undefined)
+            {
+                $rootScope.$broadcast('friendGo',{code:1});
+                $rootScope.$broadcast('chat',{name:arguments[1].name});
+            }
+            else{
+                $rootScope.$apply();
+            }
+        })
     });
 
     //执行完ng-repeate  执行函数
-    app.directive('repeatDone', function() {
+    app.directive('repeatDone', function () {
         return {
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 if (scope.$last) {                   // 这个判断意味着最后一个 OK
                     scope.$eval(attrs.repeatDone)    // 执行绑定的表达式
                 }
@@ -17,7 +38,7 @@ define(['angular', 'io'], function (angular, io) {
 
     ////自定义触摸事件
     app.directive('ngClick', ['$parse', '$timeout', '$rootElement',
-        function($parse, $timeout, $rootElement) {
+        function ($parse, $timeout, $rootElement) {
             var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
             var MOVE_TOLERANCE = 12; // 12px seems to work in most mobile browsers.
             var PREVENT_DURATION = 2500; // 2.5 seconds maximum from preventGhostClick call to click
@@ -27,6 +48,7 @@ define(['angular', 'io'], function (angular, io) {
             var lastPreventedTime;
             var touchCoordinates;
             var lastLabelClickCoordinates;
+
             function hit(x1, y1, x2, y2) {
                 return Math.abs(x1 - x2) < CLICKBUSTER_THRESHOLD && Math.abs(y1 - y2) < CLICKBUSTER_THRESHOLD;
             }
@@ -97,7 +119,7 @@ define(['angular', 'io'], function (angular, io) {
                 var y = touches[0].clientY;
                 touchCoordinates.push(x, y);
 
-                $timeout(function() {
+                $timeout(function () {
                     // Remove the allowable region.
                     for (var i = 0; i < touchCoordinates.length; i += 2) {
                         if (touchCoordinates[i] == x && touchCoordinates[i + 1] == y) {
@@ -123,7 +145,7 @@ define(['angular', 'io'], function (angular, io) {
             }
 
             // Actual linking function.
-            return function(scope, element, attr) {
+            return function (scope, element, attr) {
                 var clickHandler = $parse(attr.ngClick),
                     tapping = false,
                     tapElement,  // Used to blur the element after a tap.
@@ -136,7 +158,7 @@ define(['angular', 'io'], function (angular, io) {
                     element.removeClass(ACTIVE_CLASS_NAME);
                 }
 
-                element.on('touchstart', function(event) {
+                element.on('touchstart', function (event) {
                     //console.log('touchstart')
                     tapping = true;
                     tapElement = event.target ? event.target : event.srcElement; // IE uses srcElement.
@@ -155,20 +177,20 @@ define(['angular', 'io'], function (angular, io) {
                     touchStartY = e.clientY;
                 });
 
-                element.on('touchmove', function(event) {
+                element.on('touchmove', function (event) {
                     //console.log('touchmove')
                     resetState();
                 });
 
-                element.on('touchcancel', function(event) {
+                element.on('touchcancel', function (event) {
                     console.log('touchcancel')
                     resetState();
                 });
 
-                element.on('touchend', function(event) {
+                element.on('touchend', function (event) {
                     //console.log('touchend')
                     var tempElement = event.target ? event.target : event.srcElement; // IE uses srcElement.
-                    if(tempElement === tapElement)
+                    if (tempElement === tapElement)
                         tapping = true;
                     var diff = Date.now() - startTime;
 
@@ -195,27 +217,37 @@ define(['angular', 'io'], function (angular, io) {
 
                 // Hack for iOS Safari's benefit. It goes searching for onclick handlers and is liable to click
                 // something else nearby.
-                element.onclick = function(event) {
+                element.onclick = function (event) {
                 };
-                element.on('click', function(event, touchend) {
+                element.on('click', function (event, touchend) {
                     //console.log('click')
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         clickHandler(scope, {$event: (touchend || event)});
                     });
                 });
 
-                element.on('mousedown', function(event) {
+                element.on('mousedown', function (event) {
                     //console.log('mousedown')
                     element.addClass(ACTIVE_CLASS_NAME);
                 });
 
-                element.on('mousemove mouseup', function(event) {
+                element.on('mousemove mouseup', function (event) {
                     //console.log('mousemove mouseup')
                     element.removeClass(ACTIVE_CLASS_NAME);
                 });
 
             };
         }]);
+    ////自定义触摸事件
+    //app.directive('ngKeydown', ['$parse', '$timeout', '$rootElement',
+    //    function ($parse, $timeout, $rootElement) {
+    //        return function (scope, element, attr) {
+    //            element.on('keydown', function (event) {
+    //                var keydown = $parse(attr.ngKeydown);
+    //                keydown();
+    //            });
+    //        };
+    //    }]);
 
     app.service('$socket', function ($rootScope) {
         var socket = io();
@@ -230,22 +262,22 @@ define(['angular', 'io'], function (angular, io) {
         };
     })
     //切换视图服务
-    app.service('$switchView', function ($rootScope,$timeout) {
+    app.service('$switchView', function ($rootScope, $timeout) {
         //切换
-        this.switch = function (eleFrom,eleTo, type,callback) {
+        this.switch = function (eleFrom, eleTo, type, callback) {
 
-            eleFrom =angular.element(document.querySelector(eleFrom));
-            eleTo =angular.element(document.querySelector(eleTo));
+            eleFrom = angular.element(document.querySelector(eleFrom));
+            eleTo = angular.element(document.querySelector(eleTo));
             eleFrom.addClass('animalHide');
             eleTo.addClass('animalShow');
             //$rootScope.$apply();
-            $timeout(function(){
-                eleFrom.css('transform',' translate(-100%,0px)');
+            $timeout(function () {
+                eleFrom.css('transform', ' translate(-100%,0px)');
                 eleFrom.removeClass('animalHide');
-                eleTo.css('transform',' translate(0px,0px)');
+                eleTo.css('transform', ' translate(0px,0px)');
                 eleTo.removeClass('animalShow');
                 callback();
-            },1500);
+            }, 1500);
         };
 
     });

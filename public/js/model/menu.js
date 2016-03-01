@@ -13,7 +13,6 @@ define(['angularApp'], function (app) {
         $scope.friendShow = function (event) {
             event = event || window.event;
             event = angular.element(event.target);
-            console.log(event)
             if(event.text() === '好友列表'){
                 $switchView.switch('.menu','.friend',1,function(){
                 });

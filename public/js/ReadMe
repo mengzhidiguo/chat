@@ -13,6 +13,12 @@
         init,       //初始化
             为String对象原型添加函数strSlice,分割'16px',返回'16'
 
+        angularApp, //angular初始化 $rootScope 指令 服务
+        friend,     //angular好友列表控制器
+        login,      //angular登录控制器
+        menu,       //angular菜单控制器
+        chatlist,   //对话框控制器
+
 
 
 

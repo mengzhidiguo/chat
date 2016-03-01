@@ -63,84 +63,27 @@
     <!--好友列表-->
     <div class="firend_list" ng-click="chat()">
         <ul>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭</p>
+            <li ng-repeat="a in friendList">
+                <div class="firend_contain"><h4 class="firend_name">{{a.name}}</h4>
+                    <span class="time">{{a.time}}</span>
+                    <p>{{a.moto}}</p>
                 </div>
             </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭fffffff</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭1</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭2</p>
-                </div>
-            </li>
-            <li>
-                <div class="firend_contain"><h4 class="firend_name">周建</h4>
-                    <span class="time">15:00 PM</span>
-                    <p>我想吃饭3</p>
-                </div>
-            </li>
-
-
         </ul>
     </div>
 </div>
 
 
 <!--聊天界面-->
-<div class="chat" ng-hide="chatlistHide" ng-controller="chatlistController" ng-cloak>
+<div class="chat" ng-hide="chatlistHide" ng-controller="chatlistController" ng-cloak >
     <div class="chat_top">
         <div class="chat_top_back" ng-click="back()"></div>
-        <h4>周建</h4>
+        <h4>{{name}}</h4>
         <div class="chat_top_person"></div>
     </div>
     <div class="chat_contain">
         <div id="scroller">
             <ul>
-                <!--<li class="chat_time">12:00</li>-->
                 <li ng-repeat="a in A" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}"
                     repeat-done="repeatDone()">
                     <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
@@ -154,7 +97,7 @@
         <div class="voice"></div>
         <div class="add"></div>
         <input class="input" ng-model="talk" type="text">
-        <div class="send" ng-click="send()"></div>
+        <div class="send" ng-click="send()" ng-keypress="keydown()"></div>
     </div>
 </div>
 <script data-main="js/app" src="js/lib/requireJs.js"></script>
