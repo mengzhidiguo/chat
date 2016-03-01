@@ -7,12 +7,12 @@ module.exports  = {
         database : 'test',
         port:3306
     },
-    mysql0:{
+    mysql:{
         host     : 'SAE_MYSQL_HOST_M',
         user     : 'SAE_MYSQL_USER',
         password : 'SAE_MYSQL_PASS',
-        database : 'test',
-        port:SAE_MYSQL_PORT
+        database : 'app_mengzhidiguo',
+        port:SAE_MYSQL_PORT||3306
     },
     //端口设置
     port:process.env.PORT || 5050,
