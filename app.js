@@ -24,6 +24,6 @@ app.use('/', index);
 
 
 
-http.listen(3000||require('./config.js').port,function(){
+http.listen(require('./config.js').port,function(){
     console.log("监听开始"+3000||require('./config.js').port);
 });
