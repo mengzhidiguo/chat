@@ -9,30 +9,33 @@
 </head>
 <body>
 <!--loadding-->
-<div class="loadding"   ng-controller="loaddingController">
-    loading
+<div class="loadding" ng-controller="loaddingController">
+    <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
 </div>
 
 <!--登录界面-->
-<div class="login" ng-hide="loginHide"  ng-controller="loginController" ng-cloak>
+<div class="login" ng-hide="loginHide" ng-controller="loginController" ng-cloak>
     <div class="showTip" ng-show="c">
-        <em >{{info}}</em>
+        <em>{{info}}</em>
     </div>
-    <div class="loginin" >
-            <div class="top"><p>Already have an account?</p>
-                <p>Log In Here</p></div>
-            <input type="text" placeholder="Username" ng-model="username"  ng-maxlength="10" required>
-            <input type="text" placeholder="Password" ng-model="password"  ng-maxlength="10" required>
-            <div class="bottom">
-                <label for="check"><input type="checkbox" ng-model="rember" id="check" ng-disabled="!rember">Keep me
-                </label>
-                <button ng-click="send()">Log In »</button>
-            </div>
+    <div class="loginin">
+        <div class="top"><p>Already have an account?</p>
+            <p>Log In Here</p></div>
+        <input type="text" placeholder="Username" ng-model="username" ng-maxlength="10" required>
+        <input type="text" placeholder="Password" ng-model="password" ng-maxlength="10" required>
+        <div class="bottom">
+            <label for="check"><input type="checkbox" ng-model="rember" id="check" ng-disabled="!rember">Keep me
+            </label>
+            <button ng-click="send()">Log In »</button>
+        </div>
     </div>
 </div>
 
 <!--菜单界面-->
-<div class="menu"  ng-hide="menuHide" ng-controller="menuController" ng-cloak>
+<div class="menu" ng-hide="menuHide" ng-controller="menuController" ng-cloak>
     <div class="menu_main">
         <div class="menu_main_top">
             <!--头像-->
@@ -42,8 +45,8 @@
             <h4 class="menu_main_top_name">周建</h4>
         </div>
         <div class="menu_main_menu">
-            <ul   ng-click="friendShow()">
-                <li ng-repeat="name in menu" >{{name.name}}</li>
+            <ul ng-click="friendShow()">
+                <li ng-repeat="name in menu">{{name.name}}</li>
             </ul>
         </div>
     </div>
@@ -61,7 +64,7 @@
     <div class="firend_list" ng-click="chat()">
         <ul>
             <li>
-                <div class="firend_contain" ><h4 class="firend_name">周建</h4>
+                <div class="firend_contain"><h4 class="firend_name">周建</h4>
                     <span class="time">15:00 PM</span>
                     <p>我想吃饭</p>
                 </div>
@@ -136,14 +139,15 @@
     </div>
     <div class="chat_contain">
         <div id="scroller">
-        <ul>
-            <!--<li class="chat_time">12:00</li>-->
-            <li ng-repeat="a in A" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}" repeat-done="repeatDone()">
-                <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
-                <p ng-if="a.type!==3">{{a.body}}</p>
-               {{a.time}}
-            </li>
-        </ul>
+            <ul>
+                <!--<li class="chat_time">12:00</li>-->
+                <li ng-repeat="a in A" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}"
+                    repeat-done="repeatDone()">
+                    <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
+                    <p ng-if="a.type!==3">{{a.body}}</p>
+                    {{a.time}}
+                </li>
+            </ul>
         </div>
     </div>
     <div class="chat_bottom">
