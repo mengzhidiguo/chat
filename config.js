@@ -10,8 +10,8 @@ module.exports  = {
     mysql:{
         host     : process.env.MYSQL_HOST,
         port     : process.env.MYSQL_PORT,
-        user     : '4ox3j0kyjw'||process.env.ACCESSKEY,
-        password : 'mzz2xx3h155kjhkwzl114wjwhx1l0ljizw0xh1lj'||process.env.SECRETKEY,
+        user     : process.env.ACCESSKEY||'4ox3j0kyjw',
+        password : process.env.SECRETKEY||'mzz2xx3h155kjhkwzl114wjwhx1l0ljizw0xh1lj',
         database : 'app_' + process.env.APPNAME
     },
     //端口设置
