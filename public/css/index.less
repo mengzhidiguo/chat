@@ -21,12 +21,73 @@ body {
   width: 100%;
  height: 100%;
 }
-.transform(@x,@y,@xx,@yy){
-  transform: translate(@x,@y) scale(@xx,@yy) ;
-  -webkit-transform: translate(@x,@y)  scale(@xx,@yy);
 
+@keyframes lr
+{
+  from {
+    transform: translate(0px,0px);
+  }
+  to {
+    transform: translate(-100%,0px);
+  }
+}
+@-webkit-keyframes lr
+{
+  from {
+    transform: translate(0px,0px);
+  }
+  to {
+    transform: translate(-100%,0px);
+  }
+}
+@keyframes rl
+{
+  from {
+    transform: translate(-100%,0px);
+  }
+  to {
+    transform: translate(0px,0px);
+  }
+}
+@-webkit-keyframes rl
+{
+  from {
+    transform: translate(-100%,0px);
+  }
+  to {
+    transform: translate(0px,0px);
+  }
 }
 
+
+.animal(@time:0.5s,@delay:0.5s){
+  animation-duration: @time;
+  animation-timing-function: ease;
+  animation-delay: @delay;
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+  animation-play-state: running;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:@time;
+  -webkit-animation-timing-function: ease;
+  -webkit-animation-delay: @delay;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-play-state: running;
+  -webkit-animation-fill-mode:forwards;
+}
+
+.animalHide{
+  .animal(0.5s,0.3s);
+  animation-name: lr;
+  -webkit-animation-name: lr;
+}
+.animalShow{
+  .animal(0.5s,0.3s);
+  animation-name: rl;
+  -webkit-animation-name: rl;
+}
 
 .flexContain(@flex-direction:row,@flex-wrap:nowrap,@justify-content:flex-start,@align-items:stretch,@align-content:stretch){
   display: -webkit-box;
@@ -106,6 +167,9 @@ body {
 }
 //登录界面
 .login{
+  position: absolute;
+  top:0px;
+  left: 0px;
   height: 100%;
   width:100%;
   background: url("../image/bg.png") no-repeat center;
@@ -214,9 +278,10 @@ body {
   position: absolute;
   top:0px;
   left:0px;
+  transform: translate(-100%,0px);
   height: 100%;
   width:100%;
-  z-index: 4;
+  //z-index: 4;
   background-color: rgba(0,0,0,0.15);
   .menu_main{
     font-size: 12px;
@@ -274,9 +339,12 @@ body {
 
 //聊天界面
 .chat{
+  position: absolute;
+  top:0px;
+  left: 0px;
   height: 100%;
   width:100%;
-
+  transform: translate(-100%,0px);
   .flexContain(column ,nowrap,flex-start,stretch,stretch);
   .chat_top{
 
@@ -449,13 +517,14 @@ body {
 
 //好友列表界面
 .friend{
+  transform: translate(-100%,0px);
   position: absolute;
   top:0px;
   left:0px;
   height: 100%;
   width:100%;
   background-color: white;
-  z-index: 2;
+  //z-index: 2;
   .firend_top{
     position: fixed;
     top:0px;

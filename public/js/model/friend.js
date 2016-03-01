@@ -1,6 +1,7 @@
 define(['angularApp'],function(app) {
-    app.controller('friendController', ['$rootScope', '$scope', '$timeout', function ($rootScope, $scope, $timeout) {
-        $scope.friendHide = true;
+    app.controller('friendController', ['$rootScope', '$scope', '$timeout','$switchView', function ($rootScope, $scope,
+                                                                                                    $timeout,$switchView) {
+        //$scope.friendHide = true;
         $scope.$on('friendshow', function (evt, data) {
             $scope.friendHide = false;
         });
@@ -8,13 +9,17 @@ define(['angularApp'],function(app) {
             event = event || window.event;
             console.log(event.target.nodeName)
             if (event.target.nodeName === 'DIV') {
-                $scope.friendHide = true;
-                $rootScope.$broadcast('chatshow', '');
+                $switchView.switch('.friend','.chat',1,function(){
+                });
+                //$scope.friendHide = true;
+                //$rootScope.$broadcast('chatshow', '');
             }
         };
         $scope.menushow = function () {
-            $scope.friendHide = true;
-            $rootScope.$broadcast('menushow', '');
+            $switchView.switch('.friend','.menu',1,function(){
+            });
+            //$scope.friendHide = true;
+            //$rootScope.$broadcast('menushow', '');
         };
     }]);
     return null;

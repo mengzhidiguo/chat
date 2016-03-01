@@ -229,6 +229,27 @@ define(['angular', 'io'], function (angular, io) {
             socket.emit(eventName, data)
         };
     })
+    //切换视图服务
+    app.service('$switchView', function ($rootScope,$timeout) {
+        //切换
+        this.switch = function (eleFrom,eleTo, type,callback) {
+
+            eleFrom =angular.element(document.querySelector(eleFrom));
+            eleTo =angular.element(document.querySelector(eleTo));
+            eleFrom.addClass('animalHide');
+            eleTo.addClass('animalShow');
+            //$rootScope.$apply();
+            $timeout(function(){
+                eleFrom.css('transform',' translate(-100%,0px)');
+                eleFrom.removeClass('animalHide');
+                eleTo.css('transform',' translate(0px,0px)');
+                eleTo.removeClass('animalShow');
+                callback();
+
+            },1500);
+        };
+
+    })
 
 
 

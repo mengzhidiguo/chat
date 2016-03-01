@@ -1,7 +1,7 @@
 define(['angularApp'], function (app) {
-    app.controller('menuController', ['$rootScope', '$scope', '$timeout', function ($rootScope, $scope, $timeout) {
-        $scope.menuHide = true;
-
+    app.controller('menuController', ['$rootScope', '$scope', '$timeout','$switchView', function ($rootScope, $scope,
+                                                                                                  $timeout,$switchView) {
+        //$scope.menuHide = true;
 
         $scope.menu = [
             {name:'聊天'},
@@ -17,12 +17,14 @@ define(['angularApp'], function (app) {
             event = angular.element(event.target);
             console.log(event)
             if(event.text() === '好友列表'){
-                $scope.menuHide = true;
-                $rootScope.$broadcast('friendshow', '');
+                $switchView.switch('.menu','.friend',1,function(){
+                });
+                //$scope.menuHide = true;
+                //$rootScope.$broadcast('friendshow', '');
             }
         };
-        $scope.$on('menushow', function (evt, data) {
-            $scope.menuHide = false;
-        });
+        //$scope.$on('menushow', function (evt, data) {
+        //    $scope.menuHide = false;
+        //});
     }]);
 })

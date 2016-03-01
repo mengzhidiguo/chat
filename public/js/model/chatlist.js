@@ -1,5 +1,5 @@
 define(['angularApp'],function(app){
-    app.controller('chatlistController', ['$rootScope', '$scope', '$timeout','$socket', function ($rootScope, $scope, $timeout, $socket) {
+    app.controller('chatlistController', ['$rootScope', '$scope', '$timeout','$socket','$switchView', function ($rootScope, $scope, $timeout, $socket,$switchView) {
         $scope.A = [
             {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
             {type: 3, time:'2016-2-29 12:00'},
@@ -8,13 +8,11 @@ define(['angularApp'],function(app){
             {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
         ];
 
-        $scope.chatlistHide = true;
-        $scope.$on('chatshow', function (evt, data) {
-            $scope.chatlistHide = false;
-        })
+
+
         $scope.back = function () {
-            $scope.chatlistHide = true;
-            $rootScope.$broadcast('friendshow', '');
+            $switchView.switch('.chat','.friend',1,function(){
+            });
         }
 
         //发送信息,向A数组添加数据

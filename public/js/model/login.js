@@ -1,6 +1,7 @@
 define(['angularApp'],function(app){
     //登录控制器
-    app.controller('loginController', ['$rootScope', '$scope', '$timeout', '$socket', function ($rootScope, $scope, $timeout, $socket) {
+    app.controller('loginController', ['$rootScope', '$scope', '$timeout', '$socket','$switchView', function ($rootScope, $scope, $timeout,
+                                                                                                              $socket,$switchView) {
         //提示框是否显示
         $scope.c = false;
         //提示信息内容
@@ -19,10 +20,15 @@ define(['angularApp'],function(app){
                 } else if (msg.code == 0) {
                     $scope.info = msg.msg;
                     //登录成功
-                    $timeout(function () {
-                        $scope.loginHide = true;
-                        $rootScope.$broadcast('menushow', '');
-                    }, 500);
+                    //$timeout(function () {
+
+                    $switchView.switch('.login','.menu',1,function(){
+
+                    });
+
+                        //$scope.loginHide = true;
+                        //$rootScope.$broadcast('menushow', '');
+                    //}, 500);
                 }
             });
         }
