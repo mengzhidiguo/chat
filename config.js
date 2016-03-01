@@ -12,7 +12,7 @@ module.exports  = {
         user     : 'SAE_MYSQL_USER',
         password : 'SAE_MYSQL_PASS',
         database : 'app_mengzhidiguo',
-        port:'SAE_MYSQL_PORT'
+        port:3307//'SAE_MYSQL_PORT'
     },
     //端口设置
     port:process.env.PORT || 5050,
