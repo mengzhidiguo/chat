@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var index = require('./routes/index');
 //var fs = require("fs");
-require('./db/db');
+//require('./db/db');
 //获取post数据用的中间件
 var bodyParser = require('body-parser');
 

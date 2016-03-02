@@ -3,13 +3,14 @@
  */
 
 module.exports = function (msg, socket,io,socketOnLine) {
+    var mysql      = require('mysql');
+    var con = mysql.createConnection(require('../config.js').mysql);
     var str = {code: 1, msg: '失败'};
     if (msg.username === '' || msg.username === undefined) {
         str.msg = '请输入用户名，密码';
         socket.emit('login', str);
         return;
     }
-    con = require('../db/db')();
     var sql = con.query('select * from userinfo where username = ?',[msg.username], function (err, rows) {
         if (err) {
             str.msg = '内部数据错误，内容已记录，请等待解决';
@@ -58,5 +59,4 @@ module.exports = function (msg, socket,io,socketOnLine) {
        // 推送给用户好友列表
        require('./common').getFriendList(socket,io,msg.username,socketOnLine);
     });
-    con.end();
 };

@@ -4,7 +4,9 @@
 var str = {code: 0, msg: ''};
 //推送给用户好友列表
 exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象  id用户userInfo的id
-    var con = require('../db/db')();
+    //var con = require('../db/db')();
+    var mysql      = require('mysql');
+    var con = mysql.createConnection(require('../config.js').mysql);
     var friendName = [];
     for(var b in socketOnLine){
         friendName.push(b);
@@ -29,5 +31,4 @@ exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象
         io.sockets.emit('main',str);
     });
     console.log(sql.sql)
-    con.end();
 }
