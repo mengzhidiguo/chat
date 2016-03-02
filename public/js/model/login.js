@@ -9,21 +9,37 @@ define(['angularApp'],function(app){
 
         //发送按钮点击事件
         $scope.send = function () {
-            console.log('click');
             $socket.emit('login', {username: $scope.username, password: $scope.password});
             $scope.c = true;
             $socket.on('login', function (msg) {
-                if (msg.code == 1) {
-                    $scope.info = msg.msg;
-                    $timeout(function () {
-                        $scope.c = false;
-                        $scope.info = '';
-                    }, 500);
-                } else if (msg.code == 0) {
-                    //console.log(msg.msg);
-                    $scope.info = msg.msg;
+                switch(msg.code){
                     //登录成功
-                    $switchView.switch('.login','.menu',1,function(){});
+                    case 0:
+                        $scope.info = msg.msg;
+                        $switchView.switch('.login','.menu',1,function(){});
+                        break;
+                    //用户名错误或者密码错误
+                    case 1:
+                        $scope.info = msg.msg;
+                        $timeout(function () {
+                            $scope.c = false;
+                            $scope.info = '';
+                        }, 500);
+                        break;
+                    case 2:
+                        $scope.info = msg.msg;
+                        $timeout(function () {
+                            $scope.c = false;
+                            $scope.info = '';
+                        }, 500);
+                        break;
+                        break;
+                    default:
+                        $scope.info = '未知错误';
+                        $timeout(function () {
+                            $scope.c = false;
+                            $scope.info = '';
+                        }, 500);
                 }
             });
         }

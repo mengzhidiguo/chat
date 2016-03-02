@@ -146,7 +146,7 @@ define(['angular', 'io'], function (angular, io) {
 
             // Actual linking function.
             return function (scope, element, attr) {
-                var clickHandler = $parse(attr.ngClick),
+                var clickHandler = $parse(attr.ngTouch),
                     tapping = false,
                     tapElement,  // Used to blur the element after a tap.
                     startTime,   // Used to check if the tap was held too long.

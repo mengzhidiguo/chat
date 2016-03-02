@@ -16,14 +16,26 @@ module.exports = function (msg, socket) {
             socket.emit('login', str);
             return;
         }
+        console.log(rows.length);
         if (rows.length <= 0) {
-            str.msg = '此用户未注册，请注册后登陆';
+            str.code = 2;
+            str.msg = '此用户未注册，正在注册请等待';
             socket.emit('login', str);
+            con.query('insert into userinfo set  ?',{
+                username:msg.username,
+                password:msg.password,
+                moto:'吃饭要吃饱',
+            }, function (err, rows){
+                if(!err){
+                    str.code = 0;
+                    str.msg = '注册成功,登录中';
+                    socket.emit('login', str);
+                }
+            })
             return;
         }
-        var author = rows[0].author, date = rows[0].time, times = rows[0].hit, title = rows[0].title;
-        console.log(author + date + times + title)
-        str.msg = author + date + times + title;
+        str.code = 0;
+        str.msg = '登陆成功';
         socket.emit('login', str);
     });
     console.log(sql.sql);

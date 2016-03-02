@@ -7,7 +7,7 @@ module.exports  = {
         database : 'test',
         port:3306
     },
-    mysql0:{
+    mysql:{
         host     : process.env.MYSQL_HOST,
         port     : process.env.MYSQL_PORT,
         user     : process.env.ACCESSKEY,
