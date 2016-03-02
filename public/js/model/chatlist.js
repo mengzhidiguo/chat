@@ -10,9 +10,11 @@ define(['angularApp'], function (app) {
 
         $scope.name = '';
         var chat = {};
-        for(var a  in $rootScope.friendList){
-            chat[a] = [];
-        }
+        $scope.$on('friendList',function(){
+            for(var a  in $rootScope.friendList){
+                chat[a] = [];
+            };
+        });
         $scope.back = function () {
             $switchView.switch('.chat', '.friend', 1, function () {
             });
@@ -22,8 +24,8 @@ define(['angularApp'], function (app) {
         $scope.send = function () {
             if ($scope.talk === '' || $scope.talk === undefined)
                 return;
-            $scope.A.push({type: 2, imgSrc: './image/friend_name_06.png', body: $scope.talk})
-            $socket.emit('chat', {type: 1, body: $scope.talk});
+            $scope.A.push({type: 2, imgSrc: './image/friend_name_06.png', body: $scope.talk});
+            $socket.emit('chat', {type: 1, from:$rootScope.userInfo.username,to:$scope.name,body: $scope.talk});
             $scope.talk = '';
         };
         $scope.keydown = function(){

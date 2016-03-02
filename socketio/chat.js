@@ -1,23 +1,29 @@
 /**
  * Created by 周建 on 2015/12/4.
  */
-var main_socket = null;
-
+//io.sockets.sockets当前所有的socket连接  通过id标识
+var socketOnLine = {};
 function init(io) {
     console.log("socket启动");
     var num = 0;
     io.on('connection', function (socket) {
         socket.on('login', function (msg) {
-            console.log(msg);
-            require('./userLogin')(msg,socket);
-
-
+            require('./userLogin')(msg,socket,io,socketOnLine);
+            console.log(socketOnLine)
+            //console.log(io.sockets.sockets)
+            //for(var a in io.sockets.sockets){
+            //
+            //    console.log(io.sockets.sockets[a])
+            //}
         });
-
         socket.on('chat', function (msg) {
-
             var temp = {code: 0, type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body}
-            socket.emit('chat', temp);
+            if(socketOnLine[msg.to]){
+                if(io.sockets.sockets[socketOnLine[msg.to]]){
+                    io.sockets.sockets[socketOnLine[msg.to]].emit('chat',temp);
+                }
+            }
+            //socket.emit('chat', temp);
         });
         socket.on('photo', function (msg) {
             var base64Data = msg.replace(new RegExp('^data:image/jpeg;base64,'), "");
@@ -31,6 +37,18 @@ function init(io) {
             //    }
             //});
             io.sockets.emit("msg", {msg: msg, id: socket.id});
+        });
+
+        socket.on("disconnect",function(msg){
+            for(var a in socketOnLine){
+                if(socketOnLine[a] == socket.id)
+                {
+                    delete socketOnLine[a];
+                    require('./common').getFriendList(socket,io,a,socketOnLine);
+                    return;
+                }
+
+            }
         });
     });
     //io.on('connection', function(socket) {

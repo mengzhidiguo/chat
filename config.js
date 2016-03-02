@@ -1,6 +1,6 @@
 module.exports  = {
     //数据库配置
-    mysql1:{
+    mysql0:{
         host     : 'localhost',
         user     : 'root',
         password : '',

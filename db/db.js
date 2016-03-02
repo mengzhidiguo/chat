@@ -6,4 +6,8 @@ var connection = mysql.createConnection(require('../config.js').mysql);
 
 //module.exports = connection.query;
 
-module.exports = connection;
+module.exports = function(){
+    if(!connection)
+        connection = mysql.createConnection(require('../config.js').mysql);
+    return connection;
+};

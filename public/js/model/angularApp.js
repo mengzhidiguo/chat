@@ -1,18 +1,35 @@
 define(['angular', 'io'], function (angular, io) {
 
-    var app = angular.module('chat', ['ngRoute']).run(function ($rootScope) {
+    var app = angular.module('chat', ['ngRoute']).run(['$rootScope','$socket',function ($rootScope,$socket) {
         //    可以通过run方法来访问$rootScope
+        $rootScope.userInfo = {};
 
+        //好友列表  好友的一些基本信息
         $rootScope.friendList = {
-            '周建': {id: 1, name: '周建', time: '12:00', moto: '吃饭要吃饱,好吗'},
-            '测试人员1': {id: 2, name: '测试人员1', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
-            '测试人员2': {id: 3, name: '测试人员2', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
-            '测试人员3': {id: 4, name: '测试人员3', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
-            '测试人员4': {id: 5, name: '测试人员4', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
-            '测试人员5': {id: 6, name: '测试人员5', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
-            '测试人员6': {id: 7, name: '测试人员6', time: '25:00 PM', moto: '吃饭要吃饱,好吗'},
         };
 
+        //接收到后台的广播信息
+        $socket.on('broadcast',function(msg){
+        });
+        $socket.on('main',function(msg){
+            switch(msg.code){
+                //获取登陆者信息
+                case 0:
+                    $rootScope.userInfo = msg.msg;
+                    console.log('0'+msg.msg);
+                    break;
+                //获取好友信息
+                case 1:
+                    console.log('1'+msg.msg);
+                    $rootScope.friendList = msg.msg;
+                    console.log($rootScope.friendList);
+                    $rootScope.$broadcast('friendList');
+                    break;
+
+            }
+        });
+
+        //接收切换界面的事件信息   并发送广播通知切换
         $rootScope.$on('friend', function (evt, next, current) {
             if($rootScope.friendList[arguments[1].name] !== undefined)
             {
@@ -23,7 +40,7 @@ define(['angular', 'io'], function (angular, io) {
                 $rootScope.$apply();
             }
         })
-    });
+    }]);
 
     //执行完ng-repeate  执行函数
     app.directive('repeatDone', function () {
