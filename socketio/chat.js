@@ -13,14 +13,14 @@ function init(io){
             var str = {code:0,msg:'失败'};
             if(msg.username == '周建' && msg.password == 'zhoujian')
                 str = {code:0,msg:'成功'};
-            //socket.emit('login',str);
+            socket.emit('login',str);
 
-            query('select * from blog_article;',function(rows){
-               var author = rows[0].author, date = rows[0].time, times = rows[0].hit, title = rows[0].title;
-                console.log(author+date+times+title)
-                str.msg = author+date+times+title;
-                socket.emit('login',str);
-            })
+            //query('select * from blog_article;',function(rows){
+            //   var author = rows[0].author, date = rows[0].time, times = rows[0].hit, title = rows[0].title;
+            //    console.log(author+date+times+title)
+            //    str.msg = author+date+times+title;
+            //    socket.emit('login',str);
+            //})
         });
 
         socket.on('chat',function(msg){
