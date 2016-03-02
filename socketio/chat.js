@@ -18,10 +18,16 @@ function init(io) {
         });
         socket.on('chat', function (msg) {
             var temp = {code: 0, type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body}
-            if(socketOnLine[msg.to]){
-                if(io.sockets.sockets[socketOnLine[msg.to]]){
+            if(socketOnLine[msg.to] !== undefined && socketOnLine[msg.to] !==  null){
+                console.log(socketOnLine[msg.to])
+                if(io.sockets.sockets[socketOnLine[msg.to]] !== undefined && io.sockets.sockets[socketOnLine[msg.to]] !==  null){
+                    console.log(io.sockets.sockets[socketOnLine[msg.to]])
                     io.sockets.sockets[socketOnLine[msg.to]].emit('chat',temp);
                 }
+            }
+            else{
+                temp.body = '000出现错误了'
+                socket.emit('chat', temp);
             }
             //socket.emit('chat', temp);
         });
