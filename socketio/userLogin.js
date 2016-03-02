@@ -1,7 +1,6 @@
 /**
  * Created by Administrator on 2016/3/2.
  */
-var con = require('../db/db')();
 
 module.exports = function (msg, socket,io,socketOnLine) {
     var str = {code: 1, msg: '失败'};
@@ -22,7 +21,6 @@ module.exports = function (msg, socket,io,socketOnLine) {
             str.code = 2;
             str.msg = '此用户未注册，正在注册请等待';
             socket.emit('login', str);
-            con = require('../db/db')();
             con.query('insert into userinfo set  ?',{
                 username:msg.username,
                 password:msg.password,
@@ -60,5 +58,5 @@ module.exports = function (msg, socket,io,socketOnLine) {
        // 推送给用户好友列表
        require('./common').getFriendList(socket,io,msg.username,socketOnLine);
     });
-
+    con.end();
 };

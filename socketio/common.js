@@ -29,4 +29,5 @@ exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象
         io.sockets.emit('main',str);
     });
     console.log(sql.sql)
+    con.end();
 }
