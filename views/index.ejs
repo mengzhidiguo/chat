@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" ng-app="chat">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<!--loadding-->
+<div class="loadding" ng-controller="loaddingController">
+    <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
+</div>
+
+<!--登录界面-->
+<div class="login" ng-hide="loginHide" ng-controller="loginController" ng-cloak>
+    <div class="showTip" ng-show="c">
+        <em>{{info}}</em>
+    </div>
+    <div class="loginin">
+        <div class="top"><p>Already have an account?</p>
+            <p>Log In Here</p></div>
+        <input type="text" placeholder="Username" ng-model="username" ng-maxlength="10" required>
+        <input type="text" placeholder="Password" ng-model="password" ng-maxlength="10" required>
+        <div class="bottom">
+            <label for="check"><input type="checkbox" ng-model="rember" id="check" ng-disabled="!rember">Keep me
+            </label>
+            <button ng-click="send()">Log In »</button>
+        </div>
+    </div>
+</div>
+
+<!--菜单界面-->
+<div class="menu" ng-hide="menuHide" ng-controller="menuController" ng-cloak>
+    <div class="menu_main">
+        <div class="menu_main_top">
+            <!--头像-->
+            <img class="menu_main_top_photo" src="./image/menu_03.png" alt="">
+            <!--编辑-->
+            <img class="menu_main_top_edit" src="./image/menu_06.png" alt="">
+            <h4 class="menu_main_top_name">周建</h4>
+        </div>
+        <div class="menu_main_menu">
+            <ul ng-click="friendShow()">
+                <li ng-repeat="name in menu">{{name.name}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--好友界面-->
+<div class="friend" ng-hide="friendHide" ng-controller="friendController" ng-cloak>
+    <!--头部-->
+    <div class="firend_top">
+        <div class="firend_menu" ng-click="menushow()"></div>
+        <h4 class="logo">Chat</h4>
+    </div>
+
+    <!--好友列表-->
+    <div class="firend_list" ng-click="chat()">
+        <ul>
+            <li ng-repeat="a in friendList">
+                <div class="firend_contain"><h4 class="firend_name">{{a.name}}</h4>
+                    <span class="time">{{a.time}}</span>
+                    <p>{{a.moto}}</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<!--聊天界面-->
+<div class="chat" ng-hide="chatlistHide" ng-controller="chatlistController" ng-cloak >
+    <div class="chat_top">
+        <div class="chat_top_back" ng-click="back()"></div>
+        <h4>{{name}}</h4>
+        <div class="chat_top_person"></div>
+    </div>
+    <div class="chat_contain">
+        <div id="scroller">
+            <ul>
+                <li ng-repeat="a in A" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}"
+                    repeat-done="repeatDone()">
+                    <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
+                    <p ng-if="a.type!==3">{{a.body}}</p>
+                    {{a.time}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="chat_bottom">
+        <div class="voice"></div>
+        <div class="add"></div>
+        <input class="input" ng-model="talk" type="text">
+        <div class="send" ng-click="send()" ng-keypress="keydown()"></div>
+    </div>
+</div>
+<script data-main="js/app" src="js/lib/requireJs.js"></script>
+</body>
+</html>

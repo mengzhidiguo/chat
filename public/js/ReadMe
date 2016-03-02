@@ -1,0 +1,27 @@
+---------------------lib目录------------------------
+    为常用插件:
+        angular,
+        iscroll,        //移动端滚动插件
+        jquery,         //应该用不到  如果用到使用zepTojs代替
+        require         //模块管理插件    使用AMD规范
+
+
+
+---------------------model目录------------------------
+    为自定义插件  模块化功能
+        config,     //项目公共配置
+        init,       //初始化
+            为String对象原型添加函数strSlice,分割'16px',返回'16'
+
+        angularApp, //angular初始化 $rootScope 指令 服务
+        friend,     //angular好友列表控制器
+        login,      //angular登录控制器
+        menu,       //angular菜单控制器
+        chatlist,   //对话框控制器
+
+
+
+
+---------------------app文件------------------------
+    配置require.config,开始执行功能
+        zhKeep  对象  添加到全局对象window中  保存一些对象

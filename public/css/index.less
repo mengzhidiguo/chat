@@ -1,0 +1,659 @@
+h4,h3,h2,h1,p,ul,li,footer,label, header, div, body, html, button, img,input {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+ul{
+  list-style: none;
+}
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 625%;
+  height: 100%;
+  width: 100%;
+  -ms-touch-action: none;
+}
+
+body {
+  width: 100%;
+ height: 100%;
+}
+
+@keyframes lr
+{
+  from {
+    transform: translate(0px,0px);
+  }
+  to {
+    transform: translate(-100%,0px);
+  }
+}
+@-webkit-keyframes lr
+{
+  from {
+    transform: translate(0px,0px);
+  }
+  to {
+    transform: translate(-100%,0px);
+  }
+}
+@keyframes rl
+{
+  from {
+    transform: translate(-100%,0px);
+  }
+  to {
+    transform: translate(0px,0px);
+  }
+}
+@-webkit-keyframes rl
+{
+  from {
+    transform: translate(-100%,0px);
+  }
+  to {
+    transform: translate(0px,0px);
+  }
+}
+
+
+
+
+.animal(@time:0.5s,@delay:0.5s){
+  animation-duration: @time;
+  animation-timing-function: ease;
+  animation-delay: @delay;
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+  animation-play-state: running;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:@time;
+  -webkit-animation-timing-function: ease;
+  -webkit-animation-delay: @delay;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-play-state: running;
+  -webkit-animation-fill-mode:forwards;
+}
+
+.animalHide{
+  .animal(0.5s,0.3s);
+  animation-name: lr;
+  -webkit-animation-name: lr;
+}
+.animalShow{
+  .animal(0.5s,0.3s);
+  animation-name: rl;
+  -webkit-animation-name: rl;
+}
+
+.flexContain(@flex-direction:row,@flex-wrap:nowrap,@justify-content:flex-start,@align-items:stretch,@align-content:stretch){
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-flex-direction: @flex-direction;
+  -moz-flex-direction: @flex-direction;
+  -ms-flex-direction: @flex-direction;
+  -o-flex-direction: @flex-direction;
+  flex-direction: @flex-direction;
+
+
+
+  -webkit-flex-wrap: @flex-wrap;
+  -moz-flex-wrap: @flex-wrap;
+  -ms-flex-wrap: @flex-wrap;
+  -o-flex-wrap: @flex-wrap;
+  flex-wrap: @flex-wrap;
+
+  -webkit-justify-content: @justify-content;
+  -moz-justify-content: @justify-content;
+  -ms-justify-content: @justify-content;
+  -o-justify-content: @justify-content;
+  justify-content: @justify-content;
+
+  -webkit-align-items: @align-items;
+  -moz-align-items: @align-items;
+  -ms-align-items: @align-items;
+  -o-align-items: @align-items;
+  align-items: @align-items;
+
+  -webkit-align-content: @align-content;
+  -moz-align-content: @align-content;
+  -ms-align-content: @align-content;
+  -o-align-content: @align-content;
+  align-content: @align-content;
+
+
+
+
+}
+.flexZi(@order:0,@flex-grow:0,@flex-shrink:1,@flex-basis:auto,@align-self:auto){
+  -webkit-box-ordinal-group: @order;   /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-ordinal-group: @order;      /* OLD - Firefox 19- */
+  -ms-flex-order: @order;              /* TWEENER - IE 10 */
+  -webkit-order: @order;               /* NEW - Chrome */
+  order: @order;
+
+  -webkit-flex-grow: @flex-grow;
+  -moz-flex-grow: @flex-grow;
+  -ms-flex-grow: @flex-grow;
+  -o-flex-grow: @flex-grow;
+  flex-grow:@flex-grow;
+
+
+  -webkit-flex-shrink: @flex-shrink;
+  -moz-flex-shrink: @flex-shrink;
+  -ms-flex-shrink: @flex-shrink;
+  -o-flex-shrink: @flex-shrink;
+  flex-shrink:@flex-shrink;
+
+  -webkit-flex-basis: @flex-basis;
+  -moz-flex-basis: @flex-basis;
+  -ms-flex-basis: @flex-basis;
+  -o-flex-basis: @flex-basis;
+  flex-basis:@flex-basis;
+
+  -webkit-align-self: @align-self;
+  -moz-align-self: @align-self;
+  -ms-align-self: @align-self;
+  -o-align-self: @align-self;
+  align-self:@align-self;
+
+}
+//加载界面
+.loadding{
+  position: absolute;
+  z-index: 1000;
+  top:0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  font-size: 50px;
+  @-webkit-keyframes bounce {
+    0%, 100% {
+      -webkit-transform: scale(0.0)
+    }
+    50% {
+      -webkit-transform: scale(1.0)
+    }
+  }
+  @keyframes bounce {
+    0%, 100% {
+          transform: scale(0.0);
+          -webkit-transform: scale(0.0);
+    } 50% {
+            transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+      }
+  }
+
+  .spinner {
+      width: 60px;
+      height: 60px;
+      position: relative;
+      top:50%;
+      margin: -30px auto;
+  }
+   
+  .double-bounce1, .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #67CF22;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-animation: bounce 2.0s infinite ease-in-out;
+      animation: bounce 2.0s infinite ease-in-out;
+  }
+   
+  .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+  }
+}
+
+//登录界面
+.login{
+  position: absolute;
+  top:0px;
+  left: 0px;
+  height: 100%;
+  width:100%;
+  background: url("../image/bg.png") no-repeat center;
+  background-size: 100% 100%;
+  .flexContain(row,nowrap,flex-start,stretch,stretch);
+  .showTip{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top:0px;
+    left: 0px;
+    z-index: 5;
+    text-align: center;
+    em{
+      position: absolute;
+      top:50%;
+      left: 50%;
+      margin-left: -2rem;
+      margin-top: -1rem;
+      background-color: #E0E0E0;
+      font-size: 0.28rem;
+      color: #676767;
+      font-style: normal;
+      border-radius: 0.09rem;
+      width:4rem;
+      height: 2rem;
+      line-height: 2rem;
+      display: block;
+    }
+  }
+  .loginin{
+    height: 5.328rem;
+    width: 4.80rem;
+    border:0.01rem solid #607175;
+    background-color: rgba(255,255,255,0.15);
+    margin: auto;
+    .flexZi(0,0,1,auto,center);
+    .top{
+      margin-top: 0.48rem;
+      text-align: center;
+      //background: url("../image/login_03.png") no-repeat 0.59rem center;
+      p:nth-child(1){
+        color: white;
+        font-size: 0.224rem;
+      }
+      p:nth-child(2){
+        color: #f9c751;
+        font-size: 0.48rem;
+      }
+    }
+
+    input{
+      border-color: #585a52 #364443 #91948a #6f6c5b;
+      border-width: 0.01rem;
+      border-style: solid;
+      border-radius: 0.05rem;
+      margin:auto;
+      display: block;
+      background-color: #4a5754;
+      outline:none;
+      color: white;
+      padding-left: 0.54rem;
+      width:3.84rem;
+      height: 0.64rem;
+      font-size: 0.224rem;
+      line-height: 0.64rem;
+    }
+    input:nth-child(2){
+      margin-top: 0.48rem;
+    }
+    input:nth-child(3){
+      margin-top: 0.32rem;
+    }
+    .bottom{
+      width:3.84rem;
+      margin:auto;
+      button{
+        font-size: 0.224rem;
+        text-align: center;
+        line-height: 0.64rem;
+        width:1.84rem;
+        height:0.64rem;
+        background-color: #009c99;
+        border-radius: 0.05rem;
+        color: white;
+        outline:none;
+        box-shadow: inset  0 0.01rem 0.02rem #43b9b7 , 0 0.01rem 0.01rem #404a4d;
+      }
+    }
+    label{
+      font-size: 0.224rem;
+      color: white;
+      line-height: normal;
+      input{
+        display: inline-block;
+        width:0.2rem;
+        height: 0.2rem;
+
+      }
+    }
+  }
+}
+
+//菜单界面
+.menu{
+  position: absolute;
+  top:0px;
+  left:0px;
+  transform: translate(-100%,0px);
+  height: 100%;
+  width:100%;
+  //z-index: 4;
+  background-color: rgba(0,0,0,0.15);
+  .menu_main{
+    font-size: 12px;
+    width:6.4rem;
+    height: 100%;
+    .flexContain(column ,nowrap,flex-start,stretch,stretch);
+    .menu_main_top{
+      background: url("../image/menu_bg.png") no-repeat center;
+      background-size: 100% 100%;
+      .flexZi(1,0,0,auto,auto);
+      width:100%;
+      height: 3.4rem;
+      position: relative;
+      .menu_main_top_photo{
+        position: absolute;
+        top:0.35rem;
+        left:0.35rem;
+        height: 1.28rem;
+        width:1.28rem;
+        border-radius: 0.64rem;
+      }
+      .menu_main_top_edit{
+        position: absolute;
+        top:0.35rem;
+        right:0.35rem;
+        height: 0.36rem;
+        width:0.36rem;
+
+      }
+      .menu_main_top_name{
+        margin-top: 2.81rem;
+        margin-left: 0.35rem;
+        font-size: 0.28rem;
+        color: white;
+      }
+    }
+    .menu_main_menu{
+      width: 100%;
+      overflow: hidden;
+      font-size: 0.28rem;
+      color: #858585;
+      background-color: white;
+      .flexZi(2,1,1,auto,auto);
+      ul{
+        li{
+          padding-left: 1.42rem;
+          line-height: 0.95rem;
+          height:0.95rem;
+        }
+      }
+    }
+
+  }
+}
+
+//聊天界面
+.chat{
+  position: absolute;
+  top:0px;
+  left: 0px;
+  height: 100%;
+  width:100%;
+  transform: translate(-100%,0px);
+  .flexContain(column ,nowrap,flex-start,stretch,stretch);
+  .chat_top{
+
+    height: 1.14rem;
+    width:100%;
+    font-size: 0px;
+    background-color: #0f9d58;
+    .flexZi(1,0,0,auto,auto);
+    .chat_top_back{
+      display: inline-block;
+      height: 1.14rem;
+      width: 1.14rem;
+      background: url("../image/chat_06.png") no-repeat center;
+      background-size:0.32rem 0.36rem ;
+    }
+    .chat_top_person{
+      float: right;
+      display: inline-block;
+      height: 1.14rem;
+      width: 1.14rem;
+      background: url("../image/chat_03.png") no-repeat center;
+      background-size: 0.38rem 0.38rem;
+    }
+    h4{
+      vertical-align: top;
+      height: 1.14rem;
+      line-height: 1.14rem;
+      font-size: 0.38rem;
+      color: white;
+      display: inline-block;
+    }
+  }
+  .chat_contain{
+    width:100%;
+    overflow: hidden;
+    background-color: #efeff4;
+    .flexZi(2,1,1,auto,auto);
+    font-size: 0.32rem;
+    color: #444444;
+    ul{
+      padding-bottom: 0.8rem;
+    }
+    //左边对话框
+    .chat_left{
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+      .flexContain(row ,nowrap,flex-start,flex-end ,stretch);
+      img{
+        margin-left: 0.2rem;
+        margin-right: 0.3rem;
+        height: 0.8rem;
+        width: 0.8rem;
+        border-radius: 0.4rem;
+        .flexZi(1,0,0,auto,auto);
+      }
+      p{
+        border-radius: 0.07rem;
+        background-color: white;
+        max-width: 4.33rem;
+        .flexZi(2,0,0,auto,auto);
+        position: relative;
+      }
+      p::after{
+        position: absolute;
+        bottom: 0.09rem;
+        left:-0.09rem;
+        background: url("../image/chat_11.png") no-repeat center;
+        content: '';
+        display: block;
+        height: 0.09rem;
+        width:0.09rem;
+      }
+    }
+    //对话右侧框
+    .chat_right{
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+      .flexContain(row ,nowrap,flex-end,flex-end,stretch);
+      img{
+        margin-right: 0.2rem;
+        margin-left: 0.3rem;
+        height: 0.8rem;
+        width: 0.8rem;
+        border-radius: 0.4rem;
+        .flexZi(2,0,0,auto,auto);
+
+      }
+      p{
+        background-color: #33ac71;
+        color:white;
+        line-height: 0.45rem;
+        border-radius: 0.07rem;
+        max-width: 4.33rem;
+        .flexZi(1,0,0,auto,auto);
+        position: relative;
+      }
+      p::after{
+        position: absolute;
+        bottom: 0.09rem;
+        right:-0.09rem;
+        background: url("../image/chat_15.png") no-repeat center;
+        content: '';
+        display: block;
+        height: 0.09rem;
+        width:0.09rem;
+      }
+    }
+    //时间显示
+    .chat_time{
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+      height: 0.7rem;
+      width:100%;
+      text-align: center;
+      font-size: 0.2rem;
+      color: #8e8e93;
+      line-height: 0.7rem;
+    }
+  }
+  .chat_bottom{
+    background-color: #f7f8f9;
+    height:0.85rem;
+    width:100%;
+    .flexZi(3,0,0,auto,auto);
+    .flexContain(row ,nowrap,space-between,center,stretch);
+
+    .voice{
+      height: 100%;
+      width:0.44rem;
+
+      background: url("../image/chat_19.png") no-repeat center;
+      background-size:0.26rem 0.48rem;
+      .flexZi(1,0,1,auto,auto);
+    }
+    .add{
+      height: 100%;
+      width:0.44rem;
+
+      background: url("../image/chat_21.png") no-repeat center;
+      background-size: 0.48rem 0.48rem;
+      .flexZi(2,0,1,auto,auto);
+    }
+    .input{
+      outline: none;
+      border:1px solid #afafb3;
+      border-radius: 3px;
+      margin-left: 0.2rem;
+      line-height: 0.55rem;
+      font-size: 0.3rem;
+      padding-left: 10px;
+      color: #444444;
+      height: 0.55rem;
+      width:4.2rem;
+      .flexZi(3,1,1,auto,auto);
+
+    }
+    .send{
+      .flexZi(4,0,1,auto,auto);
+      width: 0.9rem;
+      height: 0.58rem;
+      background: url("../image/chat_23.png") no-repeat center;
+      background-size: 0.41rem 0.35rem;
+      background-color: #0f9d58;
+      margin-left: 0.2rem;
+      margin-right:0.2rem;
+      border-radius: 0.04rem;
+    }
+  }
+}
+
+//好友列表界面
+.friend{
+  transform: translate(-100%,0px);
+  position: absolute;
+  top:0px;
+  left:0px;
+  height: 100%;
+  width:100%;
+  background-color: white;
+  //z-index: 2;
+  .firend_top{
+    position: fixed;
+    top:0px;
+    left:0px;
+    height: 1.1rem;
+    font-size: 0px;
+    width:100%;
+    z-index: 2;
+    background-color: #0f9d58;
+    .firend_menu{
+      display: inline-block;
+      background: url("../image/friend_06.png") no-repeat center;
+      background-size: 0.40rem 0.28rem;
+      height: 1.1rem;
+      width:1.1rem;
+      vertical-align: top;
+    }
+    .logo{
+      padding-left: 0.80rem;
+      background: url("../image/friend_03.png") no-repeat left center;
+      background-size: 0.63rem 0.48rem;
+      display: inline-block;
+      color: white;
+      height: 1.1rem;
+      font-size: 0.38rem;
+      line-height:1.1rem;
+    }
+  }
+
+  .firend_list{
+    margin-top: 1.1rem;
+    width: 100%;
+    ul{
+      font-size: 32px;
+      li{
+        height: 80px;
+        overflow: hidden;
+        background: url("../image/friend_name_03.png") no-repeat 0.32rem center;
+        background-size: 60px 60px;
+        .firend_contain{
+          height:100%;
+          margin-left: 100px;
+          overflow: hidden;
+          line-height: 20px;
+          border-bottom: 1px solid #e6e6e6;
+          padding-top: 20px;
+          h4{
+            display: inline-block;
+            overflow: hidden;
+            font-size:16px;
+            color: #515151;
+          }
+          p{
+            display: inline-block;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+            color: #848484;
+            font-size:12px;
+          }
+          span{
+            float: right;
+            margin-right: 0.2rem;
+            vertical-align: top;
+            display: inline-block;
+            color: #a3a3a3;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
+
