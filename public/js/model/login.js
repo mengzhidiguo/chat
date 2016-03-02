@@ -9,6 +9,7 @@ define(['angularApp'],function(app){
 
         //发送按钮点击事件
         $scope.send = function () {
+            console.log('click');
             $socket.emit('login', {username: $scope.username, password: $scope.password});
             $scope.c = true;
             $socket.on('login', function (msg) {
@@ -16,9 +17,10 @@ define(['angularApp'],function(app){
                     $scope.info = msg.msg;
                     $timeout(function () {
                         $scope.c = false;
+                        $scope.info = '';
                     }, 500);
                 } else if (msg.code == 0) {
-                    console.log(msg.msg);
+                    //console.log(msg.msg);
                     $scope.info = msg.msg;
                     //登录成功
                     $switchView.switch('.login','.menu',1,function(){});

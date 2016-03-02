@@ -37,14 +37,14 @@ define(['angular', 'io'], function (angular, io) {
     })
 
     ////自定义触摸事件
-    app.directive('ngClick', ['$parse', '$timeout', '$rootElement',
+    app.directive('ngTouch', ['$parse', '$timeout', '$rootElement',
         function ($parse, $timeout, $rootElement) {
             var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
             var MOVE_TOLERANCE = 12; // 12px seems to work in most mobile browsers.
             var PREVENT_DURATION = 2500; // 2.5 seconds maximum from preventGhostClick call to click
             var CLICKBUSTER_THRESHOLD = 25; // 25 pixels in any dimension is the limit for busting clicks.
 
-            var ACTIVE_CLASS_NAME = 'ng-click-active';
+            var ACTIVE_CLASS_NAME = 'ng-touch-active';
             var lastPreventedTime;
             var touchCoordinates;
             var lastLabelClickCoordinates;
