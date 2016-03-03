@@ -17,20 +17,20 @@
 12 silly mapToRegistry uri https://registry.npm.taobao.org/n
 13 verbose request uri https://registry.npm.taobao.org/n
 14 verbose request no auth needed
-15 info attempt registry request try #1 at 21:13:12
-16 verbose request id dc5d2d398e65de04
+15 info attempt registry request try #1 at 10:54:02
+16 verbose request id 297a4a1a1c15c7fb
 17 verbose etag "11b49-6etJhwglWXMdCO1PEc9B6Q"
 18 http request GET https://registry.npm.taobao.org/n
 19 http 304 https://registry.npm.taobao.org/n
-20 verbose headers { date: 'Wed, 02 Mar 2016 13:13:16 GMT',
+20 verbose headers { date: 'Thu, 03 Mar 2016 02:54:06 GMT',
 20 verbose headers   connection: 'keep-alive',
 20 verbose headers   etag: '"11b49-6etJhwglWXMdCO1PEc9B6Q"',
-20 verbose headers   'x-readtime': '53' }
+20 verbose headers   'x-readtime': '133' }
 21 silly get cb [ 304,
-21 silly get   { date: 'Wed, 02 Mar 2016 13:13:16 GMT',
+21 silly get   { date: 'Thu, 03 Mar 2016 02:54:06 GMT',
 21 silly get     connection: 'keep-alive',
 21 silly get     etag: '"11b49-6etJhwglWXMdCO1PEc9B6Q"',
-21 silly get     'x-readtime': '53' } ]
+21 silly get     'x-readtime': '133' } ]
 22 verbose etag https://registry.npm.taobao.org/n from cache
 23 verbose get saving n to C:\Users\Administrator\AppData\Roaming\npm-cache\registry.npm.taobao.org\n\.cache.json
 24 silly install normalizeTree

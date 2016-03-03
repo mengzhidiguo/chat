@@ -1,11 +1,8 @@
-
 var mysql      = require('mysql');
 var con;
-
 function handleDisconnect() {
     con = mysql.createConnection(require('../config.js').mysql); // Recreate the connection, since
                                                   // the old one cannot be reused.
-
     con.connect(function(err) {              // The server is either down
     if(err) {                                     // or restarting (takes a whilesometimes).
       console.log('error when connecting to db:', err);
