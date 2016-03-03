@@ -11,6 +11,13 @@ exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象
         friendName.push(b);
         console.log(friendName)
     }
+    str.code = 1;
+    str.msg = {};
+    if(friendName.length <= 0)
+    {
+        io.sockets.emit('main',str);
+        return ;
+    }
     query(1,['select * from userinfo where username in (?)',[friendName]],function(rows,err){
         if(err){
             str.code = 5;
@@ -18,8 +25,6 @@ exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象
             socket.emit('main',str);
             return ;
         }
-        str.code = 1;
-        str.msg = {};
         for(var n =0; n < rows.length;n++){
             str.msg[rows[n].username] = {};
             str.msg[rows[n].username]['id'] = rows[n].id;

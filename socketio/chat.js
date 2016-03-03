@@ -21,13 +21,14 @@ function init(io) {
             if(socketOnLine[msg.to] !== undefined && socketOnLine[msg.to] !==  null){
                 console.log(socketOnLine[msg.to])
                 if(io.sockets.sockets[socketOnLine[msg.to]] !== undefined && io.sockets.sockets[socketOnLine[msg.to]] !==  null){
-                    console.log(io.sockets.sockets[socketOnLine[msg.to]])
+                    console.log(io.sockets.sockets[socketOnLine[msg.to]]);
                     io.sockets.sockets[socketOnLine[msg.to]].emit('chat',temp);
                 }
             }
             else{
-                temp.body = '000出现错误了'
+                temp.body = '000出现错误了';
                 socket.emit('chat', temp);
+                require('./common').getFriendList(socket,io,msg.from,socketOnLine);
             }
             //socket.emit('chat', temp);
         });

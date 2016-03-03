@@ -19,10 +19,17 @@ function handleDisconnect() {
     }
   });
 }
-
-handleDisconnect();
+//
+//handleDisconnect();
 
 module.exports = function(type,sql,callback){
+    con = mysql.createConnection(require('../config.js').mysql);
+    con.connect(function(err) {              // The server is either down
+        if(err) {                                     // or restarting (takes a whilesometimes).
+            console.log('error when connecting to db:', err);
+            return ;
+        }                                     // to avoid a hot loop, and to allow our nodescript to
+    });
     var sqlText = '';
     //连接不存在
     if(!con){
@@ -56,5 +63,6 @@ module.exports = function(type,sql,callback){
     }
 
     console.info(sqlText.sql);
+    con.end();
 
 };
