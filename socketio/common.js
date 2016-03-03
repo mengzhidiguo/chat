@@ -1,18 +1,17 @@
 /**
  * Created by Administrator on 2016/3/2.
  */
+
+var query = require('../db/db');
 var str = {code: 0, msg: ''};
 //推送给用户好友列表
 exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象  id用户userInfo的id
-    //var con = require('../db/db')();
-    var mysql      = require('mysql');
-    var con = mysql.createConnection(require('../config.js').mysql);
     var friendName = [];
     for(var b in socketOnLine){
         friendName.push(b);
         console.log(friendName)
     }
-    var sql = con.query('select * from userinfo where username in (?)',[friendName],function(err,rows){
+    query(1,['select * from userinfo where username in (?)',[friendName]],function(rows,err){
         if(err){
             str.code = 5;
             str.msg = '获取用户列表失败';
@@ -30,5 +29,4 @@ exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象
         }
         io.sockets.emit('main',str);
     });
-    console.log(sql.sql)
 }
