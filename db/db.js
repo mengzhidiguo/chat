@@ -1,5 +1,7 @@
 var mysql      = require('mysql');
 var con;
+var pool = mysql.createPool(require('../config.js').mysql)
+
 function handleDisconnect() {
     con = mysql.createConnection(require('../config.js').mysql); // Recreate the connection, since
                                                   // the old one cannot be reused.
@@ -23,46 +25,51 @@ function handleDisconnect() {
 //handleDisconnect();
 
 module.exports = function(type,sql,callback){
-    con = mysql.createConnection(require('../config.js').mysql);
-    con.connect(function(err) {              // The server is either down
-        if(err) {                                     // or restarting (takes a whilesometimes).
-            console.log('error when connecting to db:', err);
-            return ;
-        }                                     // to avoid a hot loop, and to allow our nodescript to
-    });
-    var sqlText = '';
-    //连接不存在
-    if(!con){
-        console.error('数据库连接错误'+con);
-        return ;
-    }
 
-    //sql方式
-    if(type === 0){
-        sqlText = con.query(sql[0],function(err,results){
-            if(err){
-                console.log('数据库查询出错');
-                console.error(err);
-                return ;
-            }
-            callback(results);
-        });
-    }else if(type === 1){//sql+?方式
-        if(sql[1] === undefined) {
-            console.log('查询参数输入错误');
+    pool.getConnection(function(err,con){
+        //con = mysql.createConnection(require('../config.js').mysql);
+        //con.connect(function(err) {              // The server is either down
+        //    if(err) {                                     // or restarting (takes a whilesometimes).
+        //        console.log('error when connecting to db:', err);
+        //        return ;
+        //    }                                     // to avoid a hot loop, and to allow our nodescript to
+        //});
+        var sqlText = '';
+        //连接不存在
+        if(!con){
+            console.error('数据库连接错误'+con);
             return ;
         }
-        sqlText = con.query(sql[0],sql[1],function(err,results){
-            if(err){
-                console.log('数据库查询出错');
-                console.error(err);
+
+        //sql方式
+        if(type === 0){
+            sqlText = con.query(sql[0],function(err,results){
+                if(err){
+                    console.log('数据库查询出错');
+                    console.error(err);
+                    return ;
+                }
+                callback(results);
+            });
+        }else if(type === 1){//sql+?方式
+            if(sql[1] === undefined) {
+                console.log('查询参数输入错误');
                 return ;
             }
-            callback(results);
-        });
-    }
+            sqlText = con.query(sql[0],sql[1],function(err,results){
+                if(err){
+                    console.log('数据库查询出错');
+                    console.error(err);
+                    return ;
+                }
+                callback(results);
+            });
+        }
 
-    console.info(sqlText.sql);
-    con.end();
+        console.info(sqlText.sql);
+        //con.end();
+        con.release();
+    });
+
 
 };
