@@ -1,6 +1,6 @@
 module.exports  = {
     //数据库配置
-    mysql:{
+    mysql1:{
         host     : 'localhost',
         user     : 'root',
         password : '',
@@ -8,7 +8,7 @@ module.exports  = {
         port:3306,
         debug: ['ComQueryPacket', 'RowDataPacket']
     },
-    mysql1:{
+    mysql:{
         host     : process.env.MYSQL_HOST,
         port     : process.env.MYSQL_PORT,
         user     : process.env.ACCESSKEY,
@@ -17,6 +17,6 @@ module.exports  = {
         debug: ['ComQueryPacket', 'RowDataPacket']
     },
     //express监听端口设置
-    port1:process.env.PORT || 5050,
-    port:3000||process.env.PORT || 5050,
+    port:process.env.PORT || 5050,
+    port1:3000||process.env.PORT || 5050,
 };
