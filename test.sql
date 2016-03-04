@@ -1,4 +1,4 @@
-/*
+﻿/*
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
@@ -28,7 +28,7 @@ CREATE TABLE `blog_article` (
   `author` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '作者',
   `keyContent` text CHARACTER SET utf8 COMMENT '题目介绍',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of blog_article
@@ -47,7 +47,7 @@ CREATE TABLE `chat` (
   `text` varchar(500) CHARACTER SET utf8 DEFAULT NULL,
   `time` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `code` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of chat
@@ -63,7 +63,7 @@ CREATE TABLE `friend` (
   `friendFrom` int(11) NOT NULL,
   `level` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of friend
@@ -86,7 +86,7 @@ CREATE TABLE `userinfo` (
   `birthplace` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userinfo

@@ -9,19 +9,13 @@ function init(io) {
     io.on('connection', function (socket) {
         socket.on('login', function (msg) {
             require('./userLogin')(msg,socket,io,socketOnLine);
-            console.log(socketOnLine)
-            //console.log(io.sockets.sockets)
-            //for(var a in io.sockets.sockets){
-            //
-            //    console.log(io.sockets.sockets[a])
-            //}
         });
         socket.on('chat', function (msg) {
-            var temp = {code: 0, type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body}
+            console.log(msg)
+            var temp = {code: 0,from:msg.from,type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body}
             if(socketOnLine[msg.to] !== undefined && socketOnLine[msg.to] !==  null){
                 console.log(socketOnLine[msg.to])
                 if(io.sockets.sockets[socketOnLine[msg.to]] !== undefined && io.sockets.sockets[socketOnLine[msg.to]] !==  null){
-                    console.log(io.sockets.sockets[socketOnLine[msg.to]]);
                     io.sockets.sockets[socketOnLine[msg.to]].emit('chat',temp);
                 }
             }

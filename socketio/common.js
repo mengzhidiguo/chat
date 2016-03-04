@@ -8,6 +8,8 @@ var str = {code: 0, msg: ''};
 exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象  id用户userInfo的id
     var friendName = [];
     for(var b in socketOnLine){
+        //if(b === username)
+        //    continue;
         friendName.push(b);
         console.log(friendName)
     }

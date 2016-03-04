@@ -7,7 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
-<body>
+<body  ng-keydown="keydown($event)">
 <!--loadding-->
 <div class="loadding" ng-controller="loaddingController">
     <div class="spinner">
@@ -17,9 +17,9 @@
 </div>
 
 <!--登录界面-->
-<div class="login" ng-hide="loginHide" ng-controller="loginController" ng-cloak>
-    <div class="showTip" ng-show="c">
-        <em>{{info}}</em>
+<div class="login"  ng-controller="loginController">
+    <div class="showTip" ng-show="config.tipIsShow">
+        <em>{{config.info}}</em>
     </div>
     <div class="loginin">
         <div class="top"><p>Already have an account?</p>
@@ -35,25 +35,25 @@
 </div>
 
 <!--菜单界面-->
-<div class="menu" ng-hide="menuHide" ng-controller="menuController" ng-cloak>
+<div class="menu"  ng-controller="menuController" >
     <div class="menu_main">
         <div class="menu_main_top">
             <!--头像-->
             <img class="menu_main_top_photo" src="./image/menu_03.png" alt="">
             <!--编辑-->
             <img class="menu_main_top_edit" src="./image/menu_06.png" alt="">
-            <h4 class="menu_main_top_name">周建</h4>
+            <h4 class="menu_main_top_name">{{config.username}}</h4>
         </div>
         <div class="menu_main_menu">
             <ul ng-touch="friendShow()">
-                <li ng-repeat="name in menu">{{name.name}}</li>
+                <li ng-repeat="name in config.menu">{{name.name}}</li>
             </ul>
         </div>
     </div>
 </div>
 
 <!--好友界面-->
-<div class="friend" ng-hide="friendHide" ng-controller="friendController" ng-cloak>
+<div class="friend"  ng-controller="friendController"  >
     <!--头部-->
     <div class="firend_top">
         <div class="firend_menu" ng-touch="menushow()"></div>
@@ -63,7 +63,7 @@
     <!--好友列表-->
     <div class="firend_list" ng-touch="chat()">
         <ul>
-            <li ng-repeat="a in friendList">
+            <li ng-repeat="a in config.friendList">
                 <div class="firend_contain"><h4 class="firend_name">{{a.name}}</h4>
                     <span class="time">{{a.time}}</span>
                     <p>{{a.moto}}</p>
@@ -75,16 +75,16 @@
 
 
 <!--聊天界面-->
-<div class="chat" ng-hide="chatlistHide" ng-controller="chatlistController" ng-cloak >
+<div class="chat"  ng-controller="chatlistController" >
     <div class="chat_top">
         <div class="chat_top_back" ng-touch="back()"></div>
-        <h4>{{name}}</h4>
+        <h4>{{config.name}}</h4>
         <div class="chat_top_person"></div>
     </div>
     <div class="chat_contain">
         <div id="scroller">
             <ul>
-                <li ng-repeat="a in A" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}"
+                <li ng-repeat="a in config.chatInfoList" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}"
                     repeat-done="repeatDone()">
                     <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
                     <p ng-if="a.type!==3">{{a.body}}</p>
@@ -97,7 +97,7 @@
         <div class="voice"></div>
         <div class="add"></div>
         <input class="input" ng-model="talk" type="text">
-        <div class="send" ng-touch="send()" ng-keypress="keydown()"></div>
+        <div class="send" ng-touch="send()"></div>
     </div>
 </div>
 <script data-main="js/app" src="js/lib/requireJs.js"></script>

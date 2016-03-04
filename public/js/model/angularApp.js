@@ -1,47 +1,117 @@
 define(['angular', 'io'], function (angular, io) {
 
-    var app = angular.module('chat', ['ngRoute']).run(['$rootScope','$socket',function ($rootScope,$socket) {
-        //    可以通过run方法来访问$rootScope
-        $rootScope.userInfo = {};
-
-        //好友列表  好友的一些基本信息
-        $rootScope.friendList = {
+    //    可以通过run方法来访问$rootScope
+    var app = angular.module('chat', ['ngRoute']).run(['$rootScope', '$socket', function ($rootScope, $socket) {
+        $rootScope.config = {
+            currentView: 'loadding',//当前所处的视图
+            views: ['loadding', 'login', 'menu', 'friend', 'chat'],//app所拥有的全部视图
+            username: '',                //用户名
+            userInfo: {},                //用户信息
+            friendList: {},              //好友列表  好友的一些基本信息
         };
 
-        //接收到后台的广播信息
-        $socket.on('broadcast',function(msg){
+
+        // angular本地事件 信息
+
+        //code :0   接收切换界面的事件信息   并发送广播通知切换
+        $rootScope.$on('root', function () {
+            var msg = arguments[1];
+            switch (msg.code) {
+                case 0:
+                    if ($rootScope.config.friendList[msg.msg.name] !== undefined) {
+                        $rootScope.$broadcast('friend', {code: 0, msg: {}});
+                        $rootScope.$broadcast('chat', {code: 0, msg: {name: msg.msg.name}});
+                    }
+                    else {
+                        $rootScope.$apply();
+                    }
+                    break;
+            }
         });
-        $socket.on('main',function(msg){
-            switch(msg.code){
+
+
+        //socket 接受信息
+        //接收到后台的广播信息
+        $socket.on('broadcast', function (msg) {
+        });
+        $socket.on('main', function (msg) {
+            switch (msg.code) {
                 //获取登陆者信息
                 case 0:
                     $rootScope.userInfo = msg.msg;
-                    console.log('0'+msg.msg);
                     break;
                 //获取好友信息
                 case 1:
-                    console.log('1'+msg.msg);
-                    $rootScope.friendList = msg.msg;
-                    console.log($rootScope.friendList);
-                    $rootScope.$broadcast('friendList');
+                    $rootScope.config.friendList = msg.msg;
+                    //通知chat视图  friend列表改变
+                    $rootScope.$broadcast('chat', {code: 1, msg: {}});
+                    $rootScope.$broadcast('friend', {code: 1, msg: {}});
                     break;
-
             }
         });
 
-        //接收切换界面的事件信息   并发送广播通知切换
-        $rootScope.$on('friend', function (evt, next, current) {
-            if($rootScope.friendList[arguments[1].name] !== undefined)
-            {
-                $rootScope.$broadcast('friendGo',{code:1});
-                $rootScope.$broadcast('chat',{name:arguments[1].name});
+        //root  事件回调函数
+
+        //全局监听键盘事件  通过广播事件 通知具体视图
+        $rootScope.keydown = function (e) {
+            var msg = {view: $rootScope.config.currentView, code: e.keyCode,msg:''};
+            switch (e.keyCode) {
+                //esc
+                case 27:
+                    //阻止默认事件
+                    e.preventDefault();
+                    return;
+                //enter
+                case 13:
+                    msg.msg = 'ENTER';
+                    $rootScope.$broadcast('keydown', msg);
+                    //e.preventDefault();
+                    break;
+                //后退  删除键  backspace
+                case 8:
+                    msg.msg = 'BACK';
+                    break;
             }
-            else{
-                $rootScope.$apply();
-            }
-        })
+        }
     }]);
 
+    //自定义服务
+    app.service('$socket', function ($rootScope) {
+        var socket = io();
+        this.on = function (eventName, callback) {
+            socket.on(eventName, function (msg) {
+                callback(msg);
+                $rootScope.$apply();
+            })
+        };
+        this.emit = function (eventName, data) {
+            socket.emit(eventName, data)
+        };
+    });
+    //切换视图服务
+    app.service('$switchView', function ($rootScope, $timeout) {
+        //切换
+        this.switch = function (eleFrom, eleTo, type, callback) {
+            //更换当前view
+            $rootScope.config.currentView = eleTo.slice(1, eleTo.length);
+
+            eleFrom = angular.element(document.querySelector(eleFrom));
+            eleTo = angular.element(document.querySelector(eleTo));
+            eleFrom.addClass('animalHide');
+            eleTo.addClass('animalShow');
+            //$rootScope.$apply();
+            $timeout(function () {
+                eleFrom.css('transform', ' translate(-100%,0px)');
+                eleFrom.removeClass('animalHide');
+                eleTo.css('transform', ' translate(0px,0px)');
+                eleTo.removeClass('animalShow');
+                callback();
+            }, 800);
+        };
+
+    });
+
+    //自定义指令
     //执行完ng-repeate  执行函数
     app.directive('repeatDone', function () {
         return {
@@ -255,7 +325,7 @@ define(['angular', 'io'], function (angular, io) {
 
             };
         }]);
-    ////自定义触摸事件
+    ////自定义触摸事件ng-keydown$event
     //app.directive('ngKeydown', ['$parse', '$timeout', '$rootElement',
     //    function ($parse, $timeout, $rootElement) {
     //        return function (scope, element, attr) {
@@ -265,38 +335,5 @@ define(['angular', 'io'], function (angular, io) {
     //            });
     //        };
     //    }]);
-
-    app.service('$socket', function ($rootScope) {
-        var socket = io();
-        this.on = function (eventName, callback) {
-            socket.on(eventName, function (msg) {
-                callback(msg);
-                $rootScope.$apply();
-            })
-        };
-        this.emit = function (eventName, data) {
-            socket.emit(eventName, data)
-        };
-    })
-    //切换视图服务
-    app.service('$switchView', function ($rootScope, $timeout) {
-        //切换
-        this.switch = function (eleFrom, eleTo, type, callback) {
-
-            eleFrom = angular.element(document.querySelector(eleFrom));
-            eleTo = angular.element(document.querySelector(eleTo));
-            eleFrom.addClass('animalHide');
-            eleTo.addClass('animalShow');
-            //$rootScope.$apply();
-            $timeout(function () {
-                eleFrom.css('transform', ' translate(-100%,0px)');
-                eleFrom.removeClass('animalHide');
-                eleTo.css('transform', ' translate(0px,0px)');
-                eleTo.removeClass('animalShow');
-                callback();
-            }, 1500);
-        };
-
-    });
     return app;
 });

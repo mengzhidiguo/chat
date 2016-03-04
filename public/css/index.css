@@ -52,7 +52,7 @@ body {
 }
 @keyframes rl {
   from {
-    transform: translate(-100%, 0px);
+    transform: translate(100%, 0px);
   }
   to {
     transform: translate(0px, 0px);
@@ -60,7 +60,7 @@ body {
 }
 @-webkit-keyframes rl {
   from {
-    transform: translate(-100%, 0px);
+    transform: translate(100%, 0px);
   }
   to {
     transform: translate(0px, 0px);
@@ -69,14 +69,14 @@ body {
 .animalHide {
   animation-duration: 0.5s;
   animation-timing-function: ease;
-  animation-delay: 0.3s;
+  animation-delay: 0s;
   animation-iteration-count: 1;
   animation-direction: alternate;
   animation-play-state: running;
   animation-fill-mode: forwards;
   -webkit-animation-duration: 0.5s;
   -webkit-animation-timing-function: ease;
-  -webkit-animation-delay: 0.3s;
+  -webkit-animation-delay: 0s;
   -webkit-animation-iteration-count: 1;
   -webkit-animation-direction: alternate;
   -webkit-animation-play-state: running;
@@ -87,14 +87,14 @@ body {
 .animalShow {
   animation-duration: 0.5s;
   animation-timing-function: ease;
-  animation-delay: 0.3s;
+  animation-delay: 0s;
   animation-iteration-count: 1;
   animation-direction: alternate;
   animation-play-state: running;
   animation-fill-mode: forwards;
   -webkit-animation-duration: 0.5s;
   -webkit-animation-timing-function: ease;
-  -webkit-animation-delay: 0.3s;
+  -webkit-animation-delay: 0s;
   -webkit-animation-iteration-count: 1;
   -webkit-animation-direction: alternate;
   -webkit-animation-play-state: running;

@@ -1,20 +1,57 @@
 define(['angularApp'], function (app) {
     app.controller('chatlistController', ['$rootScope', '$scope', '$timeout', '$socket', '$switchView', function ($rootScope, $scope, $timeout, $socket, $switchView) {
-        $scope.A = [
-            {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
-            {type: 3, time: '2016-2-29 12:00'},
-            {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
-            {type: 2, imgSrc: './image/friend_name_06.png', body: '不是'},
-            {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
-        ];
+        //$scope.chatInfoList = [
+        //    {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
+        //    {type: 3, time: '2016-2-29 12:00'},
+        //    {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
+        //    {type: 2, imgSrc: './image/friend_name_06.png', body: '不是'},
+        //    {type: 1, imgSrc: './image/friend_name_06.png', body: '哈哈哈'},
+        //];
+        $scope.config ={
+            chatInfoList:[],       //当前聊天信息
+            name:'',               //当前聊天对象名称
+            chat:{},               //全部好友聊天信息
+        };
 
-        $scope.name = '';
-        var chat = {};
-        $scope.$on('friendList',function(){
-            for(var a  in $rootScope.friendList){
-                chat[a] = [];
-            };
+        //angular 本地广播信息
+
+
+        //code :0  当前聊天对象发生改变 切换聊天信息列表  切换聊天者name
+        //code :1  好友列表发生改变  更新好友列表信息
+        $scope.$on('chat', function () {
+            var msg = arguments[1];
+            switch (msg.code){
+                case 0:
+                    $scope.config.chatInfoList =   $scope.config.chat[msg.msg.name];
+                    $scope.config.name = msg.msg.name;
+                    break;
+                case 1:
+                    for (var a  in $rootScope.config.friendList) {
+                        if($scope.config.chat[a] === undefined)
+                            $scope.config.chat[a] = [];
+                    }
+                    break;
+            }
         });
+        $scope.$on('keydown',function(){
+            var msg = arguments[1];
+            if(msg.currentView = 'chat'){
+                switch (msg.code){
+                    //回车键 enter
+                    case 13:
+                        $scope.send();
+                        break;
+                }
+            }
+        });
+
+
+
+        //chat视图 事件回调函数
+
+
+
+        //返回好友列表
         $scope.back = function () {
             $switchView.switch('.chat', '.friend', 1, function () {
             });
@@ -24,19 +61,19 @@ define(['angularApp'], function (app) {
         $scope.send = function () {
             if ($scope.talk === '' || $scope.talk === undefined)
                 return;
-            $scope.A.push({type: 2, imgSrc: './image/friend_name_06.png', body: $scope.talk});
-            $socket.emit('chat', {type: 1, from:$rootScope.userInfo.username,to:$scope.name,body: $scope.talk});
+            $scope.config.chatInfoList.push({type: 2, imgSrc: './image/friend_name_06.png', body: $scope.talk});
+            $socket.emit('chat', {type: 1, from: $rootScope.userInfo.username, to: $scope.config.name, body: $scope.talk});
             $scope.talk = '';
         };
-        $scope.keydown = function(){
-            console.log(arguments);
+        //ng-repeate完成之后调用这个函数  更新isScroll
+        $scope.repeatDone = function () {
+            zhKeep.chatScroll.refresh();
+            zhKeep.chatScroll.scrollToElement(document.querySelectorAll('.chat_contain ul li')[document.querySelectorAll('.chat_contain ul li').length - 1]);
         };
 
 
-        $scope.$on('chat', function () {
-            $scope.A = chat[arguments[1].name];
-            $scope.name = arguments[1].name;
-        });
+        //服务器socket信息
+
         //接受chat的socket信息
         $socket.on('chat', function (msg) {
             if (msg.code == 1) {
@@ -46,17 +83,17 @@ define(['angularApp'], function (app) {
                 if (msg.type === 1) {
                     if (msg.imgSrc === undefined)
                         msg.imgSrc = './image/friend_name_06.png';
-                    $scope.A.push({type: 1, imgSrc: msg.imgSrc, body: msg.body})
+                    if(msg.from == $scope.name){
+                        $scope.config.chatInfoList.push({type: 1, imgSrc: msg.imgSrc, body: msg.body});
+                    }else{
+                        if($scope.config.chat[msg.from] !== undefined)
+                            $scope.config.chat[msg.from].push({type: 1, imgSrc: msg.imgSrc, body: msg.body});
+                    }
                 }
-
             }
         });
 
-        //ng-repeate完成之后调用这个函数  更新isScroll
-        $scope.repeatDone = function () {
-            zhKeep.chatScroll.refresh();
-            zhKeep.chatScroll.scrollToElement(document.querySelectorAll('.chat_contain ul li')[document.querySelectorAll('.chat_contain ul li').length - 1]);
-        }
+
     }]);
 
     return null;

@@ -5,9 +5,6 @@ var query = require('../db/db');
 
 
 module.exports = function (msg, socket,io,socketOnLine) {
-    var mysql      = require('mysql');
-    var con = mysql.createConnection(require('../config.js').mysql);
-    con.connect();
     var str = {code: 1, msg: '失败'};
     if (msg.username === '' || msg.username === undefined) {
         str.msg = '请输入用户名，密码';
@@ -25,7 +22,7 @@ module.exports = function (msg, socket,io,socketOnLine) {
             socket.emit('login', str);
             return;
         }
-        console.log(rows.length);
+        console.log("查询结果数量:"+rows.length);
         if (rows.length <= 0) {
             str.code = 2;
             str.msg = '此用户未注册，正在注册请等待';
@@ -44,7 +41,7 @@ module.exports = function (msg, socket,io,socketOnLine) {
             socket.emit('login', str);
             return ;
         }
-        else if(rows[0].username !== msg.username){
+        else if(rows[0].password !== msg.password){
             str.msg = '密码输入错误';
             socket.emit('login', str);
             return ;
