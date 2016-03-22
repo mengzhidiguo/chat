@@ -9,19 +9,3252 @@
 
 <script src="public/js/lib/requireJs.js"></script>
 <script>
-    require.config({
-        paths: {
-            't':'public/js/lib/test'
-        }
-    });
+    (function () {
+        var T, baidu = T = baidu || {version: "1.3.9"};
+        baidu.guid = "$BAIDU$";
+        window[baidu.guid] = window[baidu.guid] || {};
+        baidu.ajax = baidu.ajax || {};
+        baidu.fn = baidu.fn || {};
+        baidu.fn.blank = function () {
+        };
+        baidu.ajax.request = function (url, opt_options) {
+            var options = opt_options || {}, data = options.data || "", async = !(options.async === false), username = options.username || "", password = options.password || "", method = (options.method || "GET").toUpperCase(), headers = options.headers || {}, timeout = options.timeout || 0, eventHandlers = {}, tick, key, xhr;
 
-    require(['t'],function(t){
-        console.log(t.a)
-        t.a++;
-    })
-    require(['t'],function(t){
-        console.log(t.a)
-    })
+            function stateChangeHandler() {
+                if (xhr.readyState == 4) {
+                    try {
+                        var stat = xhr.status
+                    } catch (ex) {
+                        fire("failure");
+                        return
+                    }
+                    fire(stat);
+                    if ((stat >= 200 && stat < 300) || stat == 304 || stat == 1223) {
+                        fire("success")
+                    } else {
+                        fire("failure")
+                    }
+                    window.setTimeout(function () {
+                        xhr.onreadystatechange = baidu.fn.blank;
+                        if (async) {
+                            xhr = null
+                        }
+                    }, 0)
+                }
+            }
+
+            function getXHR() {
+                if (window.ActiveXObject) {
+                    try {
+                        return new ActiveXObject("Msxml2.XMLHTTP")
+                    } catch (e) {
+                        try {
+                            return new ActiveXObject("Microsoft.XMLHTTP")
+                        } catch (e) {
+                        }
+                    }
+                }
+                if (window.XMLHttpRequest) {
+                    return new XMLHttpRequest()
+                }
+            }
+
+            function fire(type) {
+                type = "on" + type;
+                var handler = eventHandlers[type], globelHandler = baidu.ajax[type];
+                if (handler) {
+                    if (tick) {
+                        clearTimeout(tick)
+                    }
+                    if (type != "onsuccess") {
+                        handler(xhr)
+                    } else {
+                        try {
+                            xhr.responseText
+                        } catch (error) {
+                            return handler(xhr)
+                        }
+                        handler(xhr, xhr.responseText)
+                    }
+                } else {
+                    if (globelHandler) {
+                        if (type == "onsuccess") {
+                            return
+                        }
+                        globelHandler(xhr)
+                    }
+                }
+            }
+
+            for (key in options) {
+                eventHandlers[key] = options[key]
+            }
+            headers["X-Requested-With"] = "XMLHttpRequest";
+            try {
+                xhr = getXHR();
+                if (method == "GET") {
+                    if (data) {
+                        url += (url.indexOf("?") >= 0 ? "&" : "?") + data;
+                        data = null
+                    }
+                    if (options.noCache) {
+                        url += (url.indexOf("?") >= 0 ? "&" : "?") + "b" + (+new Date) + "=1"
+                    }
+                }
+                if (username) {
+                    xhr.open(method, url, async, username, password)
+                } else {
+                    xhr.open(method, url, async)
+                }
+                if (async) {
+                    xhr.onreadystatechange = stateChangeHandler
+                }
+                if (method == "POST") {
+                    xhr.setRequestHeader("Content-Type", (headers["Content-Type"] || "application/x-www-form-urlencoded"))
+                }
+                for (key in headers) {
+                    if (headers.hasOwnProperty(key)) {
+                        xhr.setRequestHeader(key, headers[key])
+                    }
+                }
+                fire("beforerequest");
+                if (timeout) {
+                    tick = setTimeout(function () {
+                        xhr.onreadystatechange = baidu.fn.blank;
+                        xhr.abort();
+                        fire("timeout")
+                    }, timeout)
+                }
+                xhr.send(data);
+                if (!async) {
+                    stateChangeHandler()
+                }
+            } catch (ex) {
+                fire("failure")
+            }
+            return xhr
+        };
+        baidu.ajax.get = function (url, onsuccess) {
+            return baidu.ajax.request(url, {onsuccess: onsuccess})
+        };
+        baidu.ajax.post = function (url, data, onsuccess) {
+            return baidu.ajax.request(url, {onsuccess: onsuccess, method: "POST", data: data})
+        };
+        baidu.array = baidu.array || {};
+        baidu.each = baidu.array.forEach = baidu.array.each = function (source, iterator, thisObject) {
+            var returnValue, item, i, len = source.length;
+            if ("function" == typeof iterator) {
+                for (i = 0; i < len; i++) {
+                    item = source[i];
+                    returnValue = iterator.call(thisObject || source, item, i);
+                    if (returnValue === false) {
+                        break
+                    }
+                }
+            }
+            return source
+        };
+        baidu.array.filter = function (source, iterator, thisObject) {
+            var result = [], resultIndex = 0, len = source.length, item, i;
+            if ("function" == typeof iterator) {
+                for (i = 0; i < len; i++) {
+                    item = source[i];
+                    if (true === iterator.call(thisObject || source, item, i)) {
+                        result[resultIndex++] = item
+                    }
+                }
+            }
+            return result
+        };
+        baidu.array.remove = function (source, match) {
+            var len = source.length;
+            while (len--) {
+                if (len in source && source[len] === match) {
+                    source.splice(len, 1)
+                }
+            }
+            return source
+        };
+        baidu.array.removeAt = function (source, index) {
+            return source.splice(index, 1)[0]
+        };
+        baidu.browser = baidu.browser || {};
+        baidu.browser.firefox = /firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? +RegExp["\x241"] : undefined;
+        baidu.browser.ie = baidu.ie = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp["\x241"]) : undefined;
+        baidu.browser.isGecko = /gecko/i.test(navigator.userAgent) && !/like gecko/i.test(navigator.userAgent);
+        baidu.browser.isStrict = document.compatMode == "CSS1Compat";
+        baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
+        baidu.browser.opera = /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(navigator.userAgent) ? +(RegExp["\x246"] || RegExp["\x242"]) : undefined;
+        (function () {
+            var ua = navigator.userAgent;
+            baidu.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? +(RegExp["\x241"] || RegExp["\x242"]) : undefined
+        })();
+        baidu.cookie = baidu.cookie || {};
+        baidu.cookie._isValidKey = function (key) {
+            return (new RegExp('^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24')).test(key)
+        };
+        baidu.cookie.getRaw = function (key) {
+            if (baidu.cookie._isValidKey(key)) {
+                var reg = new RegExp("(^| )" + key + "=([^;]*)(;|\x24)"), result = reg.exec(document.cookie);
+                if (result) {
+                    return result[2] || null
+                }
+            }
+            return null
+        };
+        baidu.cookie.get = function (key) {
+            var value = baidu.cookie.getRaw(key);
+            if ("string" == typeof value) {
+                value = decodeURIComponent(value);
+                return value
+            }
+            return null
+        };
+        baidu.cookie.setRaw = function (key, value, options) {
+            if (!baidu.cookie._isValidKey(key)) {
+                return
+            }
+            options = options || {};
+            var expires = options.expires;
+            if ("number" == typeof options.expires) {
+                expires = new Date();
+                expires.setTime(expires.getTime() + options.expires)
+            }
+            document.cookie = key + "=" + value + (options.path ? "; path=" + options.path : "") + (expires ? "; expires=" + expires.toGMTString() : "") + (options.domain ? "; domain=" + options.domain : "") + (options.secure ? "; secure" : "")
+        };
+        baidu.cookie.remove = function (key, options) {
+            options = options || {};
+            options.expires = new Date(0);
+            baidu.cookie.setRaw(key, "", options)
+        };
+        baidu.cookie.set = function (key, value, options) {
+            baidu.cookie.setRaw(key, encodeURIComponent(value), options)
+        };
+        baidu.dom = baidu.dom || {};
+        baidu.dom._NAME_ATTRS = (function () {
+            var result = {
+                cellpadding: "cellPadding",
+                cellspacing: "cellSpacing",
+                colspan: "colSpan",
+                rowspan: "rowSpan",
+                valign: "vAlign",
+                usemap: "useMap",
+                frameborder: "frameBorder"
+            };
+            if (baidu.browser.ie < 8) {
+                result["for"] = "htmlFor";
+                result["class"] = "className"
+            } else {
+                result.htmlFor = "for";
+                result.className = "class"
+            }
+            return result
+        })();
+        baidu.lang = baidu.lang || {};
+        baidu.lang.isString = function (source) {
+            return "[object String]" == Object.prototype.toString.call(source)
+        };
+        baidu.isString = baidu.lang.isString;
+        baidu.dom._g = function (id) {
+            if (baidu.lang.isString(id)) {
+                return document.getElementById(id)
+            }
+            return id
+        };
+        baidu._g = baidu.dom._g;
+        baidu.dom.g = function (id) {
+            if ("string" == typeof id || id instanceof String) {
+                return document.getElementById(id)
+            } else {
+                if (id && id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+                    return id
+                }
+            }
+            return null
+        };
+        baidu.g = baidu.G = baidu.dom.g;
+        baidu.dom._matchNode = function (element, direction, start) {
+            element = baidu.dom.g(element);
+            for (var node = element[start]; node; node = node[direction]) {
+                if (node.nodeType == 1) {
+                    return node
+                }
+            }
+            return null
+        };
+        baidu.dom._styleFilter = baidu.dom._styleFilter || [];
+        baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
+            get: function (key, value) {
+                if (/color/i.test(key) && value.indexOf("rgb(") != -1) {
+                    var array = value.split(",");
+                    value = "#";
+                    for (var i = 0, color; color = array[i]; i++) {
+                        color = parseInt(color.replace(/[^\d]/gi, ""), 10).toString(16);
+                        value += color.length == 1 ? "0" + color : color
+                    }
+                    value = value.toUpperCase()
+                }
+                return value
+            }
+        };
+        baidu.dom._styleFilter.filter = function (key, value, method) {
+            for (var i = 0, filters = baidu.dom._styleFilter, filter; filter = filters[i]; i++) {
+                if (filter = filter[method]) {
+                    value = filter(key, value)
+                }
+            }
+            return value
+        };
+        baidu.dom._styleFilter[baidu.dom._styleFilter.length] = {
+            set: function (key, value) {
+                if (value.constructor == Number && !/zIndex|fontWeight|opacity|zoom|lineHeight/i.test(key)) {
+                    value = value + "px"
+                }
+                return value
+            }
+        };
+        baidu.dom._styleFixer = baidu.dom._styleFixer || {};
+        baidu.dom._styleFixer.display = baidu.browser.ie && baidu.browser.ie < 8 ? {
+            set: function (element, value) {
+                element = element.style;
+                if (value == "inline-block") {
+                    element.display = "inline";
+                    element.zoom = 1
+                } else {
+                    element.display = value
+                }
+            }
+        } : baidu.browser.firefox && baidu.browser.firefox < 3 ? {
+            set: function (element, value) {
+                element.style.display = value == "inline-block" ? "-moz-inline-box" : value
+            }
+        } : null;
+        baidu.dom._styleFixer["float"] = baidu.browser.ie ? "styleFloat" : "cssFloat";
+        baidu.dom._styleFixer.opacity = baidu.browser.ie ? {
+            get: function (element) {
+                var filter = element.style.filter;
+                return filter && filter.indexOf("opacity=") >= 0 ? (parseFloat(filter.match(/opacity=([^)]*)/)[1]) / 100) + "" : "1"
+            }, set: function (element, value) {
+                var style = element.style;
+                style.filter = (style.filter || "").replace(/alpha\([^\)]*\)/gi, "") + (value == 1 ? "" : "alpha(opacity=" + value * 100 + ")");
+                style.zoom = 1
+            }
+        } : null;
+        baidu.string = baidu.string || {};
+        (function () {
+            var trimer = new RegExp("(^[\\s\\t\\xa0\\u3000]+)|([\\u3000\\xa0\\s\\t]+\x24)", "g");
+            baidu.string.trim = function (source) {
+                return String(source).replace(trimer, "")
+            }
+        })();
+        baidu.trim = baidu.string.trim;
+        baidu.dom.addClass = function (element, className) {
+            element = baidu.dom.g(element);
+            var classArray = className.split(/\s+/), result = element.className, classMatch = " " + result + " ", i = 0, l = classArray.length;
+            for (; i < l; i++) {
+                if (classMatch.indexOf(" " + classArray[i] + " ") < 0) {
+                    result += (result ? " " : "") + classArray[i]
+                }
+            }
+            element.className = result;
+            return element
+        };
+        baidu.addClass = baidu.dom.addClass;
+        baidu.dom.children = function (element) {
+            element = baidu.dom.g(element);
+            for (var children = [], tmpEl = element.firstChild; tmpEl; tmpEl = tmpEl.nextSibling) {
+                if (tmpEl.nodeType == 1) {
+                    children.push(tmpEl)
+                }
+            }
+            return children
+        };
+        baidu.dom.contains = function (container, contained) {
+            var g = baidu.dom._g;
+            container = g(container);
+            contained = g(contained);
+            return container.contains ? container != contained && container.contains(contained) : !!(container.compareDocumentPosition(contained) & 16)
+        };
+        baidu.dom.setAttr = function (element, key, value) {
+            element = baidu.dom.g(element);
+            if ("style" == key) {
+                element.style.cssText = value
+            } else {
+                key = baidu.dom._NAME_ATTRS[key] || key;
+                element.setAttribute(key, value)
+            }
+            return element
+        };
+        baidu.setAttr = baidu.dom.setAttr;
+        baidu.dom.setAttrs = function (element, attributes) {
+            element = baidu.dom.g(element);
+            for (var key in attributes) {
+                baidu.dom.setAttr(element, key, attributes[key])
+            }
+            return element
+        };
+        baidu.setAttrs = baidu.dom.setAttrs;
+        baidu.dom.create = function (tagName, opt_attributes) {
+            var el = document.createElement(tagName), attributes = opt_attributes || {};
+            return baidu.dom.setAttrs(el, attributes)
+        };
+        baidu.dom.first = function (element) {
+            return baidu.dom._matchNode(element, "nextSibling", "firstChild")
+        };
+        baidu.dom.getAttr = function (element, key) {
+            element = baidu.dom.g(element);
+            if ("style" == key) {
+                return element.style.cssText
+            }
+            key = baidu.dom._NAME_ATTRS[key] || key;
+            return element.getAttribute(key)
+        };
+        baidu.getAttr = baidu.dom.getAttr;
+        baidu.dom.getDocument = function (element) {
+            element = baidu.dom.g(element);
+            return element.nodeType == 9 ? element : element.ownerDocument || element.document
+        };
+        baidu.dom.getComputedStyle = function (element, key) {
+            element = baidu.dom._g(element);
+            var doc = baidu.dom.getDocument(element), styles;
+            if (doc.defaultView && doc.defaultView.getComputedStyle) {
+                styles = doc.defaultView.getComputedStyle(element, null);
+                if (styles) {
+                    return styles[key] || styles.getPropertyValue(key)
+                }
+            }
+            return ""
+        };
+        baidu.string.toCamelCase = function (source) {
+            if (source.indexOf("-") < 0 && source.indexOf("_") < 0) {
+                return source
+            }
+            return source.replace(/[-_][^-_]/g, function (match) {
+                return match.charAt(1).toUpperCase()
+            })
+        };
+        baidu.dom.getStyle = function (element, key) {
+            var dom = baidu.dom;
+            element = dom.g(element);
+            key = baidu.string.toCamelCase(key);
+            var value = element.style[key] || (element.currentStyle ? element.currentStyle[key] : "") || dom.getComputedStyle(element, key);
+            if (!value) {
+                var fixer = dom._styleFixer[key];
+                if (fixer) {
+                    value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer)
+                }
+            }
+            if (fixer = dom._styleFilter) {
+                value = fixer.filter(key, value, "get")
+            }
+            return value
+        };
+        baidu.getStyle = baidu.dom.getStyle;
+        baidu.dom.getPosition = function (element) {
+            element = baidu.dom.g(element);
+            var doc = baidu.dom.getDocument(element), browser = baidu.browser, getStyle = baidu.dom.getStyle, BUGGY_GECKO_BOX_OBJECT = browser.isGecko > 0 && doc.getBoxObjectFor && getStyle(element, "position") == "absolute" && (element.style.top === "" || element.style.left === ""), pos = {
+                left: 0,
+                top: 0
+            }, viewport = (browser.ie && !browser.isStrict) ? doc.body : doc.documentElement, parent, box;
+            if (element == viewport) {
+                return pos
+            }
+            if (element.getBoundingClientRect) {
+                box = element.getBoundingClientRect();
+                pos.left = Math.floor(box.left) + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
+                pos.top = Math.floor(box.top) + Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+                pos.left -= doc.documentElement.clientLeft;
+                pos.top -= doc.documentElement.clientTop;
+                var htmlDom = doc.body, htmlBorderLeftWidth = parseInt(getStyle(htmlDom, "borderLeftWidth")), htmlBorderTopWidth = parseInt(getStyle(htmlDom, "borderTopWidth"));
+                if (browser.ie && !browser.isStrict) {
+                    pos.left -= isNaN(htmlBorderLeftWidth) ? 2 : htmlBorderLeftWidth;
+                    pos.top -= isNaN(htmlBorderTopWidth) ? 2 : htmlBorderTopWidth
+                }
+            } else {
+                parent = element;
+                do {
+                    pos.left += parent.offsetLeft;
+                    pos.top += parent.offsetTop;
+                    if (browser.isWebkit > 0 && getStyle(parent, "position") == "fixed") {
+                        pos.left += doc.body.scrollLeft;
+                        pos.top += doc.body.scrollTop;
+                        break
+                    }
+                    parent = parent.offsetParent
+                } while (parent && parent != element);
+                if (browser.opera > 0 || (browser.isWebkit > 0 && getStyle(element, "position") == "absolute")) {
+                    pos.top -= doc.body.offsetTop
+                }
+                parent = element.offsetParent;
+                while (parent && parent != doc.body) {
+                    pos.left -= parent.scrollLeft;
+                    if (!browser.opera || parent.tagName != "TR") {
+                        pos.top -= parent.scrollTop
+                    }
+                    parent = parent.offsetParent
+                }
+            }
+            return pos
+        };
+        baidu.dom.hasClass = function (element, className) {
+            element = baidu.dom.g(element);
+            var classArray = baidu.string.trim(className).split(/\s+/), len = classArray.length;
+            className = element.className.split(/\s+/).join(" ");
+            while (len--) {
+                if (!(new RegExp("(^| )" + classArray[len] + "( |\x24)")).test(className)) {
+                    return false
+                }
+            }
+            return true
+        };
+        baidu.dom.hide = function (element) {
+            element = baidu.dom.g(element);
+            element.style.display = "none";
+            return element
+        };
+        baidu.hide = baidu.dom.hide;
+        baidu.dom.insertAfter = function (newElement, existElement) {
+            var g, existParent;
+            g = baidu.dom._g;
+            newElement = g(newElement);
+            existElement = g(existElement);
+            existParent = existElement.parentNode;
+            if (existParent) {
+                existParent.insertBefore(newElement, existElement.nextSibling)
+            }
+            return newElement
+        };
+        baidu.dom.insertBefore = function (newElement, existElement) {
+            var g, existParent;
+            g = baidu.dom._g;
+            newElement = g(newElement);
+            existElement = g(existElement);
+            existParent = existElement.parentNode;
+            if (existParent) {
+                existParent.insertBefore(newElement, existElement)
+            }
+            return newElement
+        };
+        baidu.dom.insertHTML = function (element, position, html) {
+            element = baidu.dom.g(element);
+            var range, begin;
+            if (element.insertAdjacentHTML && !baidu.browser.opera) {
+                element.insertAdjacentHTML(position, html)
+            } else {
+                range = element.ownerDocument.createRange();
+                position = position.toUpperCase();
+                if (position == "AFTERBEGIN" || position == "BEFOREEND") {
+                    range.selectNodeContents(element);
+                    range.collapse(position == "AFTERBEGIN")
+                } else {
+                    begin = position == "BEFOREBEGIN";
+                    range[begin ? "setStartBefore" : "setEndAfter"](element);
+                    range.collapse(begin)
+                }
+                range.insertNode(range.createContextualFragment(html))
+            }
+            return element
+        };
+        baidu.insertHTML = baidu.dom.insertHTML;
+        baidu.dom.next = function (element) {
+            return baidu.dom._matchNode(element, "nextSibling", "nextSibling")
+        };
+        baidu.string.escapeReg = function (source) {
+            return String(source).replace(new RegExp("([.*+?^=!:\x24{}()|[\\]/\\\\])", "g"), "\\\x241")
+        };
+        baidu.dom.q = function (className, element, tagName) {
+            var result = [], trim = baidu.string.trim, len, i, elements, node;
+            if (!(className = trim(className))) {
+                return result
+            }
+            if ("undefined" == typeof element) {
+                element = document
+            } else {
+                element = baidu.dom.g(element);
+                if (!element) {
+                    return result
+                }
+            }
+            tagName && (tagName = trim(tagName).toUpperCase());
+            if (element.getElementsByClassName) {
+                elements = element.getElementsByClassName(className);
+                len = elements.length;
+                for (i = 0; i < len; i++) {
+                    node = elements[i];
+                    if (tagName && node.tagName != tagName) {
+                        continue
+                    }
+                    result[result.length] = node
+                }
+            } else {
+                className = new RegExp("(^|\\s)" + baidu.string.escapeReg(className) + "(\\s|\x24)");
+                elements = tagName ? element.getElementsByTagName(tagName) : (element.all || element.getElementsByTagName("*"));
+                len = elements.length;
+                for (i = 0; i < len; i++) {
+                    node = elements[i];
+                    className.test(node.className) && (result[result.length] = node)
+                }
+            }
+            return result
+        };
+        baidu.q = baidu.Q = baidu.dom.q;
+        (function () {
+            var ready = baidu.dom.ready = function () {
+                var readyBound = false, readyList = [], DOMContentLoaded;
+                if (document.addEventListener) {
+                    DOMContentLoaded = function () {
+                        document.removeEventListener("DOMContentLoaded", DOMContentLoaded, false);
+                        ready()
+                    }
+                } else {
+                    if (document.attachEvent) {
+                        DOMContentLoaded = function () {
+                            if (document.readyState === "complete") {
+                                document.detachEvent("onreadystatechange", DOMContentLoaded);
+                                ready()
+                            }
+                        }
+                    }
+                }
+                function ready() {
+                    if (!ready.isReady) {
+                        ready.isReady = true;
+                        for (var i = 0, j = readyList.length; i < j; i++) {
+                            readyList[i]()
+                        }
+                    }
+                }
+
+                function doScrollCheck() {
+                    try {
+                        document.documentElement.doScroll("left")
+                    } catch (e) {
+                        setTimeout(doScrollCheck, 1);
+                        return
+                    }
+                    ready()
+                }
+
+                function bindReady() {
+                    if (readyBound) {
+                        return
+                    }
+                    readyBound = true;
+                    if (document.addEventListener) {
+                        document.addEventListener("DOMContentLoaded", DOMContentLoaded, false);
+                        window.addEventListener("load", ready, false)
+                    } else {
+                        if (document.attachEvent) {
+                            document.attachEvent("onreadystatechange", DOMContentLoaded);
+                            window.attachEvent("onload", ready);
+                            var toplevel = false;
+                            try {
+                                toplevel = window.frameElement == null
+                            } catch (e) {
+                            }
+                            if (document.documentElement.doScroll && toplevel) {
+                                doScrollCheck()
+                            }
+                        }
+                    }
+                }
+
+                bindReady();
+                return function (callback) {
+                    ready.isReady ? callback() : readyList.push(callback)
+                }
+            }();
+            ready.isReady = false
+        })();
+        baidu.dom.remove = function (element) {
+            element = baidu.dom._g(element);
+            var tmpEl = element.parentNode;
+            tmpEl && tmpEl.removeChild(element)
+        };
+        baidu.dom.removeClass = function (element, className) {
+            element = baidu.dom.g(element);
+            var oldClasses = element.className.split(/\s+/), newClasses = className.split(/\s+/), lenOld, lenDel = newClasses.length, j, i = 0;
+            for (; i < lenDel; ++i) {
+                for (j = 0, lenOld = oldClasses.length; j < lenOld; ++j) {
+                    if (oldClasses[j] == newClasses[i]) {
+                        oldClasses.splice(j, 1);
+                        break
+                    }
+                }
+            }
+            element.className = oldClasses.join(" ");
+            return element
+        };
+        baidu.removeClass = baidu.dom.removeClass;
+        baidu.dom.setStyle = function (element, key, value) {
+            var dom = baidu.dom, fixer;
+            element = dom.g(element);
+            key = baidu.string.toCamelCase(key);
+            if (fixer = dom._styleFilter) {
+                value = fixer.filter(key, value, "set")
+            }
+            fixer = dom._styleFixer[key];
+            (fixer && fixer.set) ? fixer.set(element, value) : (element.style[fixer || key] = value);
+            return element
+        };
+        baidu.setStyle = baidu.dom.setStyle;
+        baidu.dom.setStyles = function (element, styles) {
+            element = baidu.dom.g(element);
+            for (var key in styles) {
+                baidu.dom.setStyle(element, key, styles[key])
+            }
+            return element
+        };
+        baidu.setStyles = baidu.dom.setStyles;
+        baidu.dom.show = function (element) {
+            element = baidu.dom.g(element);
+            element.style.display = "";
+            return element
+        };
+        baidu.show = baidu.dom.show;
+        baidu.dom.toggle = function (element) {
+            element = baidu.dom.g(element);
+            element.style.display = element.style.display == "none" ? "" : "none";
+            return element
+        };
+        baidu.event = baidu.event || {};
+        baidu.event.EventArg = function (event, win) {
+            win = win || window;
+            event = event || win.event;
+            var doc = win.document;
+            this.target = (event.target) || event.srcElement;
+            this.keyCode = event.which || event.keyCode;
+            for (var k in event) {
+                var item = event[k];
+                if ("function" != typeof item) {
+                    this[k] = item
+                }
+            }
+            if (!this.pageX && this.pageX !== 0) {
+                this.pageX = (event.clientX || 0) + (doc.documentElement.scrollLeft || doc.body.scrollLeft);
+                this.pageY = (event.clientY || 0) + (doc.documentElement.scrollTop || doc.body.scrollTop)
+            }
+            this._event = event
+        };
+        baidu.event.EventArg.prototype.preventDefault = function () {
+            if (this._event.preventDefault) {
+                this._event.preventDefault()
+            } else {
+                this._event.returnValue = false
+            }
+            return this
+        };
+        baidu.event.EventArg.prototype.stopPropagation = function () {
+            if (this._event.stopPropagation) {
+                this._event.stopPropagation()
+            } else {
+                this._event.cancelBubble = true
+            }
+            return this
+        };
+        baidu.event.EventArg.prototype.stop = function () {
+            return this.stopPropagation().preventDefault()
+        };
+        baidu.event._listeners = baidu.event._listeners || [];
+        baidu.event.get = function (event, win) {
+            return new baidu.event.EventArg(event, win)
+        };
+        baidu.event.getTarget = function (event) {
+            return event.target || event.srcElement
+        };
+        baidu.event.on = function (element, type, listener) {
+            type = type.replace(/^on/i, "");
+            element = baidu.dom._g(element);
+            var realListener = function (ev) {
+                listener.call(element, ev)
+            }, lis = baidu.event._listeners, filter = baidu.event._eventFilter, afterFilter, realType = type;
+            type = type.toLowerCase();
+            if (filter && filter[type]) {
+                afterFilter = filter[type](element, type, realListener);
+                realType = afterFilter.type;
+                realListener = afterFilter.listener
+            }
+            if (element.addEventListener) {
+                element.addEventListener(realType, realListener, false)
+            } else {
+                if (element.attachEvent) {
+                    element.attachEvent("on" + realType, realListener)
+                }
+            }
+            lis[lis.length] = [element, type, listener, realListener, realType];
+            return element
+        };
+        baidu.on = baidu.event.on;
+        baidu.event.preventDefault = function (event) {
+            if (event.preventDefault) {
+                event.preventDefault()
+            } else {
+                event.returnValue = false
+            }
+        };
+        baidu.event.un = function (element, type, listener) {
+            element = baidu.dom._g(element);
+            type = type.replace(/^on/i, "").toLowerCase();
+            var lis = baidu.event._listeners, len = lis.length, isRemoveAll = !listener, item, realType, realListener;
+            while (len--) {
+                item = lis[len];
+                if (item[1] === type && item[0] === element && (isRemoveAll || item[2] === listener)) {
+                    realType = item[4];
+                    realListener = item[3];
+                    if (element.removeEventListener) {
+                        element.removeEventListener(realType, realListener, false)
+                    } else {
+                        if (element.detachEvent) {
+                            element.detachEvent("on" + realType, realListener)
+                        }
+                    }
+                    lis.splice(len, 1)
+                }
+            }
+            return element
+        };
+        baidu.un = baidu.event.un;
+        baidu.json = baidu.json || {};
+        baidu.json.parse = function (data) {
+            return (new Function("return (" + data + ")"))()
+        };
+        baidu.json.stringify = (function () {
+            var escapeMap = {"\b": "\\b", "\t": "\\t", "\n": "\\n", "\f": "\\f", "\r": "\\r", '"': '\\"', "\\": "\\\\"};
+
+            function encodeString(source) {
+                if (/["\\\x00-\x1f]/.test(source)) {
+                    source = source.replace(/["\\\x00-\x1f]/g, function (match) {
+                        var c = escapeMap[match];
+                        if (c) {
+                            return c
+                        }
+                        c = match.charCodeAt();
+                        return "\\u00" + Math.floor(c / 16).toString(16) + (c % 16).toString(16)
+                    })
+                }
+                return '"' + source + '"'
+            }
+
+            function encodeArray(source) {
+                var result = ["["], l = source.length, preComma, i, item;
+                for (i = 0; i < l; i++) {
+                    item = source[i];
+                    switch (typeof item) {
+                        case"undefined":
+                        case"function":
+                        case"unknown":
+                            break;
+                        default:
+                            if (preComma) {
+                                result.push(",")
+                            }
+                            result.push(baidu.json.stringify(item));
+                            preComma = 1
+                    }
+                }
+                result.push("]");
+                return result.join("")
+            }
+
+            function pad(source) {
+                return source < 10 ? "0" + source : source
+            }
+
+            function encodeDate(source) {
+                return '"' + source.getFullYear() + "-" + pad(source.getMonth() + 1) + "-" + pad(source.getDate()) + "T" + pad(source.getHours()) + ":" + pad(source.getMinutes()) + ":" + pad(source.getSeconds()) + '"'
+            }
+
+            return function (value) {
+                switch (typeof value) {
+                    case"undefined":
+                        return "undefined";
+                    case"number":
+                        return isFinite(value) ? String(value) : "null";
+                    case"string":
+                        return encodeString(value);
+                    case"boolean":
+                        return String(value);
+                    default:
+                        if (value === null) {
+                            return "null"
+                        } else {
+                            if (value instanceof Array) {
+                                return encodeArray(value)
+                            } else {
+                                if (value instanceof Date) {
+                                    return encodeDate(value)
+                                } else {
+                                    var result = ["{"], encode = baidu.json.stringify, preComma, item;
+                                    for (var key in value) {
+                                        if (Object.prototype.hasOwnProperty.call(value, key)) {
+                                            item = value[key];
+                                            switch (typeof item) {
+                                                case"undefined":
+                                                case"unknown":
+                                                case"function":
+                                                    break;
+                                                default:
+                                                    if (preComma) {
+                                                        result.push(",")
+                                                    }
+                                                    preComma = 1;
+                                                    result.push(encode(key) + ":" + encode(item))
+                                            }
+                                        }
+                                    }
+                                    result.push("}");
+                                    return result.join("")
+                                }
+                            }
+                        }
+                }
+            }
+        })();
+        (function () {
+            var guid = window[baidu.guid];
+            baidu.lang.guid = function () {
+                return "TANGRAM__" + (guid._counter++).toString(36)
+            };
+            guid._counter = guid._counter || 1
+        })();
+        window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+        baidu.lang.isFunction = function (source) {
+            return "[object Function]" == Object.prototype.toString.call(source)
+        };
+        baidu.lang.Class = function (guid) {
+            this.guid = guid || baidu.lang.guid();
+            window[baidu.guid]._instances[this.guid] = this
+        };
+        window[baidu.guid]._instances = window[baidu.guid]._instances || {};
+        baidu.lang.Class.prototype.dispose = function () {
+            delete window[baidu.guid]._instances[this.guid];
+            for (var property in this) {
+                if (!baidu.lang.isFunction(this[property])) {
+                    delete this[property]
+                }
+            }
+            this.disposed = true
+        };
+        baidu.lang.Class.prototype.toString = function () {
+            return "[object " + (this._className || "Object") + "]"
+        };
+        baidu.lang.Event = function (type, target) {
+            this.type = type;
+            this.returnValue = true;
+            this.target = target || null;
+            this.currentTarget = null
+        };
+        baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
+            if (!baidu.lang.isFunction(handler)) {
+                return
+            }
+            !this.__listeners && (this.__listeners = {});
+            var t = this.__listeners, id;
+            if (typeof key == "string" && key) {
+                if (/[^\w\-]/.test(key)) {
+                    throw ("nonstandard key:" + key)
+                } else {
+                    handler.hashCode = key;
+                    id = key
+                }
+            }
+            type.indexOf("on") != 0 && (type = "on" + type);
+            typeof t[type] != "object" && (t[type] = {});
+            id = id || baidu.lang.guid();
+            handler.hashCode = id;
+            t[type][id] = handler
+        };
+        baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
+            if (typeof handler != "undefined") {
+                if ((baidu.lang.isFunction(handler) && !(handler = handler.hashCode)) || (!baidu.lang.isString(handler))) {
+                    return
+                }
+            }
+            !this.__listeners && (this.__listeners = {});
+            type.indexOf("on") != 0 && (type = "on" + type);
+            var t = this.__listeners;
+            if (!t[type]) {
+                return
+            }
+            if (typeof handler != "undefined") {
+                t[type][handler] && delete t[type][handler]
+            } else {
+                for (var guid in t[type]) {
+                    delete t[type][guid]
+                }
+            }
+        };
+        baidu.lang.Class.prototype.dispatchEvent = function (event, options) {
+            if (baidu.lang.isString(event)) {
+                event = new baidu.lang.Event(event)
+            }
+            !this.__listeners && (this.__listeners = {});
+            options = options || {};
+            for (var i in options) {
+                event[i] = options[i]
+            }
+            var i, t = this.__listeners, p = event.type;
+            event.target = event.target || this;
+            event.currentTarget = this;
+            p.indexOf("on") != 0 && (p = "on" + p);
+            baidu.lang.isFunction(this[p]) && this[p].apply(this, arguments);
+            if (typeof t[p] == "object") {
+                for (i in t[p]) {
+                    t[p][i].apply(this, arguments)
+                }
+            }
+            return event.returnValue
+        };
+        baidu.lang.inherits = function (subClass, superClass, className) {
+            var key, proto, selfProps = subClass.prototype, clazz = new Function();
+            clazz.prototype = superClass.prototype;
+            proto = subClass.prototype = new clazz();
+            for (key in selfProps) {
+                proto[key] = selfProps[key]
+            }
+            subClass.prototype.constructor = subClass;
+            subClass.superClass = superClass.prototype;
+            if ("string" == typeof className) {
+                proto._className = className
+            }
+        };
+        baidu.inherits = baidu.lang.inherits;
+        baidu.lang.instance = function (guid) {
+            return window[baidu.guid]._instances[guid] || null
+        };
+        baidu.lang.isArray = function (source) {
+            return "[object Array]" == Object.prototype.toString.call(source)
+        };
+        baidu.lang.isElement = function (source) {
+            return !!(source && source.nodeName && source.nodeType == 1)
+        };
+        baidu.lang.isNumber = function (source) {
+            return "[object Number]" == Object.prototype.toString.call(source) && isFinite(source)
+        };
+        baidu.lang.isObject = function (source) {
+            return "function" == typeof source || !!(source && "object" == typeof source)
+        };
+        baidu.isObject = baidu.lang.isObject;
+        baidu.lang.module = function (name, module, owner) {
+            var packages = name.split("."), len = packages.length - 1, packageName, i = 0;
+            if (!owner) {
+                try {
+                    if (!(new RegExp("^[a-zA-Z_\x24][a-zA-Z0-9_\x24]*\x24")).test(packages[0])) {
+                        throw""
+                    }
+                    owner = eval(packages[0]);
+                    i = 1
+                } catch (e) {
+                    owner = window
+                }
+            }
+            for (; i < len; i++) {
+                packageName = packages[i];
+                if (!owner[packageName]) {
+                    owner[packageName] = {}
+                }
+                owner = owner[packageName]
+            }
+            if (!owner[packages[len]]) {
+                owner[packages[len]] = module
+            }
+        };
+        baidu.lang.toArray = function (source) {
+            if (source === null || source === undefined) {
+                return []
+            }
+            if (baidu.lang.isArray(source)) {
+                return source
+            }
+            if (typeof source.length !== "number" || typeof source === "string" || baidu.lang.isFunction(source)) {
+                return [source]
+            }
+            if (source.item) {
+                var l = source.length, array = new Array(l);
+                while (l--) {
+                    array[l] = source[l]
+                }
+                return array
+            }
+            return [].slice.call(source)
+        };
+        baidu.object = baidu.object || {};
+        baidu.object.isPlain = function (obj) {
+            var hasOwnProperty = Object.prototype.hasOwnProperty, key;
+            if (!obj || Object.prototype.toString.call(obj) !== "[object Object]" || !("isPrototypeOf" in obj)) {
+                return false
+            }
+            if (obj.constructor && !hasOwnProperty.call(obj, "constructor") && !hasOwnProperty.call(obj.constructor.prototype, "isPrototypeOf")) {
+                return false
+            }
+            for (key in obj) {
+            }
+            return key === undefined || hasOwnProperty.call(obj, key)
+        };
+        baidu.object.clone = function (source) {
+            var result = source, i, len;
+            if (!source || source instanceof Number || source instanceof String || source instanceof Boolean) {
+                return result
+            } else {
+                if (baidu.lang.isArray(source)) {
+                    result = [];
+                    var resultLen = 0;
+                    for (i = 0, len = source.length; i < len; i++) {
+                        result[resultLen++] = baidu.object.clone(source[i])
+                    }
+                } else {
+                    if (baidu.object.isPlain(source)) {
+                        result = {};
+                        for (i in source) {
+                            if (source.hasOwnProperty(i)) {
+                                result[i] = baidu.object.clone(source[i])
+                            }
+                        }
+                    }
+                }
+            }
+            return result
+        };
+        baidu.extend = baidu.object.extend = function (target, source) {
+            for (var p in source) {
+                if (source.hasOwnProperty(p)) {
+                    target[p] = source[p]
+                }
+            }
+            return target
+        };
+        baidu.page = baidu.page || {};
+        baidu.page.getScrollTop = function () {
+            var d = document;
+            return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop
+        };
+        baidu.page.getViewHeight = function () {
+            var doc = document, client = doc.compatMode == "BackCompat" ? doc.body : doc.documentElement;
+            return client.clientHeight
+        };
+        baidu.page.getViewWidth = function () {
+            var doc = document, client = doc.compatMode == "BackCompat" ? doc.body : doc.documentElement;
+            return client.clientWidth
+        };
+        baidu.sio = baidu.sio || {};
+        baidu.sio._removeScriptTag = function (scr) {
+            if (scr.clearAttributes) {
+                scr.clearAttributes()
+            } else {
+                for (var attr in scr) {
+                    if (scr.hasOwnProperty(attr)) {
+                        delete scr[attr]
+                    }
+                }
+            }
+            if (scr && scr.parentNode) {
+                scr.parentNode.removeChild(scr)
+            }
+            scr = null
+        };
+        baidu.sio._createScriptTag = function (scr, url, charset) {
+            scr.setAttribute("type", "text/javascript");
+            charset && scr.setAttribute("charset", charset);
+            scr.setAttribute("src", url);
+            document.getElementsByTagName("head")[0].appendChild(scr)
+        };
+        baidu.sio.callByBrowser = function (url, opt_callback, opt_options) {
+            var scr = document.createElement("SCRIPT"), scriptLoaded = 0, options = opt_options || {}, charset = options.charset, callback = opt_callback || function () {
+                    }, timeOut = options.timeOut || 0, timer;
+            scr.onload = scr.onreadystatechange = function () {
+                if (scriptLoaded) {
+                    return
+                }
+                var readyState = scr.readyState;
+                if ("undefined" == typeof readyState || readyState == "loaded" || readyState == "complete") {
+                    scriptLoaded = 1;
+                    try {
+                        callback();
+                        clearTimeout(timer)
+                    } finally {
+                        scr.onload = scr.onreadystatechange = null;
+                        baidu.sio._removeScriptTag(scr)
+                    }
+                }
+            };
+            if (timeOut) {
+                timer = setTimeout(function () {
+                    scr.onload = scr.onreadystatechange = null;
+                    baidu.sio._removeScriptTag(scr);
+                    options.onfailure && options.onfailure()
+                }, timeOut)
+            }
+            baidu.sio._createScriptTag(scr, url, charset)
+        };
+        baidu.sio.callByServer = function (url, callback, opt_options) {
+            var scr = document.createElement("SCRIPT"), prefix = "bd__cbs__", callbackName, callbackImpl, options = opt_options || {}, charset = options.charset, queryField = options.queryField || "callback", timeOut = options.timeOut || 0, timer, reg = new RegExp("(\\?|&)" + queryField + "=([^&]*)"), matches;
+            if (baidu.lang.isFunction(callback)) {
+                callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
+                window[callbackName] = getCallBack(0)
+            } else {
+                if (baidu.lang.isString(callback)) {
+                    callbackName = callback
+                } else {
+                    if (matches = reg.exec(url)) {
+                        callbackName = matches[2]
+                    }
+                }
+            }
+            if (timeOut) {
+                timer = setTimeout(getCallBack(1), timeOut)
+            }
+            url = url.replace(reg, "\x241" + queryField + "=" + callbackName);
+            if (url.search(reg) < 0) {
+                url += (url.indexOf("?") < 0 ? "?" : "&") + queryField + "=" + callbackName
+            }
+            baidu.sio._createScriptTag(scr, url, charset);
+            function getCallBack(onTimeOut) {
+                return function () {
+                    try {
+                        if (onTimeOut) {
+                            options.onfailure && options.onfailure()
+                        } else {
+                            callback.apply(window, arguments);
+                            clearTimeout(timer)
+                        }
+                        window[callbackName] = null;
+                        delete window[callbackName]
+                    } catch (exception) {
+                    } finally {
+                        baidu.sio._removeScriptTag(scr)
+                    }
+                }
+            }
+        };
+        baidu.string.decodeHTML = function (source) {
+            var str = String(source).replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+            return str.replace(/&#([\d]+);/g, function (_0, _1) {
+                return String.fromCharCode(parseInt(_1, 10))
+            })
+        };
+        baidu.decodeHTML = baidu.string.decodeHTML;
+        baidu.string.encodeHTML = function (source) {
+            return String(source).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")
+        };
+        baidu.encodeHTML = baidu.string.encodeHTML;
+        baidu.string.format = function (source, opts) {
+            source = String(source);
+            var data = Array.prototype.slice.call(arguments, 1), toString = Object.prototype.toString;
+            if (data.length) {
+                data = data.length == 1 ? (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) : data;
+                return source.replace(/#\{(.+?)\}/g, function (match, key) {
+                    var replacer = data[key];
+                    if ("[object Function]" == toString.call(replacer)) {
+                        replacer = replacer(key)
+                    }
+                    return ("undefined" == typeof replacer ? "" : replacer)
+                })
+            }
+            return source
+        };
+        baidu.format = baidu.string.format;
+        baidu.string.getByteLength = function (source) {
+            return String(source).replace(/[^\x00-\xff]/g, "ci").length
+        };
+        baidu.swf = baidu.swf || {};
+        baidu.swf.version = (function () {
+            var n = navigator;
+            if (n.plugins && n.mimeTypes.length) {
+                var plugin = n.plugins["Shockwave Flash"];
+                if (plugin && plugin.description) {
+                    return plugin.description.replace(/([a-zA-Z]|\s)+/, "").replace(/(\s)+r/, ".") + ".0"
+                }
+            } else {
+                if (window.ActiveXObject && !window.opera) {
+                    for (var i = 12; i >= 2; i--) {
+                        try {
+                            var c = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + i);
+                            if (c) {
+                                var version = c.GetVariable("$version");
+                                return version.replace(/WIN/g, "").replace(/,/g, ".")
+                            }
+                        } catch (e) {
+                        }
+                    }
+                }
+            }
+        })();
+        baidu.swf.createHTML = function (options) {
+            options = options || {};
+            var version = baidu.swf.version, needVersion = options.ver || "6.0.0", vUnit1, vUnit2, i, k, len, item, tmpOpt = {}, encodeHTML = baidu.string.encodeHTML;
+            for (k in options) {
+                tmpOpt[k] = options[k]
+            }
+            options = tmpOpt;
+            if (version) {
+                version = version.split(".");
+                needVersion = needVersion.split(".");
+                for (i = 0; i < 3; i++) {
+                    vUnit1 = parseInt(version[i], 10);
+                    vUnit2 = parseInt(needVersion[i], 10);
+                    if (vUnit2 < vUnit1) {
+                        break
+                    } else {
+                        if (vUnit2 > vUnit1) {
+                            return ""
+                        }
+                    }
+                }
+            } else {
+                return ""
+            }
+            var vars = options.vars, objProperties = ["classid", "codebase", "id", "width", "height", "align"];
+            options.align = options.align || "middle";
+            options.classid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
+            options.codebase = "http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0";
+            options.movie = options.url || "";
+            delete options.vars;
+            delete options.url;
+            if ("string" == typeof vars) {
+                options.flashvars = vars
+            } else {
+                var fvars = [];
+                for (k in vars) {
+                    item = vars[k];
+                    fvars.push(k + "=" + encodeURIComponent(item))
+                }
+                options.flashvars = fvars.join("&")
+            }
+            var str = ["<object "];
+            for (i = 0, len = objProperties.length; i < len; i++) {
+                item = objProperties[i];
+                str.push(" ", item, '="', encodeHTML(options[item]), '"')
+            }
+            str.push(">");
+            var params = {
+                wmode: 1,
+                scale: 1,
+                quality: 1,
+                play: 1,
+                loop: 1,
+                menu: 1,
+                salign: 1,
+                bgcolor: 1,
+                base: 1,
+                allowscriptaccess: 1,
+                allownetworking: 1,
+                allowfullscreen: 1,
+                seamlesstabbing: 1,
+                devicefont: 1,
+                swliveconnect: 1,
+                flashvars: 1,
+                movie: 1
+            };
+            for (k in options) {
+                item = options[k];
+                k = k.toLowerCase();
+                if (params[k] && (item || item === false || item === 0)) {
+                    str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />')
+                }
+            }
+            options.src = options.movie;
+            options.name = options.id;
+            delete options.id;
+            delete options.movie;
+            delete options.classid;
+            delete options.codebase;
+            options.type = "application/x-shockwave-flash";
+            options.pluginspage = "http://www.macromedia.com/go/getflashplayer";
+            str.push("<embed");
+            var salign;
+            for (k in options) {
+                item = options[k];
+                if (item || item === false || item === 0) {
+                    if ((new RegExp("^salign\x24", "i")).test(k)) {
+                        salign = item;
+                        continue
+                    }
+                    str.push(" ", k, '="', encodeHTML(item), '"')
+                }
+            }
+            if (salign) {
+                str.push(' salign="', encodeHTML(salign), '"')
+            }
+            str.push("></embed></object>");
+            return str.join("")
+        };
+        baidu.swf.create = function (options, target) {
+            options = options || {};
+            var html = baidu.swf.createHTML(options) || options.errorMessage || "";
+            if (target && "string" == typeof target) {
+                target = document.getElementById(target)
+            }
+            if (target) {
+                target.innerHTML = html
+            } else {
+                document.write(html)
+            }
+        };
+        baidu.swf.getMovie = function (name) {
+            var movie = document[name], ret;
+            return baidu.browser.ie == 9 ? movie && movie.length ? (ret = baidu.array.remove(baidu.lang.toArray(movie), function (item) {
+                return item.tagName.toLowerCase() != "embed"
+            })).length == 1 ? ret[0] : ret : movie : movie || window[name]
+        };
+        baidu.url = baidu.url || {};
+        baidu.url.getQueryValue = function (url, key) {
+            var reg = new RegExp("(^|&|\\?|#)" + baidu.string.escapeReg(key) + "=([^&#]*)(&|\x24|#)", "");
+            var match = url.match(reg);
+            if (match) {
+                return match[2]
+            }
+            return null
+        };
+        T.lang.createClass = T.lang.createClass || function (constructor, options) {
+                    options = options || {};
+                    var superClass = options.superClass || baidu.lang.Class;
+                    var fn = function () {
+                        if (superClass != baidu.lang.Class) {
+                            superClass.apply(this, arguments)
+                        } else {
+                            superClass.call(this)
+                        }
+                        constructor.apply(this, arguments)
+                    };
+                    fn.options = options.options || {};
+                    var C = function () {
+                    }, cp = constructor.prototype;
+                    C.prototype = superClass.prototype;
+                    var fp = fn.prototype = new C();
+                    for (var i in cp) {
+                        fp[i] = cp[i]
+                    }
+                    typeof options.className == "string" && (fp._className = options.className);
+                    fp.constructor = cp.constructor;
+                    fn.extend = function (json) {
+                        for (var i in json) {
+                            fn.prototype[i] = json[i]
+                        }
+                        return fn
+                    };
+                    return fn
+                };
+        T.fn.bind = function (func, scope) {
+            var xargs = arguments.length > 2 ? [].slice.call(arguments, 2) : null;
+            return function () {
+                var fn = baidu.lang.isString(func) ? scope[func] : func, args = (xargs) ? xargs.concat([].slice.call(arguments, 0)) : arguments;
+                return fn.apply(scope || fn, args)
+            }
+        };
+        T.array.some = function (source, iterator, thisObject) {
+            var i = 0, len = source.length;
+            for (; i < len; i++) {
+                if (i in source && iterator.call(thisObject || source, source[i], i)) {
+                    return true
+                }
+            }
+            return false
+        };
+        baidu.object.each = function (source, iterator) {
+            var returnValue, key, item;
+            if ("function" == typeof iterator) {
+                for (key in source) {
+                    if (source.hasOwnProperty(key)) {
+                        item = source[key];
+                        returnValue = iterator.call(source, item, key);
+                        if (returnValue === false) {
+                            break
+                        }
+                    }
+                }
+            }
+            return source
+        };
+        baidu.platform = baidu.platform || {};
+        baidu.platform.isAndroid = /android/i.test(navigator.userAgent);
+        baidu.browser = baidu.browser || {};
+        baidu.browser.isWebkit = /webkit/i.test(navigator.userAgent);
+        var mbox = mbox || {};
+        T.extend(mbox, {
+            namespace: function () {
+                var a = arguments, o = null, i, j, d;
+                for (i = 0, len = a.length; i < len; i++) {
+                    d = ("" + a[i]).split(".");
+                    o = mbox;
+                    for (j = (d[0] == "mbox") ? 1 : 0; j < d.length; j = j + 1) {
+                        o[d[j]] = o[d[j]] || {};
+                        o = o[d[j]]
+                    }
+                }
+                return o
+            }, Fuze: function () {
+                var queue, fn, infire;
+                queue = [];
+                fn = function (process) {
+                    if (infire) {
+                        process()
+                    } else {
+                        queue.push(process)
+                    }
+                };
+                fn.fire = function () {
+                    while (queue.length) {
+                        queue.shift()()
+                    }
+                    infire = true
+                };
+                fn.extinguish = function () {
+                    infire = false
+                };
+                fn.wettish = function () {
+                    this.fire();
+                    this.extinguish()
+                };
+                fn.clear = function () {
+                    while (queue.length) {
+                        queue.shift()
+                    }
+                    this.extinguish()
+                };
+                return fn
+            }, convertTime: function (time) {
+                var minute, second;
+                time = Math.round(time / 1000);
+                minute = Math.floor(time / 60);
+                second = time % 60;
+                return T.number.pad(minute, 2) + ":" + T.number.pad(second, 2)
+            }, Timer: (function (window, undefined) {
+                var fn = function (delay, repeatCount) {
+                    this._timer = function () {
+                    };
+                    this._listener = function () {
+                    };
+                    this._timerComplete = function () {
+                    };
+                    this._timerID = null;
+                    this._delay = this._remain = delay;
+                    this._repeatCount = repeatCount || 0;
+                    this._currentCount = 0;
+                    this._isRunning = false;
+                    this._startTime = this._endTime = 0;
+                    this.EVENTS = {TIMER: "timer", COMPLETE: "timerComplete"}
+                };
+                fn.prototype = {
+                    _createTimer: function (delay, repeatCount) {
+                        var me = this;
+                        if (repeatCount == 1) {
+                            return function () {
+                                return window.setTimeout(function () {
+                                    me.reset();
+                                    me._listener(me._delay, repeatCount);
+                                    me._timerComplete()
+                                }, delay)
+                            }
+                        } else {
+                            return function () {
+                                return window.setInterval(function () {
+                                    if (repeatCount != 0 && me._currentCount >= repeatCount) {
+                                        me.reset();
+                                        me._timerComplete()
+                                    } else {
+                                        me._currentCount++;
+                                        me._listener(delay, me._currentCount)
+                                    }
+                                }, delay)
+                            }
+                        }
+                    }, addEventListener: function (type, listener) {
+                        if (type == "timer") {
+                            this._listener = listener;
+                            this._timer = this._createTimer(this._delay, this._repeatCount)
+                        } else {
+                            if (type == "timerComplete") {
+                                this._timerComplete = listener
+                            }
+                        }
+                    }, reset: function () {
+                        this.stop();
+                        if (this._repeatCount == 1) {
+                            this._timer = this._createTimer(this._delay, this._repeatCount)
+                        }
+                        this._currentCount = 0;
+                        this._remain = this._delay;
+                        this._startTime = this._endTime = 0
+                    }, start: function () {
+                        if (!this._timerID) {
+                            this._timerID = this._timer();
+                            if (this._repeatCount == 1) {
+                                this._startTime = new Date().getTime()
+                            }
+                            this._isRunning = true
+                        }
+                    }, stop: function () {
+                        if (this._timerID) {
+                            if (this._repeatCount == 1) {
+                                window.clearTimeout(this._timerID)
+                            } else {
+                                window.clearInterval(this._timerID)
+                            }
+                            this._timerID = null;
+                            this._isRunning = false
+                        }
+                    }, pause: function () {
+                        if (this._repeatCount == 1) {
+                            if (this._timerID) {
+                                this.stop();
+                                this._endTime = new Date().getTime();
+                                this._remain = this._remain - (this._endTime - this._startTime);
+                                if (this._remain > 0) {
+                                    this._timer = this._createTimer(this._remain, 1)
+                                } else {
+                                    this.reset()
+                                }
+                            }
+                        } else {
+                            this.stop()
+                        }
+                    }, getCurrentCount: function () {
+                        return this._currentCount
+                    }, isRunning: function () {
+                        return this._isRunning
+                    }
+                };
+                return fn
+            })(window), StopWatch: (function (window, undefined) {
+                var count = 0;
+                var fn = function () {
+                    this.startTime = 0;
+                    this.isRunning = false;
+                    this.isReset = true;
+                    this.passedTime = 0;
+                    count++
+                };
+                fn.prototype = {
+                    reset: function () {
+                        this.startTime = 0;
+                        this.pauseTime = 0;
+                        this.passedTime = 0;
+                        this.isRunning = false;
+                        this.isReset = true
+                    }, start: function () {
+                        if (this.isReset) {
+                            this.reset();
+                            this.startTime = new Date().getTime()
+                        } else {
+                            if (!this.isRunning) {
+                                this.startTime = new Date().getTime()
+                            }
+                        }
+                        this.isRunning = true;
+                        this.isReset = false
+                    }, pause: function () {
+                        if (!this.isReset && this.isRunning) {
+                            this.pauseTime = new Date().getTime();
+                            this.passedTime += this.pauseTime - this.startTime;
+                            this.isRunning = false
+                        }
+                    }, isRunning: function () {
+                        return this.isRunning
+                    }, isReset: function () {
+                        return this.isReset
+                    }, getTime: function () {
+                        if (this.isReset) {
+                            return 0
+                        } else {
+                            if (this.isRunning) {
+                                return new Date().getTime() - this.startTime + this.passedTime
+                            } else {
+                                return this.passedTime
+                            }
+                        }
+                    }, getCounts: function () {
+                        return count
+                    }
+                };
+                return fn
+            })(window)
+        });
+        mbox.namespace("mbox.lang");
+        T.extend(mbox.lang, {
+            createClass: function (constructor, options) {
+                var fn = T.lang.createClass(constructor, options);
+                fn.extend = function (json) {
+                    for (var i in json) {
+                        fn.prototype[i] = (function (method, name) {
+                            if (T.lang.isFunction(method)) {
+                                return function () {
+                                    this.dispatchEvent(name, {name: name, arguments: arguments});
+                                    var res = method.apply(this, arguments);
+                                    return res
+                                }
+                            } else {
+                                return method
+                            }
+                        })(json[i], i)
+                    }
+                    return fn
+                };
+                return fn
+            }
+        });
+        var mbox = mbox || {};
+        var tingUrl = bds && bds.util && bds.util.domain ? bds.util.domain.get("http://tingapi.ting.baidu.com") : "http://tingapi.ting.baidu.com";
+        mbox.CONF = {
+            tingSongApi: tingUrl + "/v1/restserver/ting?method=baidu.ting.song.play&format=jsonp&bit=128&songid=",
+            tingLrcApi: tingUrl + "/v1/restserver/ting?method=baidu.ting.song.lry&fromat=jsonp&songid=",
+            engineArg: {
+                audio: {constructorName: "PlayEngine_Audio"},
+                fmp: {
+                    constructorName: "PlayEngine_FMP_MP3",
+                    args: {swfPath: A.uiPrefix + "mboxplayer/fmp.swf", instanceName: "window.alambox.player"}
+                }
+            }
+        };
+        var PlayEngine_Interface = mbox.lang.createClass((function (window, undefined) {
+            var guid = 0;
+            var defConf = {mute: false, volume: 50};
+            var fn = function (conf) {
+                this.STATES = {
+                    INIT: "init",
+                    READY: "ready",
+                    STOP: "stop",
+                    PLAY: "play",
+                    PAUSE: "pause",
+                    END: "end",
+                    BUFFERING: "buffering",
+                    PREBUFFER: "pre-buffer",
+                    ERROR: "error"
+                };
+                this.EVENTS = {
+                    STATECHANGE: "player_playStateChange",
+                    POSITIONCHANGE: "player_positionChange",
+                    PROGRESS: "player_progress",
+                    ERROR: "player_error",
+                    INIT: "player_initSuccess",
+                    INITFAIL: "player_initFail"
+                };
+                conf = conf || {};
+                this.mute = typeof conf.mute == "undefined" ? defConf.mute : !!conf.mute;
+                this.volume = typeof conf.volume == "undefined" ? defConf.volume : conf.volume;
+                this.ready = false;
+                this.url = "";
+                this.state = this.STATES.INIT;
+                this.engineType = "";
+                this.stateStack = [this.STATES.INIT];
+                this.supportMimeType = []
+            };
+            fn.prototype = {
+                newId: function () {
+                    return "_m3_" + guid++
+                }, init: function () {
+                }, reset: function () {
+                }, setUrl: function (url) {
+                }, getUrl: function () {
+                    return this.url
+                }, play: function () {
+                }, pause: function () {
+                }, stop: function () {
+                }, setMute: function (mute) {
+                }, getMute: function () {
+                    return this.mute
+                }, setVolume: function (vol) {
+                }, getVolume: function () {
+                    return this.volume
+                }, getState: function () {
+                    return ""
+                }, setCurrentPosition: function (pos) {
+                }, getCurrentPosition: function () {
+                    return 0
+                }, getLoadedPercent: function () {
+                    return 0
+                }, getLoadedBytes: function () {
+                    return 0
+                }, getTotalBytes: function () {
+                    return 0
+                }, getTotalTime: function () {
+                    return 0
+                }, getVersion: function () {
+                    return ""
+                }, getEngineType: function () {
+                    return this.engineType
+                }, canPlayType: function (mimeType) {
+                    var list = this.getSupportMimeTypeList();
+                    return T.array.some(list, function (item, index) {
+                        return mimeType == item
+                    })
+                }, getSupportMimeTypeList: function () {
+                    return this.supportMimeType
+                }, setEventListener: function (eventName, listener) {
+                    var _listener = T.fn.bind(function () {
+                        return listener.apply(this, arguments)
+                    }, this);
+                    this.addEventListener(eventName, _listener)
+                }
+            };
+            return fn
+        })(window), {superClass: T.lang.Class, className: "PlayEngine_Interface"});
+        var PlayEngine_Audio = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            this.engineType = "audio";
+            this.contentType = {
+                mp3: ["audio/mpeg", "audio/mp3"],
+                mp4: ["audio/mp4", "audio/MP4A-LATM", "video/mpeg4", "audio/mpeg4-generic"],
+                m4a: ["audio/mp4", "audio/MP4A-LATM", "video/mpeg4", "audio/mpeg4-generic"],
+                aac: ["audio/aac", "audio/aacp"],
+                "3gp": ["audio/3gpp", "audio/3gpp2"],
+                ogg: ["audio/ogg", "video/ogg", "application/ogg", "audio/vorbis"],
+                oga: ["audio/ogg", "application/ogg", "audio/vorbis"],
+                wma: ["audio/x-ms-wma"]
+            };
+            this.supportAudio = typeof Audio != "undefined";
+            this.supportMimeType = [];
+            if (this.supportAudio) {
+                this.audio = new Audio();
+                if (typeof this.audio.canPlayType == "function") {
+                    T.object.each(this.contentType, T.fn.bind(function (types, ext) {
+                        for (var i = 0; i < types.length; i++) {
+                            var canPlayType = this.audio.canPlayType(types[i]);
+                            if (canPlayType == "probably" || canPlayType == "maybe") {
+                                this.supportMimeType.push(ext);
+                                break
+                            }
+                        }
+                    }, this))
+                }
+                if (!this.supportMimeType.length) {
+                    this.supportAudio = false
+                }
+            }
+            this.supportVolume = T.fn.bind(function () {
+                if (this.supportAudio) {
+                    this.audio.volume = 0.5;
+                    return (this.audio.volume < 1)
+                }
+                return false
+            }, this)()
+        }, {superClass: PlayEngine_Interface, className: "PlayEngine_Audio"}).extend({
+            test: function (dispatch) {
+                dispatch = !!dispatch;
+                if (!this.supportAudio && dispatch) {
+                    this.dispatchEvent(this.EVENTS.INITFAIL, {engineType: this.engineType})
+                }
+                return this.supportAudio
+            }, init: function (options) {
+                this.lastState = this.STATES.INIT;
+                this.muted = this.audio.muted = false;
+                this.volume = 50;
+                this.audio.volume = 0.5;
+                this.url = "";
+                this._definedEvents();
+                this.state = this.STATES.READY;
+                this.dispatchEvent(this.EVENTS.INIT, {engineType: this.engineType, engine: this.audio})
+            }, reset: function () {
+                if (!this.supportAudio) {
+                    return
+                }
+                this.url = "";
+                this.audio.pause();
+                this.state = "ready";
+                this.lastState = "ready"
+            }, setUrl: function (url) {
+                if (!this.supportAudio) {
+                    return
+                }
+                this.url = url;
+                this.audio.src = url;
+                this.audio.load();
+                this._firePlayStateChange(this.STATES.PREBUFFER)
+            }, play: function () {
+                if (!this.supportAudio) {
+                    return
+                }
+                if (this.state != "ready") {
+                    if (T.platform.isAndroid && T.browser.isWebkit && this.audio.readyState < 3) {
+                        var canPlay = T.fn.bind(function () {
+                            this.audio.play();
+                            this.audio.removeEventListener("canplay", canPlay, false)
+                        }, this);
+                        this.audio.addEventListener("canplay", canPlay, false)
+                    } else {
+                        this.audio.play()
+                    }
+                }
+            }, pause: function () {
+                if (!this.supportAudio) {
+                    return
+                }
+                if (this.state != this.STATES.STOP && this.state != this.STATES.READY && this.state != this.STATES.END) {
+                    this.audio.pause();
+                    this._firePlayStateChange(this.STATES.PAUSE)
+                }
+            }, stop: function () {
+                if (!this.supportAudio) {
+                    return
+                }
+                if (this.state != this.STATES.READY) {
+                    if (this.audio.currentTime != 0) {
+                        this.audio.currentTime = 0
+                    }
+                    this.audio.pause();
+                    this._firePlayStateChange(this.STATES.STOP)
+                }
+            }, setMute: function (mute) {
+                if (!this.supportAudio) {
+                    return
+                }
+                this.audio.muted = this.mute = mute
+            }, setVolume: function (volume) {
+                if (!this.supportAudio) {
+                    return
+                }
+                volume = T.lang.isNumber(volume) ? volume : 50;
+                volume = Math.max(Math.min(volume, 100), 0);
+                this.volume = volume;
+                this.audio.volume = volume / 100
+            }, setCurrentPosition: function (time) {
+                if (!this.supportAudio || !this.getUrl()) {
+                    return
+                }
+                if (T.platform.isAndroid && this.audio.readyState < 3) {
+                    var canPlay = T.fn.bind(function () {
+                        this.audio.currentTime = time / 1000;
+                        this.audio.play();
+                        this.audio.removeEventListener("canplay", canPlay, false)
+                    }, this);
+                    this.audio.addEventListener("canplay", canPlay, false)
+                } else {
+                    this.audio.currentTime = time / 1000;
+                    this.audio.play()
+                }
+            }, getCurrentPosition: function () {
+                if (!this.supportAudio) {
+                    return 0
+                }
+                return Math.round(this.audio.currentTime * 1000)
+            }, getLoadedPercent: function () {
+                try {
+                    var end = this.audio.buffered.end(0), dur = this.audio.duration;
+                    dur = isNaN(dur) ? 0 : dur;
+                    return Math.round(end / dur * 100) / 100
+                } catch (e) {
+                    return 0
+                }
+            }, getTotalTime: function () {
+                if (!this.supportAudio) {
+                    return 0
+                }
+                var dur = this.audio.duration;
+                dur = isNaN(dur) ? 0 : dur;
+                return Math.round(dur * 1000)
+            }, getState: function () {
+                return this.state
+            }, _firePlayStateChange: function (stateName) {
+                if (this.state != stateName) {
+                    this.lastState = this.state;
+                    this.state = stateName;
+                    this.dispatchEvent(this.EVENTS.STATECHANGE, {
+                        newState: stateName,
+                        oldState: this.lastState,
+                        engineType: this.engineType
+                    })
+                }
+            }, _definedEvents: function () {
+                this.audio.addEventListener("error", T.fn.bind(function () {
+                    this._firePlayStateChange(this.STATES.ERROR);
+                    this.dispatchEvent(this.EVENTS.ERROR, {engineType: this.engineType})
+                }, this), false);
+                this.audio.addEventListener("ended", T.fn.bind(function () {
+                    this._firePlayStateChange(this.STATES.END)
+                }, this), false);
+                this.audio.addEventListener("playing", T.fn.bind(function () {
+                    this._firePlayStateChange(this.STATES.PLAY)
+                }, this), false);
+                this.audio.addEventListener("pause", T.fn.bind(function () {
+                    if (this.getState() == this.STATES.PLAY) {
+                        this._firePlayStateChange(this.getCurrentPosition() ? this.STATES.PAUSE : this.STATES.STOP)
+                    }
+                }, this), false);
+                this.audio.addEventListener("waiting", T.fn.bind(function () {
+                    this._firePlayStateChange(this.getCurrentPosition() ? this.STATES.BUFFERING : this.STATES.PREBUFFER)
+                }, this), false)
+            }
+        });
+        var PlayEngine_FMP_MP3 = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            this.supportMimeType = ["mp3"];
+            this.engineType = "fmp_mp3";
+            this.swfPath = "fmp_mp3.swf";
+            this.flashVersionRequire = conf.flashVersionRequire || "9.0.0";
+            this.versionErrorMessage = conf.versionErrorMessage || "";
+            this.stateCode = {
+                "-2": this.STATES.INIT,
+                "-1": this.STATES.READY,
+                "0": this.STATES.STOP,
+                "1": this.STATES.PLAY,
+                "2": this.STATES.PAUSE,
+                "3": this.STATES.END,
+                "4": this.STATES.BUFFERING,
+                "5": this.STATES.PREBUFFER,
+                "6": this.STATES.ERROR
+            };
+            this.flashLoaded = false;
+            this.flashReady = new mbox.Fuze()
+        }, {superClass: PlayEngine_Interface, className: "PlayEngine_FMP_MP3"}).extend({
+            test: function (dispatch) {
+                return this._checkPlayer(dispatch)
+            }, init: function (options) {
+                options = options || {};
+                var el = options.el;
+                this.instanceName = options.instanceName;
+                this.swfPath = options.swfPath || this.swfPath;
+                var inner, id = this.newId();
+                if (T.lang.isString(el)) {
+                    el = T.g(el)
+                }
+                if (!el) {
+                    el = T.dom.create("div");
+                    document.body.appendChild(el)
+                }
+                inner = T.dom.create("div");
+                el.appendChild(inner);
+                this.swfPath += "?" + id + "_" + Math.random();
+                T.swf.create({
+                    id: this.flashObjectId = id,
+                    width: "1px",
+                    height: "1px",
+                    ver: this.flashVersionRequire,
+                    errorMessage: this.versionErrorMessage,
+                    allowscriptaccess: "always",
+                    url: this.swfPath,
+                    bgcolor: "#ffffff",
+                    wmode: "window",
+                    scale: "noscale",
+                    vars: {_instanceName: this.instanceName + "", _buffertime: 2000}
+                }, inner);
+                this.flashObject = T.swf.getMovie(this.flashObjectId)
+            }, reset: function () {
+                this.stop();
+                if (this.state != this.STATES.INIT) {
+                    this.url = "";
+                    this.state = this.STATES.READY;
+                    this.stateStack = [this.STATES.READY]
+                }
+            }, setUrl: function (url) {
+                this.flashReady(T.fn.bind(function () {
+                    this.url = url;
+                    this.flashObject.closeStream();
+                    this.flashObject.f_load(url)
+                }, this))
+            }, play: function () {
+                this.flashReady(T.fn.bind(function () {
+                    if (this.state == this.STATES.PLAY) {
+                        return
+                    }
+                    this.flashObject.f_play()
+                }, this))
+            }, pause: function () {
+                this.flashReady(T.fn.bind(function () {
+                    if (this.state == this.STATES.PAUSE || this.state == this.STATES.STOP || this.state == this.STATES.END) {
+                        return
+                    }
+                    this.flashObject.f_pause()
+                }, this))
+            }, stop: function () {
+                this.flashReady(T.fn.bind(function () {
+                    if (this.state == this.STATES.STOP) {
+                        return
+                    }
+                    this.flashObject.f_stop()
+                }, this))
+            }, setMute: function (mute) {
+                this.flashReady(T.fn.bind(function () {
+                    this.mute = mute;
+                    this.flashObject.setData("mute", mute)
+                }, this))
+            }, setVolume: function (volume) {
+                this.flashReady(T.fn.bind(function () {
+                    this.volume = volume;
+                    this.flashObject.setData("volume", volume)
+                }, this))
+            }, setCurrentPosition: function (time) {
+                this.flashReady(T.fn.bind(function () {
+                    this.flashObject.f_play(time)
+                }, this))
+            }, getCurrentPosition: function () {
+                return this.flashLoaded ? this.flashObject.getData("currentPosition") : 0
+            }, getLoadedPercent: function () {
+                return this.flashLoaded ? this.flashObject.getData("loadedPct") : 0
+            }, getTotalTime: function () {
+                return this.flashLoaded ? this.flashObject.getData("length") : 0
+            }, getState: function (state) {
+                return T.lang.isNumber(state) ? this.stateCode[state] : this.state
+            }, getVersion: function () {
+                return T.swf.version
+            }, _firePlayStateChange: function (stateName) {
+                if (this.state != stateName) {
+                    this.state = stateName;
+                    this.stateStack.push(stateName);
+                    var previouState = this.stateStack.shift();
+                    this.dispatchEvent(this.EVENTS.STATECHANGE, {
+                        newState: stateName,
+                        oldState: previouState,
+                        engineType: this.engineType
+                    })
+                }
+            }, _onLoad: function () {
+                this.state = this.STATES.READY;
+                this.stateStack = [this.state];
+                this.dispatchEvent(this.EVENTS.INIT, {engineType: this.engineType, engine: this.flashObject});
+                setTimeout(T.fn.bind(function () {
+                    this.flashReady.fire();
+                    this.flashLoaded = true
+                }, this), 0)
+            }, _onPlayStateChange: function (state) {
+                setTimeout(T.fn.bind(function () {
+                    this._firePlayStateChange(this.getState(state))
+                }, this), 0)
+            }, _checkPlayer: function (dispatch) {
+                dispatch = !!dispatch;
+                var curVer = T.swf.version, reqVer = this.flashVersionRequire;
+                if (curVer) {
+                    var curVerArr = curVer.split("."), reqVerArr = reqVer.split(".");
+                    if (curVerArr[0] - reqVerArr[0] >= 0 && curVerArr[1] - reqVerArr[1] >= 0) {
+                        return true
+                    } else {
+                        if (dispatch) {
+                            this.dispatchEvent(this.EVENTS.INITFAIL, {engineType: this.engineType})
+                        }
+                        return false
+                    }
+                } else {
+                    if (dispatch) {
+                        this.dispatchEvent(this.EVENTS.INITFAIL, {engineType: this.engineType})
+                    }
+                    return false
+                }
+            }
+        });
+        var PlayEngine = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            this.subEnginesConf = [];
+            this.subEnginesInitArgs = {};
+            this.curEngine = null;
+            this.curEngineType = "";
+            this.unInitEngineList = [];
+            this.engineList = [];
+            this.engineTypeList = [];
+            this.ready = false;
+            this.defaultExt = ".mp3";
+            this.coreContainer = null;
+            this.EVENTS = {
+                STATECHANGE: "player_playStateChange",
+                POSITIONCHANGE: "player_positionChange",
+                PROGRESS: "player_progress",
+                ERROR: "player_error",
+                INIT: "player_initSuccess",
+                INITFAIL: "player_initFail"
+            };
+            this.STATES = {
+                INIT: "init",
+                READY: "ready",
+                STOP: "stop",
+                PLAY: "play",
+                PAUSE: "pause",
+                END: "end",
+                BUFFERING: "buffering",
+                PREBUFFER: "pre-buffer",
+                ERROR: "error"
+            };
+            this.progressTimer = new mbox.Timer(200, 0);
+            this.positionTimer = new mbox.Timer(100, 0);
+            this._initEngines(conf)
+        }, {className: "PlayEngine"}).extend({
+            _error: function (errMsg) {
+                throw new Error(errMsg)
+            }, _initEngines: function (config) {
+                this.coreContainer = config.el || null;
+                this.subEnginesConf = config.subEngines || [];
+                T.array.each(this.subEnginesConf, T.fn.bind(function (item, index) {
+                    var subEngineName = item.constructorName, args = item.args || {}, subEngineConstructor;
+                    this.subEnginesInitArgs[subEngineName] = args;
+                    try {
+                        subEngineConstructor = eval(subEngineName);
+                        if (!T.lang.isFunction(subEngineConstructor)) {
+                            return
+                        }
+                    } catch (e) {
+                        return
+                    }
+                    var engine = new subEngineConstructor(args);
+                    this.unInitEngineList.push(engine)
+                }, this));
+                this.curEngine = this.unInitEngineList[0]
+            }, init: function (options) {
+                if (this.ready) {
+                    return this._error("")
+                }
+                options = options || {};
+                this.subEnginesInitArgs = options.subEngines ? options.subEngines : this.subEnginesInitArgs;
+                this.coreContainer = options.el ? options.el : this.coreContainer;
+                if (!this.coreContainer) {
+                    var con = T.dom.create("div", {id: "_player_container_" + T.lang.guid()});
+                    T.dom.setStyles(con, {width: "1px", height: "1px", overflow: "hidden"});
+                    document.body.appendChild(con);
+                    this.coreContainer = options.el = con
+                }
+                T.array.each(this.unInitEngineList, T.fn.bind(function (engine, index) {
+                    var subEngineNameToString = engine.toString(), subEngineName = "", reg = /^\[object (.*)\]$/i;
+                    if (reg.test(subEngineNameToString)) {
+                        subEngineName = RegExp.$1
+                    }
+                    var args = this.subEnginesInitArgs[subEngineName] || {};
+                    if (engine.test(true)) {
+                        args.instanceName = args.instanceName + ".engineList[" + this.engineList.length + "]";
+                        args.el = args.el || this.coreContainer;
+                        this.engineList.push(engine);
+                        engine.init.apply(engine, [args])
+                    }
+                }, this));
+                this.switchEngineByUrl(this.defaultExt);
+                this.ready = true;
+                this._initProgressEvent();
+                this._initPositionChangeEvent()
+            }, canPlayType: function (mimeType) {
+                return T.array.some(this.engineList, function (item, index) {
+                    return item.canPlayType(mimeType)
+                })
+            }, getSupportMimeTypeList: function () {
+                var list = [];
+                T.array.each(this.engineList, T.fn.bind(function (item, index) {
+                    list = list.concat(item.getSupportMimeTypeList())
+                }, this));
+                return list
+            }, switchEngineByUrl: function (url) {
+                var has = T.array.some(this.engineList, T.fn.bind(function (item, index) {
+                    var str = item.getSupportMimeTypeList().join("|");
+                    var reg = new RegExp("\\.(" + str + ")(\\?|$)", "ig");
+                    if (reg.test(url)) {
+                        this.curEngine = item;
+                        this.curEngineType = item.getEngineType();
+                        return true
+                    }
+                }, this));
+                var stopRecursion = arguments[1];
+                if (!has && !stopRecursion) {
+                    arguments.callee.apply(this, [this.defaultExt, true])
+                }
+            }, switchEngineByMimeType: function (mimeType) {
+                T.array.some(this.engineList, T.fn.bind(function (item, index) {
+                    if (item.canPlayType(mimeType)) {
+                        this.curEngine = item;
+                        this.curEngineType = item.getEngineType();
+                        return true
+                    }
+                }, this))
+            }, reset: function () {
+                this.curEngine.reset.apply(this.curEngine, arguments)
+            }, setUrl: function (url) {
+                var oldEngie = this.curEngine;
+                this.switchEngineByUrl(url);
+                if (oldEngie && oldEngie != this.curEngine) {
+                    oldEngie.stop()
+                }
+                if (this.curEngine) {
+                    this.curEngine.setUrl.apply(this.curEngine, arguments)
+                }
+            }, getUrl: function () {
+                return this.curEngine.getUrl.apply(this.curEngine, arguments)
+            }, play: function (pos) {
+                if (typeof pos == "undefined") {
+                    if (this.curEngine) {
+                        return this.curEngine.play.apply(this.curEngine, arguments)
+                    }
+                } else {
+                    return this.setCurrentPosition(pos)
+                }
+            }, pause: function () {
+                if (this.curEngine) {
+                    return this.curEngine.pause.apply(this.curEngine, arguments)
+                }
+            }, stop: function () {
+                if (this.curEngine) {
+                    return this.curEngine.stop.apply(this.curEngine, arguments)
+                }
+            }, setMute: function (mute) {
+                var args = arguments;
+                T.array.each(this.engineList, function (item, index) {
+                    item.setMute.apply(item, args)
+                })
+            }, getMute: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getMute.apply(this.curEngine, arguments)
+                }
+                return false
+            }, setVolume: function (volume) {
+                var args = arguments;
+                T.array.each(this.engineList, function (item, index) {
+                    item.setVolume.apply(item, args)
+                })
+            }, getVolume: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getVolume.apply(this.curEngine, arguments)
+                }
+                return 0
+            }, setCurrentPosition: function (time) {
+                if (this.curEngine) {
+                    return this.curEngine.setCurrentPosition.apply(this.curEngine, arguments)
+                }
+            }, getCurrentPosition: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getCurrentPosition.apply(this.curEngine, arguments)
+                }
+                return 0
+            }, getCurrentPositionString: function () {
+                return mbox.convertTime(this.getCurrentPosition())
+            }, getLoadedPercent: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getLoadedPercent.apply(this.curEngine, arguments)
+                }
+                return 0
+            }, getLoadedBytes: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getLoadedBytes.apply(this.curEngine, arguments)
+                }
+            }, getTotalBytes: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getTotalBytes.apply(this.curEngine, arguments)
+                }
+                return 0
+            }, getTotalTime: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getTotalTime.apply(this.curEngine, arguments)
+                }
+                return 0
+            }, getTotalTimeString: function () {
+                return mbox.convertTime(this.getTotalTime())
+            }, getCurEngine: function () {
+                return this.curEngine
+            }, getEngineType: function () {
+                return this.getCurEngine().getEngineType()
+            }, getVersion: function () {
+                var res = {};
+                T.array.each(this.engineList, function (item, index) {
+                    res[item.getEngineType()] = item.getVersion()
+                });
+                return res
+            }, getState: function () {
+                if (this.curEngine) {
+                    return this.curEngine.getState.apply(this.curEngine, arguments)
+                }
+                return null
+            }, setEventListener: function (eventName, listener) {
+                var _listener;
+                if (eventName == this.EVENTS.INITFAIL || eventName == this.EVENTS.INIT) {
+                    _listener = T.fn.bind(function (e) {
+                        listener.apply(this, arguments)
+                    }, this)
+                } else {
+                    _listener = T.fn.bind(function (e) {
+                        if (e.target && e.target.getEngineType() == this.curEngineType) {
+                            listener.apply(this, arguments)
+                        }
+                    }, this)
+                }
+                T.array.each(this.unInitEngineList, function (item, index) {
+                    item.setEventListener(eventName, _listener)
+                })
+            }, _initProgressEvent: function () {
+                this.progressTimer.addEventListener("timer", T.fn.bind(function (delay, repeatCount) {
+                    var percent = this.getLoadedPercent();
+                    this.curEngine.dispatchEvent(this.EVENTS.PROGRESS, {
+                        progress: percent,
+                        totalBytes: this.getTotalBytes(),
+                        loadedBytes: this.getLoadedBytes(),
+                        totalTime: this.getTotalTime()
+                    });
+                    if (percent == 1 && this.curEngineType != "wmp") {
+                        this.progressTimer.stop()
+                    }
+                }, this));
+                this.setEventListener(this.EVENTS.STATECHANGE, T.fn.bind(function (e) {
+                    var st = e.newState;
+                    switch (st) {
+                        case this.STATES.PREBUFFER:
+                        case this.STATES.PLAY:
+                            if (this.getLoadedPercent() < 1) {
+                                this.progressTimer.start()
+                            }
+                            break;
+                        case this.STATES.STOP:
+                        case this.STATES.READY:
+                        case this.STATES.END:
+                            this.progressTimer.reset();
+                            break
+                    }
+                }, this));
+                this.setEventListener("setUrl", T.fn.bind(function (e) {
+                    this.progressTimer.reset();
+                    this.progressTimer.start()
+                }, this))
+            }, _initPositionChangeEvent: function () {
+                this.positionTimer.addEventListener("timer", T.fn.bind(function (delay, repeatCount) {
+                    var curPos = this.getCurrentPosition();
+                    this.curEngine.dispatchEvent(this.EVENTS.POSITIONCHANGE, {position: curPos})
+                }, this));
+                this.setEventListener(this.EVENTS.STATECHANGE, T.fn.bind(function (e) {
+                    var st = e.newState;
+                    switch (st) {
+                        case this.STATES.PLAY:
+                            this.positionTimer.start();
+                            break;
+                        case this.STATES.STOP:
+                        case this.STATES.PAUSE:
+                            this.positionTimer.pause();
+                            this.curEngine.dispatchEvent(this.EVENTS.POSITIONCHANGE, {position: this.getCurrentPosition()});
+                            break;
+                        case this.STATES.READY:
+                        case this.STATES.END:
+                            this.positionTimer.reset();
+                            break
+                    }
+                }, this));
+                this.setEventListener("setUrl", T.fn.bind(function (e) {
+                    this.positionTimer.reset()
+                }, this))
+            }
+        });
+        var PlayEngineRuleModel = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            this.name = conf.name || "";
+            this.delayTime = conf.delayTime;
+            this.timer = null;
+            this.playEngine = conf.playEngine || null;
+            this.listener = conf.listener || {};
+            this.handler = conf.handler || function () {
+                    };
+            this.EVENTS = {TIMER: "timer"};
+            this.init()
+        }, {className: "PlayEngineRuleModel"}).extend({
+            init: function () {
+                if (!this.timer && this.delayTime != null) {
+                    this.timer = new mbox.Timer(this.delayTime, 1);
+                    this.addHandler(this.handler);
+                    this.timer.addEventListener(this.timer.EVENTS.TIMER, T.fn.bind(function (delay, repeatCount) {
+                        this.dispatchEvent(this.EVENTS.TIMER, {timer: this.timer, playEngine: this.playEngine})
+                    }, this))
+                }
+            }, setPlayEngine: function (player) {
+                this.playEngine = player
+            }, getName: function () {
+                return this.name
+            }, getListener: function () {
+                return this.listener
+            }, getTimer: function () {
+                return this.timer
+            }, addHandler: function (handler) {
+                this.addEventListener(this.EVENTS.TIMER, T.fn.bind(function () {
+                    handler.apply(this, arguments)
+                }, this))
+            }
+        });
+        var PlayEngineRulesController = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            this.playEngine = conf.playEngine;
+            this.rules = [];
+            this.isBlock = false
+        }, {className: "PlayEngineRulesController"}).extend({
+            addRule: function (ruleModel) {
+                var rule = ruleModel.getRule();
+                rule.setPlayEngine(this.playEngine);
+                this.rules.push(rule);
+                var listener = rule.getListener();
+                T.object.each(listener, T.fn.bind(function (callback, eventName) {
+                    var _listener = T.fn.bind(function () {
+                        if (!this.isBlock) {
+                            callback.apply(rule, arguments)
+                        }
+                    }, this, rule);
+                    switch (eventName.toLowerCase()) {
+                        case"playstatechange":
+                            eventName = this.playEngine.EVENTS.STATECHANGE;
+                            break
+                    }
+                    this.playEngine.setEventListener(eventName, _listener)
+                }, this))
+            }, getRulesCount: function () {
+                return this.rules.length
+            }, getRules: function () {
+                return this.rules
+            }, reset: function (name) {
+                if (name) {
+                    for (var i = 0, len = this.rules.length; i < len; i++) {
+                        if (this.rules[i].getName() == name) {
+                            this.rules[i].getTimer().reset()
+                        }
+                    }
+                } else {
+                    for (var i = 0, len = this.rules.length; i < len; i++) {
+                        this.rules[i].getTimer().reset()
+                    }
+                }
+            }, blockListen: function () {
+                this.isBlock = true
+            }, resetListen: function () {
+                this.isBlock = false
+            }, getBlockState: function () {
+                return this.isBlock
+            }
+        });
+        var PlayEngineRules = PlayEngineRules || {};
+        PlayEngineRules.Play60s = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            conf.time = conf.time || 60;
+            conf.handler = conf.handler || function () {
+                    };
+            this.rule = new PlayEngineRuleModel({
+                name: "savelink",
+                delayTime: conf.time * 1000,
+                listener: {
+                    setUrl: function (ruleEvent, engineEvent) {
+                        ruleEvent.startRecord = true;
+                        ruleEvent.getTimer().reset()
+                    }, playStateChange: function (ruleEvent, engineEvent) {
+                        var nSt = engineEvent.newState, oSt = engineEvent.oldState;
+                        var STATES = engineEvent.target.STATES;
+                        if (ruleEvent.startRecord) {
+                            if (nSt == STATES.PLAY) {
+                                ruleEvent.getTimer().start()
+                            } else {
+                                if (nSt == STATES.PAUSE || nSt == STATES.BUFFERING) {
+                                    if (oSt == STATES.PLAY) {
+                                        ruleEvent.getTimer().pause()
+                                    }
+                                } else {
+                                    ruleEvent.getTimer().reset()
+                                }
+                            }
+                        }
+                    }
+                },
+                handler: function (event) {
+                    event.target.startRecord = false
+                }
+            });
+            this.rule.addHandler(conf.handler)
+        }, {className: "PlayEngineRules.Play60s"}).extend({
+            getRule: function () {
+                return this.rule
+            }
+        });
+        PlayEngineRules.Play100ms = mbox.lang.createClass(function (conf) {
+            conf = conf || {};
+            conf.time = conf.time || 0.1;
+            conf.handler = conf.handler || function () {
+                    };
+            this.rule = new PlayEngineRuleModel({
+                name: "play100ms",
+                delayTime: conf.time * 1000,
+                listener: {
+                    setUrl: function (ruleEvent, engineEvent) {
+                        ruleEvent.startRecord = true;
+                        ruleEvent.getTimer().reset()
+                    }, playStateChange: function (ruleEvent, engineEvent) {
+                        var nSt = engineEvent.newState, oSt = engineEvent.oldState;
+                        var STATES = engineEvent.target.STATES;
+                        if (ruleEvent.startRecord) {
+                            if (nSt == STATES.PLAY) {
+                                ruleEvent.getTimer().start()
+                            } else {
+                                ruleEvent.getTimer().reset()
+                            }
+                        }
+                    }
+                },
+                handler: function (event) {
+                    event.target.startRecord = false
+                }
+            });
+            this.rule.addHandler(conf.handler)
+        }, {className: "PlayEngineRules.Play100ms"}).extend({
+            getRule: function () {
+                return this.rule
+            }
+        });
+        mbox.SongModel = T.lang.createClass(function (options) {
+            options = options || {};
+            this.hasLink = false;
+            this.songId = 0;
+            this.songName = "";
+            this.artistId = 0;
+            this.artistName = "";
+            this.albumId = 0;
+            this.albumName = "";
+            this.songPicSmall = "";
+            this.songPicBig = "";
+            this.songPicRadio = "";
+            this.lrcLink = "";
+            this.time = 0;
+            this.songLink = "";
+            this.showLink = "";
+            this.format = "";
+            this.rate = 0;
+            this.size = 0;
+            this.lyricContent = "";
+            this.relateStatus = 0;
+            this.resourceType = 0;
+            this.copyType = 0;
+            for (var key in options) {
+                var val = options[key];
+                if (!T.isString(this[key])) {
+                    if (val != "") {
+                        var val2 = +val;
+                        if (val2 == val) {
+                            val = val2
+                        } else {
+                            if (val == null) {
+                                val = ""
+                            }
+                        }
+                    }
+                }
+                this[key] = val
+            }
+        }).extend({
+            set: function (map, value) {
+                for (var key in map) {
+                    var val = map[key];
+                    if (!T.isString(this[key])) {
+                        if (val != "") {
+                            var val2 = +val;
+                            if (val2 == val) {
+                                val = val2
+                            } else {
+                                if (val == null) {
+                                    val = ""
+                                }
+                            }
+                        }
+                    }
+                    this[key] = val
+                }
+            }, get: function (key) {
+                return this[key]
+            }, unset: function (key) {
+                delete this[key]
+            }
+        });
+        (function () {
+            var SongDataModel = T.lang.createClass(function () {
+                this.allSongCache = {};
+                this.apiAddress = mbox.CONF.tingSongApi;
+                this.lrcAddress = mbox.CONF.tingLrcApi
+            }).extend({
+                createSongModel: function (queryids, attributes) {
+                    var models = [], queryids = T.lang.toArray(queryids), attributes = T.lang.toArray(attributes);
+                    T.each(queryids, function (id, index, list) {
+                        if (!id || id === "null" || id === "undefined") {
+                            return
+                        }
+                        if (!this.allSongCache[id]) {
+                            this.allSongCache[id] = new mbox.SongModel({songId: id})
+                        }
+                        models.push(this.allSongCache[id])
+                    }, this);
+                    T.object.each(attributes, function (el, index, attr) {
+                        if (this.allSongCache[el.queryId || el.id]) {
+                            this.allSongCache[el.queryId || el.id].set(el)
+                        }
+                    }, this);
+                    return models
+                }, fetchSong: function (songModel, opts) {
+                    if (songModel.hasLink) {
+                        T.lang.isFunction(opts.success) && opts.success(songModel, this)
+                    } else {
+                        this._getSongPlay = function (r) {
+                            if (r.error_code === 22000) {
+                                var i = r.songinfo, b = r.bitrate;
+                                if (i.extra) {
+                                    var t = i.extra.split("$$");
+                                    i.song_id = i.extra;
+                                    i.title = t[0] || t[2];
+                                    i.author = t[1]
+                                }
+                                songModel.set({
+                                    hasLink: true,
+                                    songId: i.song_id,
+                                    songName: i.title,
+                                    artistId: i.ting_uid,
+                                    artistName: i.author,
+                                    albumId: i.album_id,
+                                    albumName: i.album_title,
+                                    songPicBig: i.pic_big,
+                                    songPicSmall: i.pic_small,
+                                    songPicRadio: i.pic_radio,
+                                    resourceType: i.resource_type,
+                                    relateStatus: i.relate_status,
+                                    copyType: i.copy_type,
+                                    lrcLink: i.lrclink,
+                                    rate: b.file_bitrate,
+                                    songLink: b.file_link,
+                                    showLink: b.show_link,
+                                    format: b.file_extension,
+                                    size: b.file_size,
+                                    time: b.file_duration
+                                });
+                                T.lang.isFunction(opts.success) && opts.success(songModel, this)
+                            } else {
+                                T.lang.isFunction(opts.error) && opts.error(r.error_code)
+                            }
+                        };
+                        T.sio.callByServer(this.apiAddress + songModel.songId, this._getSongPlay)
+                    }
+                }, getLrcContent: function (songModel, cb) {
+                    var isFunction = T.lang.isFunction, success = isFunction(cb) ? cb : isFunction(cb.success) ? cb.success : function () {
+                    }, error = isFunction(cb.error) ? cb.error : function () {
+                    };
+                    if (songModel.lrcContent) {
+                        success(songModel.lrcContent)
+                    } else {
+                        if (songModel.songLink && songModel.lrcLink) {
+                            this._getLrc = function (r) {
+                                if (r.lrcContent) {
+                                    songModel.lrcContent = r.lrcContent;
+                                    success(r.lrcContent)
+                                } else {
+                                    error()
+                                }
+                            };
+                            T.sio.callByServer(this.lrcAddress + songModel.songId, this._getLrc)
+                        } else {
+                            error()
+                        }
+                    }
+                }
+            });
+            mbox.SongDataModel = new SongDataModel()
+        })(undefined);
+        (function () {
+            var MODE = {RANDOM: 0, SINGLE: 1, CYCLE: 2};
+            mbox.PlayList = T.lang.createClass(function () {
+                this.curSongIndex = -1;
+                this.curSong = null;
+                this.songModels = [];
+                this.mode = MODE.SINGLE
+            }).extend({
+                _random: function () {
+                    return parseInt(Math.random() * this.getLength(), 10)
+                }, addSong: function (songs) {
+                    songs = T.lang.toArray(songs);
+                    if (songs.length) {
+                        this.songModels = this.songModels.concat(songs);
+                        this.dispatchEvent("add:songModels", {songModels: songs})
+                    }
+                }, removeSong: function (indexes) {
+                    if (indexes === -1) {
+                        this.reset();
+                        this.dispatchEvent("remove:songModels", {indexes: removeIndexes})
+                    } else {
+                        var removeIndexes = T.lang.toArray(indexes), removeLength = removeIndexes.length;
+                        if (removeLength) {
+                            removeIndexes.sort(function (a, b) {
+                                return a - b
+                            });
+                            var curSongIdx = this.curSongIndex, tmpIndex = curSongIdx, inDel = false;
+                            while (removeLength--) {
+                                var index = removeIndexes[removeLength];
+                                this.songModels.splice(index, 1);
+                                if (tmpIndex !== -1) {
+                                    if (index === curSongIdx) {
+                                        inDel = true
+                                    }
+                                    if (index <= curSongIdx) {
+                                        curSongIdx--
+                                    }
+                                }
+                            }
+                            if (inDel) {
+                                curSongIdx++
+                            }
+                            if (tmpIndex !== -1) {
+                                if (curSongIdx < 0 && songlist.length > 0) {
+                                    curSongIdx = 0;
+                                    inDel = true
+                                } else {
+                                    if (curSongIdx > songlist.length - 1) {
+                                        curSongIdx = 0
+                                    }
+                                }
+                            }
+                            if (inDel) {
+                                this.curSong = songlist[curSongIdx];
+                                this.curSongIndex = curSongIdx
+                            }
+                            this.dispatchEvent("remove:songModels", {indexes: removeIndexes})
+                        }
+                    }
+                }, prev: function () {
+                    var length = this.getLength(), prevIndex = this.curSongIndex === -1 ? 0 : (this.curSongIndex + length - 1) % length;
+                    if (!length) {
+                        return
+                    }
+                    if (this.mode === MODE.RANDOM) {
+                        this.playByIndex(this._random())
+                    } else {
+                        this.playByIndex(prevIndex)
+                    }
+                }, next: function () {
+                    var length = this.getLength(), nextIndex = (this.curSongIndex + 1) % length;
+                    if (!length) {
+                        return
+                    }
+                    if (this.mode === MODE.RANDOM) {
+                        this.playByIndex(this._random())
+                    } else {
+                        this.playByIndex(nextIndex)
+                    }
+                }, autoNext: function () {
+                    if (this.mode === MODE.SINGLE) {
+                        this.playByIndex(this.curSongIndex)
+                    } else {
+                        this.next()
+                    }
+                }, setCurIndex: function (index) {
+                    this.curSongIndex = index;
+                    this.setCurSong(this.songModels[index], false);
+                    this.dispatchEvent("change:curSongIndex", {index: index})
+                }, playByIndex: function (index) {
+                    this.curSongIndex = index;
+                    this.setCurSong(this.songModels[index], true);
+                    this.dispatchEvent("change:curSongIndex", {index: index})
+                }, setCurSong: function (song, forcePlay) {
+                    this.curSong = song;
+                    this.dispatchEvent("change:curSong", {curSong: song, forcePlay: forcePlay})
+                }, getCurIndex: function () {
+                    return this.curSongIndex
+                }, getCurSong: function () {
+                    return this.curSong
+                }, getSongList: function () {
+                    return this.songModels
+                }, setMode: function (mode) {
+                    this.mode = mode
+                }, getMode: function () {
+                    return this.mode
+                }, getLength: function () {
+                    return this.songModels.length
+                }, reset: function () {
+                    this.curSongIndex = -1;
+                    this.curSong = null;
+                    this.songModels = [];
+                    this.playlist = []
+                }, fetchLink: function (options) {
+                    mbox.SongDataModel.fetchSong(this.curSong, options)
+                }
+            })
+        })();
+        mbox.LogModel = T.lang.createClass(function (player, playList) {
+            this.logUrl = bds && bds.util && bds.util.domain ? bds.util.domain.get("http://nsclick.baidu.com/v.gif") : "http://nsclick.baidu.com/v.gif";
+            this.playerRules = {};
+            this.playerRuleCtrl = null;
+            this.player = player;
+            this.playList = playList;
+            this.initLog()
+        }).extend({
+            initLog: function () {
+                this.playerRules.play60s = new PlayEngineRules.Play60s({
+                    handler: T.fn.bind(function () {
+                        this.sendLog("60play", this.logUrl, {sendCurSong: true})
+                    }, this), time: 60
+                });
+                this.playerRules.play100ms = new PlayEngineRules.Play100ms({
+                    handler: T.fn.bind(function () {
+                        this.sendLog("playsong100ms", this.logUrl, {sendCurSong: true})
+                    }, this)
+                });
+                this.playerRuleCtrl = new PlayEngineRulesController({playEngine: this.player});
+                T.object.each(this.playerRules, T.fn.bind(function (item) {
+                    this.playerRuleCtrl.addRule(item)
+                }, this))
+            }, _addCurSong: function (params) {
+                var filterParams = {
+                    song_id: "songId",
+                    song_title: "songName",
+                    singer_id: "artistId",
+                    singer_name: "artistName",
+                    album_id: "albumId",
+                    album_name: "albumName",
+                    copytype: "copyType",
+                    format: "format",
+                    queryid: "queryId",
+                    rate: "rate",
+                    relatestatus: "relateStatus",
+                    resourcetype: "resourceType",
+                    songsize: "size",
+                    linkCode: "linkCode",
+                    lrcLink: "lrcLink",
+                    time: "time",
+                    status: "status",
+                    from: "from",
+                    link: "songLink"
+                };
+                var curSong = this.playList.getCurSong();
+                T.object.each(filterParams, function (v, k) {
+                    params.push(k + "=" + encodeURIComponent(curSong[v] == null ? "" : curSong[v]))
+                })
+            }, sendLog: function (type, url, options) {
+                var params = [], now = new Date().getTime();
+                window["naga_log_" + now] = new Image();
+                var img = window["naga_log_" + now];
+                params.push("pid=304");
+                params.push("url=");
+                params.push("type=" + type);
+                if (options.sendCurSong) {
+                    this._addCurSong(params)
+                }
+                params.push("r" + Math.random() + "=1");
+                params.push("ref=aldsinglebox");
+                if (options.otherInfo) {
+                    _.each(options.otherInfo, function (v, k) {
+                        params.push(k + "=" + encodeURIComponent((v + "") || ""))
+                    })
+                }
+                img.onload = function () {
+                    img = null;
+                    try {
+                        delete window["naga_log_" + now]
+                    } catch (e) {
+                    }
+                };
+                img.src = (url) + "?" + params.join("&")
+            }
+        });
+        var bd_mbox = mbox.lang.createClass(function (songId, options) {
+            this.playList = new mbox.PlayList();
+            this.lrc = null;
+            this.init.apply(this, arguments);
+            this.log = new mbox.LogModel(this.player, this.playList)
+        }).extend({
+            init: function (songId, opts) {
+                opts = opts || {};
+                this.initPlayer(opts.onInitFail);
+                var player = this.player, playList = this.playList, song = mbox.SongDataModel.createSongModel(songId), self = this, isFunction = T.lang.isFunction;
+                this.lrc = new mbox.lrcWidget({elem: T.g(opts.lrcElem)});
+                player.setEventListener(player.EVENTS.POSITIONCHANGE, function (e) {
+                    var position = e.position, totalTime = self.getTotalTime();
+                    isFunction(opts.onPositionChange) && opts.onPositionChange(position, position * 100 / totalTime || 0);
+                    self.lrc.scrollTo(position)
+                });
+                isFunction(opts.onProgressChange) && player.setEventListener(player.EVENTS.PROGRESS, function (e) {
+                    opts.onProgressChange(e.progress * 100)
+                });
+                isFunction(opts.onPlayStateChange) && player.setEventListener(player.EVENTS.STATECHANGE, function (e) {
+                    opts.onPlayStateChange(e.newState);
+                    switch (e.newState) {
+                        case player.STATES.END:
+                            playList.autoNext();
+                            break
+                    }
+                });
+                playList.addEventListener("change:curSong", function (e) {
+                    player.stop();
+                    if (e.curSong) {
+                        self.playList.fetchLink({
+                            success: function (songModel) {
+                                self.lrc.setLrc();
+                                if (e.forcePlay) {
+                                    player.setUrl(songModel.songLink);
+                                    player.play()
+                                }
+                                isFunction(opts.onChangeCurSong) && opts.onChangeCurSong(songModel);
+                                mbox.SongDataModel.getLrcContent(songModel, {
+                                    success: function (lrcContent) {
+                                        self.lrc.setLrc(lrcContent);
+                                        isFunction(opts.onChangeLyric) && opts.onChangeLyric(songModel)
+                                    }, error: function () {
+                                        self.lrc.setLrc();
+                                        isFunction(opts.onChangeLyric) && opts.onChangeLyric(songModel)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                });
+                if (opts.lrc) {
+                    song.set("lyricContent", opts.lrc)
+                }
+                playList.addSong(song);
+                this.playList.setCurIndex(0);
+                if (opts.forcePlay) {
+                    this.play()
+                }
+            }, initPlayer: function (initFail) {
+                initFail = initFail || function () {
+                        };
+                var subEngine = [];
+                var subEngArg = mbox.CONF.engineArg;
+                if (/(macintosh|iphone|ipod|ipad|chrome)/i.test(navigator.userAgent)) {
+                    subEngine.push(subEngArg.audio);
+                    subEngine.push({
+                        constructorName: "PlayEngine_FMP_MP3",
+                        args: {swfPath: A.uiPrefix + "mboxplayer/fmp.swf", instanceName: "window.alambox.player"}
+                    })
+                } else {
+                    subEngine.push({
+                        constructorName: "PlayEngine_FMP_MP3",
+                        args: {swfPath: A.uiPrefix + "mboxplayer/fmp.swf", instanceName: "window.alambox.player"}
+                    });
+                    subEngine.push(subEngArg.audio)
+                }
+                this.player = mbox.player = new PlayEngine({subEngines: subEngine});
+                var TOTAL = subEngine.length, failCount = 0, player = this.player, successCount = 0, firstEngine = null;
+                player.setEventListener(player.EVENTS.INITFAIL, function (e) {
+                    failCount++;
+                    if (!firstEngine) {
+                        firstEngine = e
+                    }
+                    if (failCount == TOTAL) {
+                        initFail(firstEngine)
+                    } else {
+                        if (successCount + failCount == TOTAL && !player.canPlayType("mp3")) {
+                            initFail(firstEngine)
+                        }
+                    }
+                });
+                player.setEventListener(player.EVENTS.INIT, function (e) {
+                    successCount++;
+                    if (!firstEngine) {
+                        firstEngine = e
+                    }
+                    if (successCount + failCount == TOTAL && !player.canPlayType("mp3")) {
+                        initFail(firstEngine)
+                    }
+                });
+                player.init()
+            }, play: function () {
+                if (this.player.getUrl()) {
+                    this.player.play()
+                } else {
+                    this.playList.playByIndex(0)
+                }
+            }, pause: function () {
+                this.player.pause()
+            }, stop: function () {
+                this.player.stop()
+            }, setPercent: function (percent) {
+                var totalTime = this.playList.getCurSong().time * 1000 || this.player.getTotalTime();
+                this.player.setCurrentPosition(percent * totalTime / 100)
+            }, setPosition: function (pos) {
+                this.player.setCurrentPosition(pos)
+            }, setVolume: function (percent) {
+                this.player.setVolume(percent)
+            }, setMute: function (mute) {
+                this.player.setMute(mute)
+            }, getTotalTime: function () {
+                return this.playList.getCurSong().time * 1000 || this.player.getTotalTime()
+            }, getState: function () {
+                return this.player.getState()
+            }, blockLrcScroll: function (bol) {
+                this.lrc.blockAutoScroll(bol)
+            }, reset: function () {
+                this.player.reset()
+            }, dispose: function () {
+                var _emptyFn = function () {
+                };
+                this.stop();
+                if (mbox.SongDataModel) {
+                    if (mbox.SongDataModel._getSongPlay) {
+                        mbox.SongDataModel._getSongPlay = _emptyFn
+                    }
+                    if (mbox.SongDataModel._getLrc) {
+                        mbox.SongDataModel._getLrc = _emptyFn
+                    }
+                }
+                for (var key in this.player.EVENTS) {
+                    this.player.removeEventListener(this.player.EVENTS[key])
+                }
+                this.player.progressTimer.stop();
+                this.player.positionTimer.stop();
+                this.log.playerRules.play60s.rule.timer.stop();
+                this.log.playerRules.play100ms.rule.timer.stop();
+                if (this.lrc.scrolltimer) {
+                    clearTimeout(this.lrc.scrolltimer)
+                }
+                this.player.dispose();
+                delete window.alambox.player.engineList[1];
+                delete window.alambox.player.engineList;
+                delete window.alambox.player;
+                window.alambox = undefined
+            }
+        });
+        var mbox = mbox || {};
+        (function (undefinded) {
+            var match, splitReg = /\n|\r/, txtReg = /\[[\s\S]*?\]/, timeReg = /\[\d{2,}:\d{2}(?:[\.|:]\d{2,5})?\]/g, timeRegNoG = /\[\d{2,}:\d{2}(?:[\.|:]\d{2,5})?\]/, offsetReg = /\[offset:[+|-]?\d+?(?=\])/, lrcContainerClass = "ui-lrc", lrcSentenceClass = "ui-lrc-sentence", lrcCurrentClass = "ui-lrc-current", isLrc = function (str) {
+                return timeRegNoG.test(str)
+            }, time2ms = function (time) {
+                var t = time.split(":"), m = t[0], s, ms;
+                if (t.length === 3) {
+                    s = t[1];
+                    ms = t[2]
+                } else {
+                    t = t[1].split(".");
+                    s = t[0];
+                    ms = t[1]
+                }
+                return ~~m * 60 * 1000 + ~~s * 1000 + ~~ms
+            };
+            mbox.lrcWidget = T.lang.createClass(function (options) {
+                this.lrcContent = "";
+                this.parsed = [];
+                this.lrcType = "lrc";
+                this.autoScroll = true;
+                this.ulElem = document.createElement("ul");
+                this.element = options.elem;
+                T.dom.addClass(this.element, lrcContainerClass);
+                this.element.appendChild(this.ulElem);
+                var self = this, mousedown = function () {
+                    if (self.autoScroll) {
+                        self.autoScroll = false
+                    }
+                }, mouseup = function (e) {
+                    self.autoScroll = true
+                };
+                T.event.on(this.element, "mousedown", mousedown);
+                T.event.on(document, "mouseup", mouseup);
+                T.event.on(this.element, "mouseleave", mouseup)
+            }).extend({
+                _parse: function () {
+                    var lrc = this.lrcContent;
+                    if (typeof lrc !== "string" || !(lrc = T.string.trim(lrc))) {
+                        this._clear();
+                        return
+                    }
+                    if (isLrc(lrc)) {
+                        this._parseLrc(lrc)
+                    } else {
+                        this._parseTxt(lrc)
+                    }
+                }, _parseLrc: function (lrc) {
+                    var r = [], offset = 0, arrLrc, line, time, txt, i, j, len, len2;
+                    if (match = lrc.match(offsetReg)) {
+                        offset = ~~match[0].slice(8)
+                    }
+                    arrLrc = lrc.split(splitReg);
+                    for (i = 0, len = arrLrc.length; i < len; i++) {
+                        line = arrLrc[i];
+                        if (match = line.match(timeReg)) {
+                            for (j = 0, len2 = match.length; j < len2; j++) {
+                                time = time2ms(match[j].slice(1, -1)) + offset;
+                                txt = T.string.trim(line.split(match.join("")).join(""));
+                                r.push([time, txt, null])
+                            }
+                        }
+                    }
+                    if (r.length) {
+                        this.parsed = r.sort(function (a, b) {
+                            return a[0] - b[0]
+                        });
+                        this._setLrcType("lrc")
+                    } else {
+                        this._setLrcType("no-lrc")
+                    }
+                }, _parseTxt: function (txt) {
+                    var r = [], line, lines = txt.replace(txtReg, "").split(splitReg), i, len;
+                    for (i = 0, len = lines.length; i < len; i++) {
+                        line = T.string.trim(lines[i]);
+                        if (line) {
+                            r.push([-1, line, null])
+                        }
+                    }
+                    if (r.length) {
+                        this.parsed = r;
+                        this._setLrcType("txt-lrc")
+                    } else {
+                        this._setLrcType("no-lrc")
+                    }
+                }, _setLrcType: function (lrcType) {
+                    if (lrcType !== this.lrcType) {
+                        T.dom.removeClass(this.element, this.lrcType);
+                        this.lrcType = lrcType;
+                        T.dom.addClass(this.element, lrcType)
+                    }
+                }, _render: function () {
+                    if (!this.parsed || !this.parsed.length) {
+                        this._clear();
+                        return
+                    }
+                    var $li, line, i, len;
+                    this.ulElem.innerHTML = "";
+                    for (i = 0, len = this.parsed.length; i < len; i++) {
+                        line = this.parsed[i];
+                        $li = document.createElement("li");
+                        T.dom.addClass($li, lrcSentenceClass);
+                        $li.innerHTML = line[1] || "&nbsp;";
+                        this.ulElem.appendChild($li);
+                        line[2] = $li
+                    }
+                }, _clear: function () {
+                    this.ulElem.innerHTML = "<li>该歌曲暂时没有歌词！</li>";
+                    this.parsed = null;
+                    this._setLrcType("no-lrc")
+                }, _findLine: function (ms) {
+                    if (!this.parsed || !this.parsed.length) {
+                        return -1
+                    }
+                    var r = this.parsed, head = 0, tail = r.length, mid = Math.floor(tail / 2);
+                    if (ms < r[0][0]) {
+                        return -1
+                    }
+                    while (!(r[mid][0] <= ms && ms < (r[mid + 1] ? r[mid + 1][0] : 999999999))) {
+                        if (ms < r[mid][0]) {
+                            tail = mid - 1
+                        } else {
+                            head = mid + 1
+                        }
+                        mid = Math.floor((head + tail) / 2)
+                    }
+                    return mid
+                }, setLrc: function (lrc) {
+                    this.lrcContent = lrc;
+                    this._parse();
+                    this._render()
+                }, scrollTo: function (ms) {
+                    ms = ~~ms;
+                    if (!ms || this.lrcType !== "lrc") {
+                        return
+                    }
+                    var match = this._findLine(ms), isNewMath = match > -1 && this.$curLine != this.parsed[match][2];
+                    if (match === -1) {
+                        if (this.autoScroll) {
+                            this.element.scrollTop = 0
+                        }
+                        return
+                    }
+                    if (this.$curLine && this.$curLine != this.parsed[match][2]) {
+                        T.dom.removeClass(this.$curLine, lrcCurrentClass);
+                        this.$curLine = null
+                    }
+                    this.$curLine = this.parsed[match][2];
+                    T.dom.addClass(this.$curLine, lrcCurrentClass);
+                    if (this.autoScroll && isNewMath) {
+                        var scrollTop = this.$curLine.offsetTop - this.element.offsetTop - this.element.offsetHeight * 0.371967 + this.$curLine.clientHeight * 0.628033 - this.$curLine.clientHeight;
+                        this._animationTo(scrollTop)
+                    }
+                }, _animationTo: function (scrollTop) {
+                    var t = 0, d = 15, self = this, wrapperScrollTop = this.element.scrollTop, offset = scrollTop - wrapperScrollTop;
+                    if (this.scrolltimer) {
+                        clearTimeout(this.scrolltimer);
+                        this.scrolltimer = null
+                    }
+                    var setPosition = function () {
+                        self.element.scrollTop = offset * (t / d) + wrapperScrollTop;
+                        t++;
+                        if (t <= d) {
+                            self.scrolltimer = setTimeout(setPosition, 20)
+                        }
+                    };
+                    setPosition()
+                }, blockAutoScroll: function (bol) {
+                    this.autoScroll = bol
+                }
+            })
+        })();
+        window.alambox = mbox;
+        A.ui.musicplayer = bd_mbox
+    })();
 </script>
 </body>
 </html>

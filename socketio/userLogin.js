@@ -16,7 +16,7 @@ module.exports = function (msg, socket,io,socketOnLine) {
         socket.emit('login', str);
         return;
     }
-    query(1,['select * from userinfo where username = ?',[msg.username]], function (rows,err) {
+    query(1,['select * from chat_user where username = ?',[msg.username]], function (rows,err) {
         if (err) {
             str.msg = '内部数据错误，内容已记录，请等待解决';
             socket.emit('login', str);
@@ -27,11 +27,23 @@ module.exports = function (msg, socket,io,socketOnLine) {
             str.code = 2;
             str.msg = '此用户未注册，正在注册请等待';
             socket.emit('login', str);
-            query(1,['insert into userinfo set  ?',{username:msg.username, password:msg.password, moto:'吃饭要吃饱'}], function ( rows,err){
+            query(1,['insert into chat_user set  ?',{username:msg.username, password:msg.password, moto:'吃饭要吃饱'}], function ( rows,err){
                 if(!err){
                     str.code = 0;
                     str.msg = '注册成功,登录中';
                     socket.emit('login', str);
+                    //推送用户  登陆成功
+                    str.code = 0;
+                    str.msg = '登陆成功';
+                    socket.emit('login', str);
+                    socketOnLine[msg.username] = socket.id;
+                    //推送用户 用户信息
+                    str.code = 0;
+                    str.msg = rows[0];
+                    socket.emit('main', str);
+
+                    // 推送给用户好友列表
+                    require('./common').getFriendList(socket,io,msg.username,socketOnLine);
                 }
             });
             return;

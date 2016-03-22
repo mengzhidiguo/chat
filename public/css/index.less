@@ -523,12 +523,31 @@ body {
     }
   }
   .chat_bottom{
+    position: relative;
     background-color: #f7f8f9;
     height:0.85rem;
     width:100%;
     .flexZi(3,0,0,auto,auto);
     .flexContain(row ,nowrap,space-between,center,stretch);
 
+
+    //录音提示框
+    .voiceInfo{
+      position: absolute;
+      bottom: 0.85rem;
+      height: 2rem;
+      width:2rem;
+      left:50%;
+      margin-left:-1rem;
+      -webkit-border-radius:1rem;
+      -moz-border-radius:1rem;
+      border-radius:1rem;
+      border:1px solid #8e8e93;
+      background-color: white;
+      background: url("../image/chat_19.png") no-repeat left center;
+
+    }
+    //语音开始录制按钮
     .voice{
       height: 100%;
       width:0.44rem;
@@ -537,6 +556,7 @@ body {
       background-size:0.26rem 0.48rem;
       .flexZi(1,0,1,auto,auto);
     }
+    //加号
     .add{
       height: 100%;
       width:0.44rem;
@@ -545,6 +565,7 @@ body {
       background-size: 0.48rem 0.48rem;
       .flexZi(2,0,1,auto,auto);
     }
+    //输入框
     .input{
       outline: none;
       border:1px solid #afafb3;
@@ -559,6 +580,7 @@ body {
       .flexZi(3,1,1,auto,auto);
 
     }
+    //发送按钮
     .send{
       .flexZi(4,0,1,auto,auto);
       width: 0.9rem;

@@ -14,6 +14,7 @@ require("./socketio/chat").chat(require('socket.io')(http));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+
 // 设置视图引擎，目录
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -25,5 +26,5 @@ app.use('/', index);
 
 
 http.listen(require('./config.js').port,function(){
-    console.log("监听开始"+3000||require('./config.js').port);
+    console.log("监听开始,端口为"+require('./config.js').port);
 });

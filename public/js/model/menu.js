@@ -10,13 +10,26 @@ define(['angularApp'], function (app) {
                 {name: '游戏'},
                 {name: '注销'},
             ],
-            username:'',
-        }
+            username: 'fdsafas',
+        };
 
+        //接受root广播
+        //code:0    接收username
+        $scope.$on('menu', function (msg) {
+            var msg = arguments[1];
+            switch (msg.code) {
+                case 0:
+                    $scope.config.username = msg.msg.name;
+                    break;
+            }
+        });
 
-
+        //事件处理程序
         $scope.friendShow = function (event) {
-            event = event || window.event;
+            //console.log(event);
+            if (event === undefined) {
+                return;
+            }
             event = angular.element(event.target);
             if (event.text() === '好友列表') {
                 $switchView.switch('.menu', '.friend', 1, function () {

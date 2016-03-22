@@ -17,6 +17,7 @@ define(['angularApp'],function(app){
                     case 0:
                         $rootScope.config.username = $scope.username;
                         $scope.config.info = msg.msg;
+                        $scope.$emit('root',{code:1,msg:{}})
                         $switchView.switch('.login','.menu',1,function(){
                         });
                         break;

@@ -9,5 +9,5 @@ module.exports  = {
         connectionLimit:10,
     },
     //express监听端口设置
-    port:3000,
+    port:80,
 };

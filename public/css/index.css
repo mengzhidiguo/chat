@@ -837,6 +837,7 @@ body {
   line-height: 0.7rem;
 }
 .chat .chat_bottom {
+  position: relative;
   background-color: #f7f8f9;
   height: 0.85rem;
   width: 100%;
@@ -899,6 +900,20 @@ body {
   -ms-align-content: stretch;
   -o-align-content: stretch;
   align-content: stretch;
+}
+.chat .chat_bottom .voiceInfo {
+  position: absolute;
+  bottom: 0.85rem;
+  height: 2rem;
+  width: 2rem;
+  left: 50%;
+  margin-left: -1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  border-radius: 1rem;
+  border: 1px solid #8e8e93;
+  background-color: white;
+  background: url("../image/chat_19.png") no-repeat left center;
 }
 .chat .chat_bottom .voice {
   height: 100%;

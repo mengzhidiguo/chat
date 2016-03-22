@@ -20,7 +20,7 @@ exports.getFriendList = function(socket,io,username,socketOnLine){//socket对象
         io.sockets.emit('main',str);
         return ;
     }
-    query(1,['select * from userinfo where username in (?)',[friendName]],function(rows,err){
+    query(1,['select * from chat_user where username in (?)',[friendName]],function(rows,err){
         if(err){
             str.code = 5;
             str.msg = '获取用户列表失败';

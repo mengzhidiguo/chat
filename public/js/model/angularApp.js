@@ -9,11 +9,10 @@ define(['angular', 'io'], function (angular, io) {
             userInfo: {},                //用户信息
             friendList: {},              //好友列表  好友的一些基本信息
         };
-
-
         // angular本地事件 信息
 
         //code :0   接收切换界面的事件信息   并发送广播通知切换
+        //code :1   通知menu菜单用户名字
         $rootScope.$on('root', function () {
             var msg = arguments[1];
             switch (msg.code) {
@@ -25,6 +24,9 @@ define(['angular', 'io'], function (angular, io) {
                     else {
                         $rootScope.$apply();
                     }
+                    break;
+                case 1:
+                    $rootScope.$broadcast('menu', {code: 0, msg: {name:$rootScope.config.username}});
                     break;
             }
         });
@@ -76,6 +78,37 @@ define(['angular', 'io'], function (angular, io) {
     }]);
 
     //自定义服务
+    //获取麦克风数据服务
+    app.service('$getAudioMedia',function(){
+        var audio = null;
+        require(['getAudioMedia'],function(getAudioMedia){
+            audio = getAudioMedia;
+        });
+        this.start = function(){
+            if(audio === null) {
+                require(['getAudioMedia'],function(getAudioMedia){
+                    audio = getAudioMedia;
+                    audio.start();
+                });
+            }
+            else{
+                audio.start();
+            }
+        };
+        this.end = function(callback){
+            if(audio === null) {
+                require(['getAudioMedia'],function(getAudioMedia){
+                    audio = getAudioMedia;
+                    audio.end(callback);
+                });
+            }
+            else{
+                audio.end(callback);
+            }
+        };
+    });
+
+    //socket通讯服务
     app.service('$socket', function ($rootScope) {
         var socket = io();
         this.on = function (eventName, callback) {
@@ -121,7 +154,25 @@ define(['angular', 'io'], function (angular, io) {
                 }
             }
         }
-    })
+    });
+
+    //自定义触摸按下事件
+    app.directive('touchStart',['$parse',function($parse){
+        return function(scope, element, attr){
+            element.on('touchstart', function (event) {
+                scope.$eval(attr.touchStart);
+            });
+        };
+    }]);
+
+    //自定义触摸结束事件
+    app.directive('touchEnd',['$parse',function($parse){
+        return function(scope, element, attr){
+            element.on('touchend', function (event) {
+                scope.$eval(attr.touchEnd);
+            });
+        };
+    }]);
 
     ////自定义触摸事件
     app.directive('ngTouch', ['$parse', '$timeout', '$rootElement',
@@ -247,6 +298,7 @@ define(['angular', 'io'], function (angular, io) {
 
                 element.on('touchstart', function (event) {
                     //console.log('touchstart')
+                    //alert('touchstart');
                     tapping = true;
                     tapElement = event.target ? event.target : event.srcElement; // IE uses srcElement.
                     // Hack for Safari, which can target text nodes instead of containers.
@@ -276,6 +328,7 @@ define(['angular', 'io'], function (angular, io) {
 
                 element.on('touchend', function (event) {
                     //console.log('touchend')
+                    //alert('touchend');
                     var tempElement = event.target ? event.target : event.srcElement; // IE uses srcElement.
                     if (tempElement === tapElement)
                         tapping = true;
@@ -296,6 +349,8 @@ define(['angular', 'io'], function (angular, io) {
                         }
                         //console.log('touchend222')
                         if (!angular.isDefined(attr.disabled) || attr.disabled === false) {
+                            //clickHandler(event)
+                            //console.log([event])
                             element.triggerHandler('click', [event]);
                         }
                     }
@@ -307,9 +362,10 @@ define(['angular', 'io'], function (angular, io) {
                 element.onclick = function (event) {
                 };
                 element.on('click', function (event, touchend) {
-                    //console.log('click')
+                    var event = (touchend || event);
+
                     scope.$apply(function () {
-                        clickHandler(scope, {$event: (touchend || event)});
+                        clickHandler(scope, {event:event});
                     });
                 });
 
@@ -325,15 +381,9 @@ define(['angular', 'io'], function (angular, io) {
 
             };
         }]);
-    ////自定义触摸事件ng-keydown$event
-    //app.directive('ngKeydown', ['$parse', '$timeout', '$rootElement',
-    //    function ($parse, $timeout, $rootElement) {
-    //        return function (scope, element, attr) {
-    //            element.on('keydown', function (event) {
-    //                var keydown = $parse(attr.ngKeydown);
-    //                keydown();
-    //            });
-    //        };
-    //    }]);
+
+
+
+
     return app;
 });

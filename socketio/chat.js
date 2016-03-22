@@ -10,12 +10,15 @@ function init(io) {
         socket.on('login', function (msg) {
             require('./userLogin')(msg,socket,io,socketOnLine);
         });
+
+        //code :1 出错  code :0 正常   type :1 文本消息   type:2 语音消息
+        //文本消息
         socket.on('chat', function (msg) {
-            console.log(msg)
-            var temp = {code: 0,from:msg.from,type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body}
-            if(socketOnLine[msg.to] !== undefined && socketOnLine[msg.to] !==  null){
-                console.log(socketOnLine[msg.to])
-                if(io.sockets.sockets[socketOnLine[msg.to]] !== undefined && io.sockets.sockets[socketOnLine[msg.to]] !==  null){
+            console.log(msg);
+            var temp = {code: 0,from:msg.from,type: msg.type, imgSrc: './image/friend_name_06.png', stream: msg.body};
+            if(socketOnLine[msg.to] !== undefined){
+                console.log(socketOnLine[msg.to]);
+                if(io.sockets.sockets[socketOnLine[msg.to]] !== undefined){
                     io.sockets.sockets[socketOnLine[msg.to]].emit('chat',temp);
                 }
             }
@@ -24,8 +27,30 @@ function init(io) {
                 socket.emit('chat', temp);
                 require('./common').getFriendList(socket,io,msg.from,socketOnLine);
             }
-            //socket.emit('chat', temp);
         });
+
+
+
+        //语音消息  测试
+        socket.on('voice',function(msg){
+            console.log(msg);
+            var temp = {code: 0,from:msg.from,type: msg.type, imgSrc: './image/friend_name_06.png', body: msg.body};
+            if(socketOnLine[msg.to] !== undefined){
+                console.log(socketOnLine[msg.to]);
+                if(io.sockets.sockets[socketOnLine[msg.to]] !== undefined){
+                    io.sockets.sockets[socketOnLine[msg.to]].emit('chat',temp);
+                }
+            }
+            else{
+                temp.body = '000出现错误了';
+                socket.emit('chat', temp);
+                require('./common').getFriendList(socket,io,msg.from,socketOnLine);
+            }
+        });
+
+
+
+
         socket.on('photo', function (msg) {
             var base64Data = msg.replace(new RegExp('^data:image/jpeg;base64,'), "");
 
@@ -42,13 +67,11 @@ function init(io) {
 
         socket.on("disconnect",function(msg){
             for(var a in socketOnLine){
-                if(socketOnLine[a] == socket.id)
-                {
+                if(socketOnLine[a].id === msg.id){
                     delete socketOnLine[a];
                     require('./common').getFriendList(socket,io,a,socketOnLine);
-                    return;
+                    return ;
                 }
-
             }
         });
     });

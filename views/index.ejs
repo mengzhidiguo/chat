@@ -29,7 +29,7 @@
         <div class="bottom">
             <label for="check"><input type="checkbox" ng-model="rember" id="check" ng-disabled="!rember">Keep me
             </label>
-            <button ng-touch="send()">Log In »</button>
+            <button ng-touch="send(event)">Log In »</button>
         </div>
     </div>
 </div>
@@ -45,7 +45,7 @@
             <h4 class="menu_main_top_name">{{config.username}}</h4>
         </div>
         <div class="menu_main_menu">
-            <ul ng-touch="friendShow()">
+            <ul ng-touch="friendShow(event)">
                 <li ng-repeat="name in config.menu">{{name.name}}</li>
             </ul>
         </div>
@@ -56,12 +56,12 @@
 <div class="friend"  ng-controller="friendController"  >
     <!--头部-->
     <div class="firend_top">
-        <div class="firend_menu" ng-touch="menushow()"></div>
+        <div class="firend_menu" ng-touch="menushow(event)"></div>
         <h4 class="logo">Chat</h4>
     </div>
 
     <!--好友列表-->
-    <div class="firend_list" ng-touch="chat()">
+    <div class="firend_list" ng-touch="chat(event)">
         <ul>
             <li ng-repeat="a in config.friendList">
                 <div class="firend_contain"><h4 class="firend_name">{{a.name}}</h4>
@@ -86,15 +86,23 @@
             <ul>
                 <li ng-repeat="a in config.chatInfoList" ng-class="{chat_left: a.type==1, chat_right: a.type==2,chat_time:a.type==3}"
                     repeat-done="repeatDone()">
-                    <img src="{{a.imgSrc}}" ng-if="a.type!==3" alt="">
-                    <p ng-if="a.type!==3">{{a.body}}</p>
+                    <img src="{{a.imgSrc}}" ng-if="a.type!=3" alt="">
+                    <p ng-if="a.msgtype==1">{{a.body}}</p>
+                    <p ng-if="a.msgtype==2" style="color: gray;" data-stream="{{a.stream}}" ng-touch="voicePlay(event);">语音</p>
                     {{a.time}}
                 </li>
             </ul>
         </div>
     </div>
     <div class="chat_bottom">
-        <div class="voice"></div>
+
+        <!--语音消息-->
+        <div class="voiceInfo" ng-hide="voiceInfoShow"></div>
+        <div class="voice"  touch-Start="voiceStart()" touch-End="voiceEnd()"></div>
+
+
+
+
         <div class="add"></div>
         <input class="input" ng-model="talk" type="text">
         <div class="send" ng-touch="send()"></div>
